@@ -40,7 +40,7 @@ class AsyncClient(ClientBase):
     async def _refresh_token(self):
         response = await self.client.post(
             f"{self.base_url_auth}/auth/api/get-token",
-            data={"api_key": self.api_key, "api_password": self.api_password},
+            json={"api_key": self.api_key, "api_password": self.api_password},
         )
         response.raise_for_status()
         self.auth_token = response.json()["data"][0]["access_token"]
