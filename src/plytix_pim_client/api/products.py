@@ -1,13 +1,24 @@
+from http import HTTPMethod
+
 import httpx
 
 from plytix_pim_client.dtos.product import Product
+from plytix_pim_client.dtos.request import PlytixRequest
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
 
 
 class ProductsAPI:
     @staticmethod
-    def _process_create_product_response(response: httpx.Response) -> Product:
+    def get_create_product_request(product: Product) -> PlytixRequest:
+        return PlytixRequest(
+            method=HTTPMethod.POST,
+            endpoint="/api/v1/products",
+            kwargs={"json": product.clean_dict()},
+        )
+
+    @staticmethod
+    def process_create_product_response(response: httpx.Response) -> Product:
         return Product.from_dict(response.json()["data"][0])
 
 
@@ -16,8 +27,9 @@ class ProductsAPISync(ProductsAPI):
         self.client = client
 
     def create_product(self, product: Product) -> Product:
-        response = self.client.make_request(self.client.method.POST, "/api/v1/products", json=product.clean_dict())
-        return self._process_create_product_response(response)
+        request = self.get_create_product_request(product)
+        response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
+        return self.process_create_product_response(response)
 
 
 class ProductsAPIAsync(ProductsAPI):
@@ -25,7 +37,6 @@ class ProductsAPIAsync(ProductsAPI):
         self.client = client
 
     async def create_product(self, product: Product) -> Product:
-        response = await self.client.make_request(
-            self.client.method.POST, "/api/v1/products", json=product.clean_dict()
-        )
-        return self._process_create_product_response(response)
+        request = self.get_create_product_request(product)
+        response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
+        return self.process_create_product_response(response)

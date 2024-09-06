@@ -1,4 +1,5 @@
 import asyncio
+from http import HTTPMethod
 
 import httpx
 
@@ -20,9 +21,7 @@ class AsyncClient(ClientBase):
     async def close(self):
         await self.client.aclose()
 
-    async def make_request(
-        self, method: ClientBase.method, path: str, waiting_time: float = 1.0, **kwargs
-    ) -> httpx.Response:
+    async def make_request(self, method: HTTPMethod, path: str, waiting_time: float = 1.0, **kwargs) -> httpx.Response:
         kwargs["headers"] = self._get_auth_headers()
         response = await self.client.request(method, path, **kwargs)
         try:

@@ -1,4 +1,5 @@
 import time
+from http import HTTPMethod
 
 import httpx
 
@@ -20,7 +21,7 @@ class SyncClient(ClientBase):
     def close(self):
         self.client.close()
 
-    def make_request(self, method: ClientBase.method, path: str, waiting_time: float = 1.0, **kwargs) -> httpx.Response:
+    def make_request(self, method: HTTPMethod, path: str, waiting_time: float = 1.0, **kwargs) -> httpx.Response:
         kwargs["headers"] = self._get_auth_headers()
         response = self.client.request(method, path, **kwargs)
         try:

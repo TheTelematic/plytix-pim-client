@@ -1,4 +1,4 @@
-from http import HTTPMethod, HTTPStatus
+from http import HTTPStatus
 
 import httpx
 
@@ -8,7 +8,6 @@ from plytix_pim_client.logger import logger
 
 
 class ClientBase:
-    method = HTTPMethod
 
     def __init__(self, api_key: str | None = None, api_password: str | None = None, base_url: str | None = None):
         self.api_key = api_key or config.PLYTIX_API_KEY
