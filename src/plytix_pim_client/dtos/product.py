@@ -11,7 +11,7 @@ class Product(BaseDto):
     created: str
     created_user_audit: dict
     id: str
-    label: str
+    label: str | None = None
     modified: str
     modified_user_audit: dict
     num_variations: int
