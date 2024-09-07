@@ -1,6 +1,13 @@
-from plytix_pim_client.api.products.create import ProductCreateAPISync, ProductCreateAPIAsync
+from plytix_pim_client.api.products.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
+from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
+
+
+class _ProductsAPISync(ProductCreateAPISyncMixin, ProductsSearchAPISyncMixin): ...
+
+
+class _ProductsAPIAsync(ProductCreateAPIAsyncMixin, ProductsSearchAPIAsyncMixin): ...
 
 
 class PlytixPimClientSync:
@@ -11,8 +18,8 @@ class PlytixPimClientSync:
         self._client.close()
 
     @property
-    def products(self) -> ProductCreateAPISync:
-        return ProductCreateAPISync(self._client)
+    def products(self) -> _ProductsAPISync:
+        return _ProductsAPISync(self._client)
 
 
 class PlytixPimClientAsync:
@@ -23,5 +30,5 @@ class PlytixPimClientAsync:
         await self._client.close()
 
     @property
-    def products(self) -> ProductCreateAPIAsync:
-        return ProductCreateAPIAsync(self._client)
+    def products(self) -> _ProductsAPIAsync:
+        return _ProductsAPIAsync(self._client)

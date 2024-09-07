@@ -5,10 +5,9 @@ from typing import TypedDict
 
 import httpx
 
+from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.dtos.product import Product
 from plytix_pim_client.dtos.request import PlytixRequest
-from plytix_pim_client.http.async_ import AsyncClient
-from plytix_pim_client.http.sync import SyncClient
 
 
 class CreateProductDict(TypedDict):
@@ -34,10 +33,7 @@ class ProductCreateAPI:
         return Product.from_dict(response.json()["data"][0])
 
 
-class ProductCreateAPISync(ProductCreateAPI):
-    def __init__(self, client: SyncClient):
-        self.client = client
-
+class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
     def create_product(self, sku: str, label: str | None = None) -> Product:
         """
         Create a product in Plytix PIM.
@@ -59,10 +55,7 @@ class ProductCreateAPISync(ProductCreateAPI):
             return [future.result() for future in futures]
 
 
-class ProductCreateAPIAsync(ProductCreateAPI):
-    def __init__(self, client: AsyncClient):
-        self.client = client
-
+class ProductCreateAPIAsyncMixin(ProductCreateAPI, BaseAPIAsyncMixin):
     async def create_product(self, sku: str, label: str | None = None) -> Product:
         """
         Create a product in Plytix PIM.
