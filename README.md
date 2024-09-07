@@ -2,3 +2,5 @@
 An HTTP client in Python for Plytix PIM API.
 
 API documentation: https://apidocs.plytix.com
+
+![Example](doc/images/example.png)
