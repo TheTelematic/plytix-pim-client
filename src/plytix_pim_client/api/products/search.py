@@ -1,9 +1,10 @@
 from http import HTTPMethod
-from typing import List
+from typing import List, Generator, AsyncGenerator
 
 import httpx
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import ProductsSearchFilter, RelationshipSearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.product import Product
@@ -56,6 +57,29 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
 
+    def search_all_products(
+        self,
+        filters: List[List[ProductsSearchFilter]],
+        attributes: List[str],
+        relationship_filters: List[RelationshipSearchFilter],
+        sort_by_attribute: str,
+        sort_ascending: bool = True,
+        page_size: int = DEFAULT_PAGE_SIZE,
+    ) -> Generator[List[Product], None, None]:
+        current_page = 1
+        while True:
+            pagination = Pagination(
+                sort_by_attribute=sort_by_attribute,
+                sort_ascending=sort_ascending,
+                page_size=page_size,
+                page=current_page,
+            )
+            products = self.search_products(filters, attributes, relationship_filters, pagination)
+            if not products:
+                break
+            yield products
+            current_page += 1
+
 
 class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
     async def search_products(
@@ -68,3 +92,26 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         request = self.get_search_products_request(filters, attributes, relationship_filters, pagination)
         response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
+
+    async def search_all_products(
+        self,
+        filters: List[List[ProductsSearchFilter]],
+        attributes: List[str],
+        relationship_filters: List[RelationshipSearchFilter],
+        sort_by_attribute: str,
+        sort_ascending: bool = True,
+        page_size: int = DEFAULT_PAGE_SIZE,
+    ) -> AsyncGenerator[List[Product], None]:
+        current_page = 1
+        while True:
+            pagination = Pagination(
+                sort_by_attribute=sort_by_attribute,
+                sort_ascending=sort_ascending,
+                page_size=page_size,
+                page=current_page,
+            )
+            products = await self.search_products(filters, attributes, relationship_filters, pagination)
+            if not products:
+                break
+            yield products
+            current_page += 1
