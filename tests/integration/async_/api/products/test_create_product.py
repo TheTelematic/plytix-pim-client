@@ -3,3 +3,10 @@ async def test_create_product_ok(client, new_product_data):
 
     assert result.sku == new_product_data["sku"]
     assert result.label == new_product_data["label"]
+
+
+async def test_create_product_no_label(client, new_product_data):
+    result = await client.products.create_product(new_product_data["sku"])
+
+    assert result.sku == new_product_data["sku"]
+    assert result.label is None

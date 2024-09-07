@@ -11,10 +11,14 @@ from plytix_pim_client.http.sync import SyncClient
 class ProductsAPI:
     @staticmethod
     def get_create_product_request(sku: str, label: str | None = None) -> PlytixRequest:
+        data = {"sku": sku}
+        if label:
+            data["label"] = label
+
         return PlytixRequest(
             method=HTTPMethod.POST,
             endpoint="/api/v1/products",
-            kwargs={"json": {"sku": sku, "label": label}},
+            kwargs={"json": data},
         )
 
     @staticmethod
