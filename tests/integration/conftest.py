@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 
 import pytest
 
@@ -16,3 +17,12 @@ def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
+
+
+@pytest.fixture
+def new_product_data() -> dict:
+    now = datetime.now()
+    return dict(
+        sku=f"test-product-{now.isoformat()}",
+        label=f"test_product_{str(now.timestamp()).replace('.', '')}",
+    )

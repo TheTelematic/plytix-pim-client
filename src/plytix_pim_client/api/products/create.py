@@ -10,11 +10,11 @@ from plytix_pim_client.http.sync import SyncClient
 
 class ProductsAPI:
     @staticmethod
-    def get_create_product_request(product: Product) -> PlytixRequest:
+    def get_create_product_request(sku: str, label: str | None = None) -> PlytixRequest:
         return PlytixRequest(
             method=HTTPMethod.POST,
             endpoint="/api/v1/products",
-            kwargs={"json": product.clean_dict()},
+            kwargs={"json": {"sku": sku, "label": label}},
         )
 
     @staticmethod
@@ -26,8 +26,8 @@ class ProductsAPISync(ProductsAPI):
     def __init__(self, client: SyncClient):
         self.client = client
 
-    def create_product(self, product: Product) -> Product:
-        request = self.get_create_product_request(product)
+    def create_product(self, sku: str, label: str | None = None) -> Product:
+        request = self.get_create_product_request(sku, label)
         response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_create_product_response(response)
 
@@ -36,7 +36,7 @@ class ProductsAPIAsync(ProductsAPI):
     def __init__(self, client: AsyncClient):
         self.client = client
 
-    async def create_product(self, product: Product) -> Product:
-        request = self.get_create_product_request(product)
+    async def create_product(self, sku: str, label: str | None = None) -> Product:
+        request = self.get_create_product_request(sku, label)
         response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_create_product_response(response)
