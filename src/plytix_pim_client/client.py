@@ -1,4 +1,4 @@
-from plytix_pim_client.api.products.create import ProductsAPISync, ProductsAPIAsync
+from plytix_pim_client.api.products.create import ProductCreateAPISync, ProductCreateAPIAsync
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
 
@@ -11,8 +11,8 @@ class PlytixPimClientSync:
         self._client.close()
 
     @property
-    def products(self) -> ProductsAPISync:
-        return ProductsAPISync(self._client)
+    def products(self) -> ProductCreateAPISync:
+        return ProductCreateAPISync(self._client)
 
 
 class PlytixPimClientAsync:
@@ -23,5 +23,5 @@ class PlytixPimClientAsync:
         await self._client.close()
 
     @property
-    def products(self) -> ProductsAPIAsync:
-        return ProductsAPIAsync(self._client)
+    def products(self) -> ProductCreateAPIAsync:
+        return ProductCreateAPIAsync(self._client)
