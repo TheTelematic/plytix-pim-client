@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from http import HTTPMethod
 
 from plytix_pim_client.dtos.base import BaseDto
@@ -8,4 +8,4 @@ from plytix_pim_client.dtos.base import BaseDto
 class PlytixRequest(BaseDto):
     method: HTTPMethod
     endpoint: str
-    kwargs: dict
+    kwargs: dict = field(default_factory=dict)

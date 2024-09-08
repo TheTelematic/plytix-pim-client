@@ -70,6 +70,6 @@ class ProductCreateAPIAsyncMixin(ProductCreateAPI, BaseAPIAsyncMixin):
         """
         Create multiple products in Plytix PIM. This uses asyncio to make the requests concurrently.
 
-        :param products: The products created.
+        :return: The products created.
         """
         return list(await asyncio.gather(*[self.create_product(**product) for product in products]))
