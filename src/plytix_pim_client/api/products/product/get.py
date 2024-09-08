@@ -12,7 +12,9 @@ from plytix_pim_client.dtos.request import PlytixRequest
 class ProductGetAPI:
     @staticmethod
     def get_get_product_request(product_id: str) -> PlytixRequest:
-        return PlytixRequest(            method = (HTTPMethod.GET,)endpoint=f"/api/v1/products/{product_id}",
+        return PlytixRequest(
+            method=HTTPMethod.GET,
+            endpoint=f"/api/v1/products/{product_id}",
         )
 
     @staticmethod
