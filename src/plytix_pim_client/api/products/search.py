@@ -53,6 +53,11 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
     ) -> List[Product]:
+        """
+        Search for products matching the filters.
+
+        :return: The products found.
+        """
         request = self.get_search_products_request(filters, attributes, relationship_filters, pagination)
         response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
@@ -66,6 +71,11 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> Generator[List[Product], None, None]:
+        """
+        Iterate over all products matching the filters.
+
+        :return: The products found.
+        """
         current_page = 1
         while True:
             pagination = Pagination(
@@ -89,6 +99,11 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
     ) -> List[Product]:
+        """
+        Search for products matching the filters.
+
+        :return: The products found.
+        """
         request = self.get_search_products_request(filters, attributes, relationship_filters, pagination)
         response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
@@ -102,6 +117,11 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> AsyncGenerator[List[Product], None]:
+        """
+        Iterate over all products matching the filters.
+
+        :return: The products found.
+        """
         current_page = 1
         while True:
             pagination = Pagination(

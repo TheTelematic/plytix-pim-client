@@ -36,7 +36,7 @@ class ProductCreateAPI:
 class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
     def create_product(self, sku: str, label: str | None = None) -> Product:
         """
-        Create a product in Plytix PIM.
+        Create a product.
 
         :return: The product created.
         """
@@ -46,7 +46,7 @@ class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
 
     def create_products(self, products: list[CreateProductDict]) -> list[Product]:
         """
-        Create multiple products in Plytix PIM. This uses threading to make the requests concurrently.
+        Create multiple products. This uses threading to make the requests concurrently.
 
         :return: The products created.
         """
@@ -58,7 +58,7 @@ class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
 class ProductCreateAPIAsyncMixin(ProductCreateAPI, BaseAPIAsyncMixin):
     async def create_product(self, sku: str, label: str | None = None) -> Product:
         """
-        Create a product in Plytix PIM.
+        Create a product.
 
         :return: The product created.
         """
@@ -68,8 +68,8 @@ class ProductCreateAPIAsyncMixin(ProductCreateAPI, BaseAPIAsyncMixin):
 
     async def create_products(self, products: list[CreateProductDict]) -> list[Product]:
         """
-        Create multiple products in Plytix PIM. This uses asyncio to make the requests concurrently.
+        Create multiple products. This uses asyncio to make the requests concurrently.
 
-        :param products: The products created.
+        :return: The products created.
         """
         return list(await asyncio.gather(*[self.create_product(**product) for product in products]))
