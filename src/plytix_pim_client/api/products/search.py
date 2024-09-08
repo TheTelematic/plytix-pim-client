@@ -54,7 +54,7 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         pagination: Pagination,
     ) -> List[Product]:
         """
-        Search for products matching the filters in Plytix PIM.
+        Search for products matching the filters.
 
         :return: The products found.
         """
@@ -72,7 +72,7 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> Generator[List[Product], None, None]:
         """
-        Iterate over all products matching the filters in Plytix PIM.
+        Iterate over all products matching the filters.
 
         :return: The products found.
         """
@@ -100,7 +100,7 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         pagination: Pagination,
     ) -> List[Product]:
         """
-        Search for products matching the filters in Plytix PIM.
+        Search for products matching the filters.
 
         :return: The products found.
         """
@@ -118,7 +118,7 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> AsyncGenerator[List[Product], None]:
         """
-        Iterate over all products matching the filters in Plytix PIM.
+        Iterate over all products matching the filters.
 
         :return: The products found.
         """

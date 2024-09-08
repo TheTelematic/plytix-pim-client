@@ -28,7 +28,7 @@ class ProductGetAPI:
 class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
     def get_product(self, product_id: str) -> Product | None:
         """
-        Get a product in Plytix PIM.
+        Get a product.
 
         :return: The product.
         """
@@ -40,7 +40,7 @@ class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
 
     def get_products(self, product_ids: list[str]) -> list[Product | None]:
         """
-        Get multiple products in Plytix PIM. This uses threading to make the requests concurrently.
+        Get multiple products. This uses threading to make the requests concurrently.
 
         :return: The products.
         """
@@ -52,7 +52,7 @@ class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
 class ProductGetAPIAsyncMixin(ProductGetAPI, BaseAPIAsyncMixin):
     async def get_product(self, product_id: str) -> Product | None:
         """
-        Get a product in Plytix PIM.
+        Get a product.
 
         :return: The product.
         """
@@ -64,7 +64,7 @@ class ProductGetAPIAsyncMixin(ProductGetAPI, BaseAPIAsyncMixin):
 
     async def get_products(self, product_ids: list[str]) -> list[Product | None]:
         """
-        Get multiple products in Plytix PIM. This uses asyncio to make the requests concurrently.
+        Get multiple products. This uses asyncio to make the requests concurrently.
 
         :return: The products.
         """
