@@ -1,4 +1,4 @@
-from plytix_pim_client.api.products.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
+from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
