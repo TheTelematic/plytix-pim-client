@@ -1,13 +1,14 @@
 from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
+from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
 
 
-class _ProductsAPISync(ProductCreateAPISyncMixin, ProductsSearchAPISyncMixin): ...
+class _ProductsAPISync(ProductCreateAPISyncMixin, ProductsSearchAPISyncMixin, ProductGetAPISyncMixin): ...
 
 
-class _ProductsAPIAsync(ProductCreateAPIAsyncMixin, ProductsSearchAPIAsyncMixin): ...
+class _ProductsAPIAsync(ProductCreateAPIAsyncMixin, ProductsSearchAPIAsyncMixin, ProductGetAPIAsyncMixin): ...
 
 
 class PlytixPimClientSync:

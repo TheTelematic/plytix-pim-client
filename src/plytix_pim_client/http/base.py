@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import List
 
 import httpx
 
@@ -22,10 +23,15 @@ class ClientBase:
         }
 
     @staticmethod
-    def _process_response(response: httpx.Response) -> httpx.Response:
+    def _process_response(
+        response: httpx.Response, accepted_error_codes: List[HTTPStatus] | None = None
+    ) -> httpx.Response:
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as exc:
+            if accepted_error_codes and exc.response.status_code in accepted_error_codes:
+                return exc.response
+
             if exc.response.status_code == HTTPStatus.UNAUTHORIZED:
                 raise TokenExpiredError("Token expired")
             elif exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:

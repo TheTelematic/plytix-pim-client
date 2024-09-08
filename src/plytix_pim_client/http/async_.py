@@ -1,5 +1,6 @@
 import asyncio
-from http import HTTPMethod
+from http import HTTPMethod, HTTPStatus
+from typing import List
 
 import httpx
 
@@ -21,11 +22,18 @@ class AsyncClient(ClientBase):
     async def close(self):
         await self.client.aclose()
 
-    async def make_request(self, method: HTTPMethod, path: str, waiting_time: float = 1.0, **kwargs) -> httpx.Response:
+    async def make_request(
+        self,
+        method: HTTPMethod,
+        path: str,
+        waiting_time: float = 1.0,
+        accepted_error_codes: List[HTTPStatus] | None = None,
+        **kwargs,
+    ) -> httpx.Response:
         kwargs["headers"] = self._get_auth_headers()
         response = await self.client.request(method, path, **kwargs)
         try:
-            return self._process_response(response)
+            return self._process_response(response, accepted_error_codes=accepted_error_codes)
         except TokenExpiredError:
             logger.debug("Token expired, refreshing token...")
             await self._refresh_token()
