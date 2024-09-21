@@ -20,7 +20,7 @@ class FamilyGetAPISyncMixin(BaseAPISyncMixin):
         :return: The family.
         """
         request = FamilyGetAPI.get_request(product_family_id)
-        response = self.client.make_request(
+        response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return FamilyGetAPI.process_response(response)
@@ -44,7 +44,7 @@ class FamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
         :return: The family.
         """
         request = FamilyGetAPI.get_request(product_family_id)
-        response = await self.client.make_request(
+        response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return FamilyGetAPI.process_response(response)

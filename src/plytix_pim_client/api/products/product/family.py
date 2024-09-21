@@ -35,7 +35,7 @@ class ProductAssignFamilyAPISyncMixin(ProductAssignFamilyAPI, BaseAPISyncMixin):
         :return: The product.
         """
         request = self.get_assign_family_to_product_request(product_id, product_family_id)
-        response = self.client.make_request(
+        response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_assign_family_to_product_response(response)
@@ -62,7 +62,7 @@ class ProductAssignFamilyAPIAsyncMixin(ProductAssignFamilyAPI, BaseAPIAsyncMixin
         :return: The product.
         """
         request = self.get_assign_family_to_product_request(product_id, product_family_id)
-        response = await self.client.make_request(
+        response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_assign_family_to_product_response(response)

@@ -20,7 +20,7 @@ class ProductGetAPISyncMixin(BaseAPISyncMixin):
         :return: The product.
         """
         request = ProductGetAPI.get_request(product_id)
-        response = self.client.make_request(
+        response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return ProductGetAPI.process_response(response)
@@ -44,7 +44,7 @@ class ProductGetAPIAsyncMixin(BaseAPIAsyncMixin):
         :return: The product.
         """
         request = ProductGetAPI.get_request(product_id)
-        response = await self.client.make_request(
+        response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return ProductGetAPI.process_response(response)

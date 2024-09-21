@@ -35,7 +35,7 @@ class ProductUpdateAPISyncMixin(ProductUpdateAPI, BaseAPISyncMixin):
         :return: The product.
         """
         request = self.get_update_product_request(product_id, data)
-        response = self.client.make_request(
+        response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_update_product_response(response)
@@ -61,7 +61,7 @@ class ProductUpdateAPIAsyncMixin(ProductUpdateAPI, BaseAPIAsyncMixin):
         :return: The product.
         """
         request = self.get_update_product_request(product_id, data)
-        response = await self.client.make_request(
+        response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_update_product_response(response)

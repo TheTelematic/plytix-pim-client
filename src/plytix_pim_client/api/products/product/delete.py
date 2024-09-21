@@ -32,7 +32,7 @@ class ProductDeleteAPISyncMixin(ProductDeleteAPI, BaseAPISyncMixin):
         :return: True if deleted, False if it didn't exist.
         """
         request = self.get_delete_product_request(product_id)
-        response = self.client.make_request(
+        response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_delete_product_response(response)
@@ -56,7 +56,7 @@ class ProductDeleteAPIAsyncMixin(ProductDeleteAPI, BaseAPIAsyncMixin):
         :return: True if deleted, False if it didn't exist.
         """
         request = self.get_delete_product_request(product_id)
-        response = await self.client.make_request(
+        response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
         return self.process_delete_product_response(response)

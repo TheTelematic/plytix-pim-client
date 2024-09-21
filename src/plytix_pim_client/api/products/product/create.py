@@ -1,13 +1,10 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod
 from typing import TypedDict
 
-import httpx
-
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.common.create import CreateResourceAPI
 from plytix_pim_client.dtos.product import Product
-from plytix_pim_client.dtos.request import PlytixRequest
 
 
 class CreateProductDict(TypedDict):
@@ -15,34 +12,25 @@ class CreateProductDict(TypedDict):
     label: str | None
 
 
-class ProductCreateAPI:
-    @staticmethod
-    def get_create_product_request(sku: str, label: str | None = None) -> PlytixRequest:
-        data = {"sku": sku}
-        if label:
-            data["label"] = label
-
-        return PlytixRequest(
-            method=HTTPMethod.POST,
-            endpoint="/api/v1/products",
-            kwargs={"json": data},
-        )
-
-    @staticmethod
-    def process_create_product_response(response: httpx.Response) -> Product:
-        return Product.from_dict(response.json()["data"][0])
+class ProductCreateAPI(CreateResourceAPI):
+    endpoint = "/api/v1/products"
+    resource_dto_class = Product
 
 
-class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
+class ProductCreateAPISyncMixin(BaseAPISyncMixin):
     def create_product(self, sku: str, label: str | None = None) -> Product:
         """
         Create a product.
 
         :return: The product created.
         """
-        request = self.get_create_product_request(sku, label)
-        response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
-        return self.process_create_product_response(response)
+        data = {"sku": sku}
+        if label:
+            data["label"] = label
+
+        request = ProductCreateAPI.get_request(**data)
+        response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
+        return ProductCreateAPI.process_response(response)
 
     def create_products(self, products: list[CreateProductDict]) -> list[Product]:
         """
@@ -55,16 +43,20 @@ class ProductCreateAPISyncMixin(ProductCreateAPI, BaseAPISyncMixin):
             return [future.result() for future in futures]
 
 
-class ProductCreateAPIAsyncMixin(ProductCreateAPI, BaseAPIAsyncMixin):
+class ProductCreateAPIAsyncMixin(BaseAPIAsyncMixin):
     async def create_product(self, sku: str, label: str | None = None) -> Product:
         """
         Create a product.
 
         :return: The product created.
         """
-        request = self.get_create_product_request(sku, label)
-        response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
-        return self.process_create_product_response(response)
+        data = {"sku": sku}
+        if label:
+            data["label"] = label
+
+        request = ProductCreateAPI.get_request(**data)
+        response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
+        return ProductCreateAPI.process_response(response)
 
     async def create_products(self, products: list[CreateProductDict]) -> list[Product]:
         """

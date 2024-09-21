@@ -59,7 +59,7 @@ class ProductsSearchAPISyncMixin(ProductsSearchAPI, BaseAPISyncMixin):
         :return: The products found.
         """
         request = self.get_search_products_request(filters, attributes, relationship_filters, pagination)
-        response = self.client.make_request(request.method, request.endpoint, **request.kwargs)
+        response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
 
     def search_all_products(
@@ -105,7 +105,7 @@ class ProductsSearchAPIAsyncMixin(ProductsSearchAPI, BaseAPIAsyncMixin):
         :return: The products found.
         """
         request = self.get_search_products_request(filters, attributes, relationship_filters, pagination)
-        response = await self.client.make_request(request.method, request.endpoint, **request.kwargs)
+        response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return self.process_search_products_response(response)
 
     async def search_all_products(
