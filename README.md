@@ -49,6 +49,10 @@ Any of the following resources can be accessed through the client:
 - `products`
 - `families`
 
+Inside each resource have specific methods to interact with the API. 
+If you use an IDE with code completion, you can see all available methods.
+If you find a method that is not available or confusing, please open an issue.
+
 ## Examples
 ### Create a product
 ```python
