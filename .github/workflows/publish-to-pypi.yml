@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: make requirements-tests
       - name: Run Integration Tests
-        run: make integrations-tests
+        run: make integration-tests
         env:
           PLYTIX_API_KEY: ${{ secrets.PLYTIX_API_KEY }}
           PLYTIX_API_SECRET: ${{ secrets.PLYTIX_API_SECRET }}
