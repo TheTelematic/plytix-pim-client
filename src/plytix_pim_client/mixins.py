@@ -14,6 +14,10 @@ from plytix_pim_client.api.product_families.product_family.update import (
 from plytix_pim_client.api.product_families.search import FamiliesSearchAPISyncMixin, FamiliesSearchAPIAsyncMixin
 from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
 from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
+from plytix_pim_client.api.products.product.family import (
+    ProductAssignFamilyAPISyncMixin,
+    ProductAssignFamilyAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
 from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
@@ -25,6 +29,7 @@ class _ProductsAPISync(
     ProductGetAPISyncMixin,
     ProductUpdateAPISyncMixin,
     ProductDeleteAPISyncMixin,
+    ProductAssignFamilyAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -34,6 +39,7 @@ class _ProductsAPIAsync(
     ProductGetAPIAsyncMixin,
     ProductUpdateAPIAsyncMixin,
     ProductDeleteAPIAsyncMixin,
+    ProductAssignFamilyAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
