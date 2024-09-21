@@ -1,8 +1,17 @@
-from plytix_pim_client.api.product_families.create import FamilyCreateAPISyncMixin, FamilyCreateAPIAsyncMixin
-from plytix_pim_client.api.product_families.delete import FamilyDeleteAPISyncMixin, FamilyDeleteAPIAsyncMixin
-from plytix_pim_client.api.product_families.get import FamilyGetAPISyncMixin, FamilyGetAPIAsyncMixin
+from plytix_pim_client.api.product_families.product_family.create import (
+    FamilyCreateAPISyncMixin,
+    FamilyCreateAPIAsyncMixin,
+)
+from plytix_pim_client.api.product_families.product_family.delete import (
+    FamilyDeleteAPISyncMixin,
+    FamilyDeleteAPIAsyncMixin,
+)
+from plytix_pim_client.api.product_families.product_family.get import FamilyGetAPISyncMixin, FamilyGetAPIAsyncMixin
+from plytix_pim_client.api.product_families.product_family.update import (
+    FamilyUpdateAPISyncMixin,
+    FamilyUpdateAPIAsyncMixin,
+)
 from plytix_pim_client.api.product_families.search import FamiliesSearchAPISyncMixin, FamiliesSearchAPIAsyncMixin
-from plytix_pim_client.api.product_families.update import FamilyUpdateAPISyncMixin, FamilyUpdateAPIAsyncMixin
 from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
 from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
 from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin

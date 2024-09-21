@@ -6,7 +6,6 @@ from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.family import Family
 from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
-from plytix_pim_client.dtos.product import Product
 
 
 class FamilySearchAPI(SearchResourceAPI):
@@ -21,7 +20,7 @@ class FamiliesSearchAPISyncMixin(BaseAPISyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Product]:
+    ) -> List[Family]:
         """
         Search for families matching the filters.
 
@@ -39,7 +38,7 @@ class FamiliesSearchAPISyncMixin(BaseAPISyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> Generator[List[Product], None, None]:
+    ) -> Generator[List[Family], None, None]:
         """
         Iterate over all families matching the filters.
 
@@ -67,7 +66,7 @@ class FamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Product]:
+    ) -> List[Family]:
         """
         Search for families matching the filters.
 
@@ -85,7 +84,7 @@ class FamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> AsyncGenerator[List[Product], None]:
+    ) -> AsyncGenerator[List[Family], None]:
         """
         Iterate over all families matching the filters.
 
