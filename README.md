@@ -44,6 +44,10 @@ client = PlytixPimClientAsync()
 All methods are available in both synchronous and asynchronous clients with the same I/O interface.
 For the sake of simplicity, only the synchronous client is shown in the examples.
 
+### Available resources
+- `products`
+- `families`
+
 ## Examples
 ### Create a product
 ```python
