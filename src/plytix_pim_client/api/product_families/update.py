@@ -1,77 +1,62 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod, HTTPStatus
-from typing import Tuple
-
-import httpx
+from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
-from plytix_pim_client.dtos.product import Product
-from plytix_pim_client.dtos.request import PlytixRequest
+from plytix_pim_client.api.common.update import UpdateResourceAPI
+from plytix_pim_client.dtos.family import Family
 
 
-class ProductUpdateAPI:
-    @staticmethod
-    def get_update_product_request(product_id: str, data: dict) -> PlytixRequest:
-        return PlytixRequest(
-            method=HTTPMethod.PATCH,
-            endpoint=f"/api/v1/products/{product_id}",
-            kwargs={"json": data},
-        )
-
-    @staticmethod
-    def process_update_product_response(response: httpx.Response) -> Product | None:
-        if response.status_code == HTTPStatus.NOT_FOUND:
-            return None
-
-        return Product.from_dict(response.json()["data"][0])
+class FamilyUpdateAPI(UpdateResourceAPI):
+    endpoint_prefix = "/api/v1/product_families"
+    resource_dto_class = Family
 
 
-class ProductUpdateAPISyncMixin(ProductUpdateAPI, BaseAPISyncMixin):
-    def update_product(self, product_id: str, data: dict) -> Product | None:
+class FamilyUpdateAPISyncMixin(BaseAPISyncMixin):
+    def rename_family(self, product_family_id: str, new_name: str) -> Family | None:
         """
-        Update a product.
+        Update a family.
 
-        :return: The product.
+        :return: The family.
         """
-        request = self.get_update_product_request(product_id, data)
+        request = FamilyUpdateAPI.get_request(product_family_id, {"name": new_name})
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_update_product_response(response)
+        return FamilyUpdateAPI.process_response(response)
 
-    def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    def rename_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
-        Update multiple products. This uses threading to make the requests concurrently.
+        Update multiple families. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: The families.
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.update_product, product_id, data) for product_id, data in product_ids_and_data
+                executor.submit(self.rename_family, product_family_id) for product_family_id in product_family_ids
             ]
             return [future.result() for future in futures]
 
 
-class ProductUpdateAPIAsyncMixin(ProductUpdateAPI, BaseAPIAsyncMixin):
-    async def update_product(self, product_id: str, data: dict) -> Product | None:
+class FamilyUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def rename_family(self, product_family_id: str, new_name: str) -> Family | None:
         """
-        Update a product.
+        Update a family.
 
-        :return: The product.
+        :return: The family.
         """
-        request = self.get_update_product_request(product_id, data)
+        request = FamilyUpdateAPI.get_request(product_family_id, {"name": new_name})
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_update_product_response(response)
+        return FamilyUpdateAPI.process_response(response)
 
-    async def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    async def rename_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
-        Update multiple products. This uses asyncio to make the requests concurrently.
+        Update multiple families. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: The families.
         """
         return list(
-            await asyncio.gather(*[self.update_product(product_id, data) for product_id, data in product_ids_and_data])
+            await asyncio.gather(*[self.rename_family(product_family_id) for product_family_id in product_family_ids])
         )
