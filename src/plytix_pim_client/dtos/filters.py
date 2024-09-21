@@ -22,7 +22,7 @@ class OperatorEnum(StrEnum):
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class ProductsSearchFilter(BaseDTO):
+class SearchFilter(BaseDTO):
     field: str
     operator: OperatorEnum
     value: str | int | float | bool | None

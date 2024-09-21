@@ -1,4 +1,4 @@
-from plytix_pim_client.dtos.filters import ProductsSearchFilter, OperatorEnum
+from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
 from plytix_pim_client.dtos.pagination import Pagination
 
 
@@ -19,7 +19,7 @@ async def test_search_products(client, new_product_data):
     await client.products.create_products(products)
 
     search_results = await client.products.search_products(
-        filters=[[ProductsSearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
+        filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
         attributes=["sku", "label"],
         relationship_filters=[],
         pagination=Pagination(page=1, page_size=10, sort_by_attribute="sku", sort_ascending=True),
@@ -55,7 +55,7 @@ async def test_search_all_products(client, new_product_data):
 
     search_results = []
     async for products in client.products.search_all_products(
-        filters=[[ProductsSearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
+        filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
         attributes=["sku", "label"],
         relationship_filters=[],
         sort_by_attribute="sku",
