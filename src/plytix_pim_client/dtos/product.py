@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from plytix_pim_client.dtos.base import BaseDto
+from plytix_pim_client.dtos.base import BaseDTO
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class Product(BaseDto):
+class Product(BaseDTO):
     assets: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
     categories: list = field(default_factory=list)

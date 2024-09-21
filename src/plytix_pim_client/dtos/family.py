@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from plytix_pim_client.dtos.base import BaseDto
+from plytix_pim_client.dtos.base import BaseDTO
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class Family(BaseDto):
+class Family(BaseDTO):
     created: str
     created_at: str
     id: str

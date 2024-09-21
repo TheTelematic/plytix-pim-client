@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import List
 
-from plytix_pim_client.dtos.base import BaseDto
+from plytix_pim_client.dtos.base import BaseDTO
 
 
 class OperatorEnum(StrEnum):
@@ -22,21 +22,21 @@ class OperatorEnum(StrEnum):
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class ProductsSearchFilter(BaseDto):
+class ProductsSearchFilter(BaseDTO):
     field: str
     operator: OperatorEnum
     value: str | int | float | bool | None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class ProductsRelationshipFilter(BaseDto):
+class ProductsRelationshipFilter(BaseDTO):
     id: str
     qty_operator: OperatorEnum
     value: List[str | int | float | bool]
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class RelationshipSearchFilter(BaseDto):
+class RelationshipSearchFilter(BaseDTO):
     relationship_id: str
     operator: OperatorEnum
     product_ids: List[ProductsRelationshipFilter]

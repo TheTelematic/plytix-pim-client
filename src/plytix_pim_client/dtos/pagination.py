@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
-from plytix_pim_client.dtos.base import BaseDto
+from plytix_pim_client.dtos.base import BaseDTO
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class Pagination(BaseDto):
+class Pagination(BaseDTO):
     sort_by_attribute: str
     sort_ascending: bool = True
     page: int = 1

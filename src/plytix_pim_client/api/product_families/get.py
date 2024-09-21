@@ -1,71 +1,60 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod, HTTPStatus
-
-import httpx
+from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
-from plytix_pim_client.dtos.product import Product
-from plytix_pim_client.dtos.request import PlytixRequest
+from plytix_pim_client.api.common.get import GetResourceAPI
+from plytix_pim_client.dtos.family import Family
 
 
-class ProductGetAPI:
-    @staticmethod
-    def get_get_product_request(product_id: str) -> PlytixRequest:
-        return PlytixRequest(
-            method=HTTPMethod.GET,
-            endpoint=f"/api/v1/products/{product_id}",
-        )
-
-    @staticmethod
-    def process_get_product_response(response: httpx.Response) -> Product | None:
-        if response.status_code == HTTPStatus.NOT_FOUND:
-            return None
-
-        return Product.from_dict(response.json()["data"][0])
+class FamilyGetAPI(GetResourceAPI):
+    endpoint_prefix = "/api/v1/product_families"
+    resource_dto_class = Family
 
 
-class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
-    def get_product(self, product_id: str) -> Product | None:
+class FamilyGetAPISyncMixin(BaseAPISyncMixin):
+    def get_family(self, product_family_id: str) -> Family | None:
         """
-        Get a product.
+        Get a family.
 
-        :return: The product.
+        :return: The family.
         """
-        request = self.get_get_product_request(product_id)
+        request = FamilyGetAPI.get_request(product_family_id)
         response = self.client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_get_product_response(response)
+        return FamilyGetAPI.process_response(response)
 
-    def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
-        Get multiple products. This uses threading to make the requests concurrently.
+        Get multiple families. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: The families.
         """
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.get_product, product_id) for product_id in product_ids]
+            futures = [executor.submit(self.get_family, product_family_id) for product_family_id in product_family_ids]
             return [future.result() for future in futures]
 
 
-class ProductGetAPIAsyncMixin(ProductGetAPI, BaseAPIAsyncMixin):
-    async def get_product(self, product_id: str) -> Product | None:
+class FamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def get_family(self, product_family_id: str) -> Family | None:
         """
-        Get a product.
+        Get a family.
 
-        :return: The product.
+        :return: The family.
         """
-        request = self.get_get_product_request(product_id)
+        request = FamilyGetAPI.get_request(product_family_id)
         response = await self.client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_get_product_response(response)
+        return FamilyGetAPI.process_response(response)
 
-    async def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    async def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
-        Get multiple products. This uses asyncio to make the requests concurrently.
+        Get multiple families. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: The families.
         """
-        return list(await asyncio.gather(*[self.get_product(product_id) for product_id in product_ids]))
+        return list(
+            await asyncio.gather(*[self.get_family(product_family_id) for product_family_id in product_family_ids])
+        )
