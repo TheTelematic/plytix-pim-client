@@ -13,3 +13,5 @@ class Family(BaseDto):
     total_attributes: int
     total_models: int
     total_products: int
+    created_user_audit: dict
+    modified_user_audit: dict

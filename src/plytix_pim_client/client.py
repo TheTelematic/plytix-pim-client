@@ -1,33 +1,11 @@
-from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
-from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
-from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
-from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
-from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
-
-
-class _ProductsAPISync(
-    ProductCreateAPISyncMixin,
-    ProductsSearchAPISyncMixin,
-    ProductGetAPISyncMixin,
-    ProductUpdateAPISyncMixin,
-    ProductDeleteAPISyncMixin,
-): ...
-
-
-class _ProductsAPIAsync(
-    ProductCreateAPIAsyncMixin,
-    ProductsSearchAPIAsyncMixin,
-    ProductGetAPIAsyncMixin,
-    ProductUpdateAPIAsyncMixin,
-    ProductDeleteAPIAsyncMixin,
-): ...
+from plytix_pim_client.mixins import _ProductsAPISync, _ProductsAPIAsync, _FamiliesAPISync, _FamiliesAPIAsync
 
 
 class PlytixPimClientSync:
-    def __init__(self, api_key: str | None = None, api_password: str | None = None, base_url: str | None = None):
-        self._client = SyncClient(api_key, api_password, base_url)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None):
+        self._client = SyncClient(api_key, api_password)
 
     def close(self):
         self._client.close()
@@ -36,10 +14,14 @@ class PlytixPimClientSync:
     def products(self) -> _ProductsAPISync:
         return _ProductsAPISync(self._client)
 
+    @property
+    def families(self) -> _FamiliesAPISync:
+        return _FamiliesAPISync(self._client)
+
 
 class PlytixPimClientAsync:
-    def __init__(self, api_key: str | None = None, api_password: str | None = None, base_url: str | None = None):
-        self._client = AsyncClient(api_key, api_password, base_url)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None):
+        self._client = AsyncClient(api_key, api_password)
 
     async def close(self):
         await self._client.close()
@@ -47,3 +29,7 @@ class PlytixPimClientAsync:
     @property
     def products(self) -> _ProductsAPIAsync:
         return _ProductsAPIAsync(self._client)
+
+    @property
+    def families(self) -> _FamiliesAPIAsync:
+        return _FamiliesAPIAsync(self._client)

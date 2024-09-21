@@ -26,3 +26,13 @@ def new_product_data() -> dict:
         sku=f"test-product-{now.isoformat()}",
         label=f"test_product_{str(now.timestamp()).replace('.', '')}",
     )
+
+
+@pytest.fixture
+def new_family_data() -> dict:
+    now = datetime.now()
+    return dict(
+        name=f"test-family-{now.isoformat()}",
+        attribute_ids=[],
+        parent_attribute_ids=[],
+    )
