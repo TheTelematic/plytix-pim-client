@@ -18,7 +18,7 @@ classifiers = [
 dynamic = ["version", "dependencies"]
 
 [tool.setuptools.dynamic]
-version = "plytix_pim_client.__version__"
+version = { attr = "plytix_pim_client.__version__" }
 dependencies = { file = ["requirements.txt"] }
 
 [project.urls]
