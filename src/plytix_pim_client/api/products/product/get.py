@@ -1,42 +1,29 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod, HTTPStatus
-
-import httpx
+from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.common.get import GetResourceAPI
 from plytix_pim_client.dtos.product import Product
-from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductGetAPI:
-    @staticmethod
-    def get_get_product_request(product_id: str) -> PlytixRequest:
-        return PlytixRequest(
-            method=HTTPMethod.GET,
-            endpoint=f"/api/v1/products/{product_id}",
-        )
-
-    @staticmethod
-    def process_get_product_response(response: httpx.Response) -> Product | None:
-        if response.status_code == HTTPStatus.NOT_FOUND:
-            return None
-
-        return Product.from_dict(response.json()["data"][0])
+class ProductGetAPI(GetResourceAPI):
+    endpoint_prefix = "/api/v1/products"
+    resource_dto_class = Product
 
 
-class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
+class ProductGetAPISyncMixin(BaseAPISyncMixin):
     def get_product(self, product_id: str) -> Product | None:
         """
         Get a product.
 
         :return: The product.
         """
-        request = self.get_get_product_request(product_id)
+        request = ProductGetAPI.get_request(product_id)
         response = self.client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_get_product_response(response)
+        return ProductGetAPI.process_response(response)
 
     def get_products(self, product_ids: list[str]) -> list[Product | None]:
         """
@@ -49,18 +36,18 @@ class ProductGetAPISyncMixin(ProductGetAPI, BaseAPISyncMixin):
             return [future.result() for future in futures]
 
 
-class ProductGetAPIAsyncMixin(ProductGetAPI, BaseAPIAsyncMixin):
+class ProductGetAPIAsyncMixin(BaseAPIAsyncMixin):
     async def get_product(self, product_id: str) -> Product | None:
         """
         Get a product.
 
         :return: The product.
         """
-        request = self.get_get_product_request(product_id)
+        request = ProductGetAPI.get_request(product_id)
         response = await self.client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_get_product_response(response)
+        return ProductGetAPI.process_response(response)
 
     async def get_products(self, product_ids: list[str]) -> list[Product | None]:
         """
