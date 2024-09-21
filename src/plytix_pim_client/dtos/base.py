@@ -2,9 +2,9 @@ from dataclasses import dataclass, asdict
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class BaseDto:
+class BaseDTO:
     @classmethod
-    def from_dict(cls, data: dict) -> "BaseDto":
+    def from_dict(cls, data: dict) -> "BaseDTO":
         return cls(**data)
 
     def to_dict(self) -> dict:

@@ -4,19 +4,19 @@ from typing import List
 
 import httpx
 
-from plytix_pim_client.constants import DEFAULT_HTTP_RETRIES, DEFAULT_HTTP_TIMEOUT
+from plytix_pim_client import config
 from plytix_pim_client.exceptions import TokenExpiredError, RateLimitExceededError
 from plytix_pim_client.http.base import ClientBase
 from plytix_pim_client.logger import logger
 
 
 class SyncClient(ClientBase):
-    def __init__(self, api_key: str | None = None, api_password: str | None = None, base_url: str | None = None):
-        super().__init__(api_key, api_password, base_url)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None):
+        super().__init__(api_key, api_password)
         self.client = httpx.Client(
             base_url=self.base_url_pim,
-            transport=httpx.HTTPTransport(retries=DEFAULT_HTTP_RETRIES),
-            timeout=DEFAULT_HTTP_TIMEOUT,
+            transport=httpx.HTTPTransport(retries=config.HTTP_RETRIES),
+            timeout=config.HTTP_TIMEOUT,
         )
 
     def close(self):
