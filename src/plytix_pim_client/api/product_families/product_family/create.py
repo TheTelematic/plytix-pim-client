@@ -1,6 +1,6 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from typing import TypedDict, List
+from typing import TypedDict, List, Dict
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
@@ -27,12 +27,11 @@ class FamilyCreateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The family created.
         """
-        data = {"name": name}
-        if attribute_ids:
-            data["attribute_ids"] = attribute_ids
-
-        if parent_attribute_ids:
-            data["parent_attribute_ids"] = parent_attribute_ids
+        data: Dict[str, str | List[str]] = {
+            "name": name,
+            "attribute_ids": attribute_ids or [],
+            "parent_attribute_ids": parent_attribute_ids or [],
+        }
 
         request = FamilyCreateAPI.get_request(**data)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
@@ -58,12 +57,11 @@ class FamilyCreateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The family created.
         """
-        data = {"name": name}
-        if attribute_ids:
-            data["attribute_ids"] = attribute_ids
-
-        if parent_attribute_ids:
-            data["parent_attribute_ids"] = parent_attribute_ids
+        data: Dict[str, str | List[str]] = {
+            "name": name,
+            "attribute_ids": attribute_ids or [],
+            "parent_attribute_ids": parent_attribute_ids or [],
+        }
 
         request = FamilyCreateAPI.get_request(**data)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)

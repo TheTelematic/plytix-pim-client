@@ -1,5 +1,5 @@
 from http import HTTPMethod, HTTPStatus
-from typing import TypeVar
+from typing import TypeVar, Generic
 
 import httpx
 
@@ -9,7 +9,7 @@ from plytix_pim_client.dtos.request import PlytixRequest
 T = TypeVar("T", bound=BaseDTO)
 
 
-class UpdateResourceAPI:
+class UpdateResourceAPI(Generic[T]):
     endpoint_prefix: str
     resource_dto_class: T
 

@@ -1,5 +1,5 @@
 from http import HTTPMethod
-from typing import List, TypeVar
+from typing import List, TypeVar, Generic
 
 import httpx
 
@@ -11,7 +11,7 @@ from plytix_pim_client.dtos.request import PlytixRequest
 T = TypeVar("T", bound=BaseDTO)
 
 
-class SearchResourceAPI:
+class SearchResourceAPI(Generic[T]):
     endpoint: str
     resource_dto_class: T
 

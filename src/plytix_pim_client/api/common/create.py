@@ -1,5 +1,5 @@
 from http import HTTPMethod
-from typing import TypeVar
+from typing import TypeVar, Generic
 
 import httpx
 
@@ -9,7 +9,7 @@ from plytix_pim_client.dtos.request import PlytixRequest
 T = TypeVar("T", bound=BaseDTO)
 
 
-class CreateResourceAPI:
+class CreateResourceAPI(Generic[T]):
     endpoint: str
     resource_dto_class: T
 
@@ -22,5 +22,5 @@ class CreateResourceAPI:
         )
 
     @classmethod
-    def process_response(cls, response: httpx.Response) -> T | None:
+    def process_response(cls, response: httpx.Response) -> T:
         return cls.resource_dto_class.from_dict(response.json()["data"][0])
