@@ -29,7 +29,9 @@ class FamilyCreateAPI:
             data["parent_attribute_ids"] = parent_attribute_ids
 
         return PlytixRequest(
-            method=HTTPMethod.POST,            endpoint = ("/api/v1/product_families",)kwargs={"json": data},
+            method=HTTPMethod.POST,
+            endpoint="/api/v1/product_families",
+            kwargs={"json": data},
         )
 
     @staticmethod
@@ -63,7 +65,7 @@ class FamilyCreateAPISyncMixin(FamilyCreateAPI, BaseAPISyncMixin):
 
 class FamilyCreateAPIAsyncMixin(FamilyCreateAPI, BaseAPIAsyncMixin):
     async def create_family(
-            self, name: str, attribute_ids: List[str] | None = None, parent_attribute_ids: List[str] | None = None
+        self, name: str, attribute_ids: List[str] | None = None, parent_attribute_ids: List[str] | None = None
     ) -> Family:
         """
         Create a family.
