@@ -17,9 +17,10 @@ class ClientBase:
         self.base_url_auth = config.PLYTIX_AUTH_BASE_URL
         self.auth_token: str | None = None
 
-    def _get_auth_headers(self) -> dict:
+    def _get_headers(self) -> dict:
         return {
             "Authorization": f"Bearer {self.auth_token}",
+            "User-Agent": config.USER_AGENT,
         }
 
     @staticmethod

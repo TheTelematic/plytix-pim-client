@@ -10,4 +10,7 @@ __all__ = [
     "OperatorEnum",
     "ProductsRelationshipFilter",
     "RelationshipSearchFilter",
+    "__version__",
 ]
+
+__version__ = "0.0.18"
