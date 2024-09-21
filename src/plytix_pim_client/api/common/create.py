@@ -8,6 +8,7 @@ from plytix_pim_client.dtos.request import PlytixRequest
 
 T = TypeVar("T", bound=BaseDTO)
 
+
 class CreateResourceAPI:
     endpoint: str
     resource_dto_class: T

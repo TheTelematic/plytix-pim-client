@@ -1,4 +1,5 @@
 from plytix_pim_client.api.product_families.create import FamilyCreateAPISyncMixin, FamilyCreateAPIAsyncMixin
+from plytix_pim_client.api.product_families.delete import FamilyDeleteAPISyncMixin, FamilyDeleteAPIAsyncMixin
 from plytix_pim_client.api.product_families.get import FamilyGetAPISyncMixin, FamilyGetAPIAsyncMixin
 from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
 from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
@@ -30,7 +31,7 @@ class _FamiliesAPISync(
     # FamiliesSearchAPISyncMixin,
     FamilyGetAPISyncMixin,
     # FamilyUpdateAPISyncMixin,
-    # FamilyDeleteAPISyncMixin,
+    FamilyDeleteAPISyncMixin,
 ): ...
 
 
@@ -39,5 +40,5 @@ class _FamiliesAPIAsync(
     # FamiliesSearchAPIAsyncMixin,
     FamilyGetAPIAsyncMixin,
     # FamilyUpdateAPIAsyncMixin,
-    # FamilyDeleteAPIAsyncMixin,
+    FamilyDeleteAPIAsyncMixin,
 ): ...

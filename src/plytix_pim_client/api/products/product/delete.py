@@ -1,41 +1,27 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod, HTTPStatus
-
-import httpx
+from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
-from plytix_pim_client.dtos.request import PlytixRequest
+from plytix_pim_client.api.common.delete import DeleteResourceAPI
 
 
-class ProductDeleteAPI:
-    @staticmethod
-    def get_delete_product_request(product_id: str) -> PlytixRequest:
-        return PlytixRequest(
-            method=HTTPMethod.DELETE,
-            endpoint=f"/api/v1/products/{product_id}",
-        )
-
-    @staticmethod
-    def process_delete_product_response(response: httpx.Response) -> bool:
-        if response.status_code == HTTPStatus.NOT_FOUND:
-            return False
-        else:
-            return True
+class ProductDeleteAPI(DeleteResourceAPI):
+    endpoint_prefix = "/api/v1/products"
 
 
-class ProductDeleteAPISyncMixin(ProductDeleteAPI, BaseAPISyncMixin):
+class ProductDeleteAPISyncMixin(BaseAPISyncMixin):
     def delete_product(self, product_id: str) -> bool:
         """
         Delete a product.
 
         :return: True if deleted, False if it didn't exist.
         """
-        request = self.get_delete_product_request(product_id)
+        request = ProductDeleteAPI.get_request(product_id)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_delete_product_response(response)
+        return ProductDeleteAPI.process_response(response)
 
     def delete_products(self, product_ids: list[str]) -> list[bool]:
         """
@@ -48,18 +34,18 @@ class ProductDeleteAPISyncMixin(ProductDeleteAPI, BaseAPISyncMixin):
             return [future.result() for future in futures]
 
 
-class ProductDeleteAPIAsyncMixin(ProductDeleteAPI, BaseAPIAsyncMixin):
+class ProductDeleteAPIAsyncMixin(BaseAPIAsyncMixin):
     async def delete_product(self, product_id: str) -> bool:
         """
         Delete a product.
 
         :return: True if deleted, False if it didn't exist.
         """
-        request = self.get_delete_product_request(product_id)
+        request = ProductDeleteAPI.get_request(product_id)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return self.process_delete_product_response(response)
+        return ProductDeleteAPI.process_response(response)
 
     async def delete_products(self, product_ids: list[str]) -> list[bool]:
         """
