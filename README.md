@@ -45,6 +45,7 @@ All methods are available in both synchronous and asynchronous clients with the 
 For the sake of simplicity, only the synchronous client is shown in the examples.
 
 ### Available resources
+Any of the following resources can be accessed through the client:
 - `products`
 - `families`
 
