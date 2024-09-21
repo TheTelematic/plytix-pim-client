@@ -1,6 +1,3 @@
-from integration.conftest import new_family_data
-
-
 async def test_delete_family(client, new_family_data):
     result = await client.families.create_family(**new_family_data)
 

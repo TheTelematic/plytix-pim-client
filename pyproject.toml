@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plytix-pim-client"
-version = "0.0.16"
+version = "0.0.17"
 authors = [
   { name="Arturo Parra", email="arturoteleco95@proton.me" },
 ]
 description = "An HTTP client in Python for Plytix PIM API."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

@@ -25,7 +25,7 @@ class _ProductsAPISync(
     ProductGetAPISyncMixin,
     ProductUpdateAPISyncMixin,
     ProductDeleteAPISyncMixin,
-): ...
+): ...  # noqa: E701
 
 
 class _ProductsAPIAsync(
@@ -34,7 +34,7 @@ class _ProductsAPIAsync(
     ProductGetAPIAsyncMixin,
     ProductUpdateAPIAsyncMixin,
     ProductDeleteAPIAsyncMixin,
-): ...
+): ...  # noqa: E701
 
 
 class _FamiliesAPISync(
@@ -43,7 +43,7 @@ class _FamiliesAPISync(
     FamilyGetAPISyncMixin,
     FamilyUpdateAPISyncMixin,
     FamilyDeleteAPISyncMixin,
-): ...
+): ...  # noqa: E701
 
 
 class _FamiliesAPIAsync(
@@ -52,4 +52,4 @@ class _FamiliesAPIAsync(
     FamilyGetAPIAsyncMixin,
     FamilyUpdateAPIAsyncMixin,
     FamilyDeleteAPIAsyncMixin,
-): ...
+): ...  # noqa: E701

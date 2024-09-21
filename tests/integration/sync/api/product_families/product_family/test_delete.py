@@ -1,6 +1,3 @@
-from integration.conftest import new_family_data
-
-
 def test_delete_family(client, new_family_data):
     result = client.families.create_family(**new_family_data)
 
