@@ -34,5 +34,5 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: make requirements-tests
-      - name: Run unit tests
+      - name: Run Unit Tests
         run: make unit-tests

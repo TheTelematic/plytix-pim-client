@@ -2,13 +2,32 @@ name: Upload Python Package
 
 on:
   release:
-    types: [ published ]
+    types:
+      - published
 
 permissions:
   contents: read
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: make requirements-tests
+      - name: Run Integration Tests
+        run: make integrations-tests
+        env:
+          PLYTIX_API_KEY: ${{ secrets.PLYTIX_API_KEY }}
+          PLYTIX_API_SECRET: ${{ secrets.PLYTIX_API_SECRET }}
+
   publish:
+    needs:
+      - tests
     runs-on: ubuntu-latest
     environment:
       name: pypi
