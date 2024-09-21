@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plytix-pim-client"
-version = "0.0.17"
 authors = [
   { name="Arturo Parra", email="arturoteleco95@proton.me" },
 ]
@@ -16,9 +15,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies"]
+dynamic = ["version", "dependencies"]
 
 [tool.setuptools.dynamic]
+version = "plytix_pim_client.__version__"
 dependencies = { file = ["requirements.txt"] }
 
 [project.urls]

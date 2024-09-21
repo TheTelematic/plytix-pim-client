@@ -30,7 +30,7 @@ class AsyncClient(ClientBase):
         accepted_error_codes: List[HTTPStatus] | None = None,
         **kwargs,
     ) -> httpx.Response:
-        kwargs["headers"] = self._get_auth_headers()
+        kwargs["headers"] = self._get_headers()
         response = await self.client.request(method, path, **kwargs)
         try:
             return self._process_response(response, accepted_error_codes=accepted_error_codes)
