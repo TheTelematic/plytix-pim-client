@@ -10,6 +10,10 @@ from plytix_pim_client.api.products.attributes.attribute.get import (
     ProductAttributeGetAPIAsyncMixin,
     ProductAttributeGetAPISyncMixin,
 )
+from plytix_pim_client.api.products.attributes.attribute.update import (
+    ProductAttributeUpdateAPISyncMixin,
+    ProductAttributeUpdateAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.families.family.attributes.get import (
     ProductFamilyGetAttributesAPISyncMixin,
     ProductFamilyGetAttributesAPIAsyncMixin,
@@ -92,6 +96,7 @@ class _ProductAttributesAPISync(
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeDeleteAPISyncMixin,
     ProductAttributeGetAPISyncMixin,
+    ProductAttributeUpdateAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -99,6 +104,7 @@ class _ProductAttributesAPIAsync(
     ProductAttributeCreateAPIAsyncMixin,
     ProductAttributeDeleteAPIAsyncMixin,
     ProductAttributeGetAPIAsyncMixin,
+    ProductAttributeUpdateAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

@@ -1,4 +1,3 @@
-raise Exception("Not implemented")
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPStatus
@@ -6,59 +5,81 @@ from typing import Tuple
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
-from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.attribute import ProductAttribute
 
 
-class ProductUpdateAPI(UpdateResourceAPI):
-    endpoint_prefix = "/api/v1/products"
-    resource_dto_class = Product
+class ProductAttributeUpdateAPI(UpdateResourceAPI):
+    endpoint_prefix = "/api/v1/attributes/product"
+    resource_dto_class = ProductAttribute
 
 
-class ProductUpdateAPISyncMixin(BaseAPISyncMixin):
-    def update_product(self, product_id: str, data: dict) -> Product | None:
+class ProductAttributeUpdateAPISyncMixin(BaseAPISyncMixin):
+    def update_attribute(
+        self, attribute_id: str, new_name: str, description: str | None = None
+    ) -> ProductAttribute | None:
         """
-        Update a product.
+        Update a product attribute.
 
-        :return: The product.
+        :return: The product attribute if exists, None otherwise.
         """
-        request = ProductUpdateAPI.get_request(product_id, data)
+        data = {"name": new_name}
+        if description:
+            data["description"] = description
+
+        request = ProductAttributeUpdateAPI.get_request(attribute_id, data)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductUpdateAPI.process_response(response)
+        return ProductAttributeUpdateAPI.process_response(response)
 
-    def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    def update_attributes(
+        self, attribute_ids_with_new_name_and_description: list[Tuple[str, str, str | None]]
+    ) -> list[ProductAttribute | None]:
         """
-        Update multiple products. This uses threading to make the requests concurrently.
+        Update multiple products attributes. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: List of product attributes and/or None if any doesn't exist.
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.update_product, product_id, data) for product_id, data in product_ids_and_data
+                executor.submit(self.update_attribute, attribute_id, new_name, description)
+                for attribute_id, new_name, description in attribute_ids_with_new_name_and_description
             ]
             return [future.result() for future in futures]
 
 
-class ProductUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def update_product(self, product_id: str, data: dict) -> Product | None:
+class ProductAttributeUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def update_attribute(
+        self, attribute_id: str, new_name: str, description: str | None = None
+    ) -> ProductAttribute | None:
         """
-        Update a product.
+        Update a product attribute.
 
-        :return: The product.
+        :return: The product attribute if exists, None otherwise.
         """
-        request = ProductUpdateAPI.get_request(product_id, data)
+        data = {"name": new_name}
+        if description:
+            data["description"] = description
+
+        request = ProductAttributeUpdateAPI.get_request(attribute_id, data)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductUpdateAPI.process_response(response)
+        return ProductAttributeUpdateAPI.process_response(response)
 
-    async def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    async def update_attributes(
+        self, attribute_ids_with_new_name_and_description: list[Tuple[str, str, str | None]]
+    ) -> list[ProductAttribute | None]:
         """
-        Update multiple products. This uses asyncio to make the requests concurrently.
+        Update multiple products attributes. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: List of product attributes and/or None if any doesn't exist.
         """
         return list(
-            await asyncio.gather(*[self.update_product(product_id, data) for product_id, data in product_ids_and_data])
+            await asyncio.gather(
+                *[
+                    self.update_attribute(attribute_id, new_name, description)
+                    for attribute_id, new_name, description in attribute_ids_with_new_name_and_description
+                ]
+            )
         )
