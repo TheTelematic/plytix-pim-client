@@ -17,7 +17,7 @@ unit-tests: requirements-tests
 
 	PLYTIX_API_KEY=foo PLYTIX_API_PASSWORD=bar python3 -m pytest tests/unit ${args}
 
-integration-tests: requirements-test.txt
+integration-tests: requirements-tests
 	@args=$1
 
 	python3 -m pytest tests/integration ${args}
