@@ -5,7 +5,7 @@ from typing import Tuple
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
-from plytix_pim_client.dtos.product import Product
+from plytix_pim_client.dtos.products.product import Product
 
 
 class ProductUpdateAPI(UpdateResourceAPI):

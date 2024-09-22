@@ -1,10 +1,10 @@
-from .client import PlytixPimClientSync, PlytixPimClientAsync
+from plytix_pim_client.dtos.products.product import Product
+from .client import PlytixSync, PlytixAsync
 from .dtos.filters import SearchFilter, OperatorEnum, ProductsRelationshipFilter, RelationshipSearchFilter
-from .dtos.product import Product
 
 __all__ = [
-    "PlytixPimClientSync",
-    "PlytixPimClientAsync",
+    "PlytixSync",
+    "PlytixAsync",
     "Product",
     "SearchFilter",
     "OperatorEnum",

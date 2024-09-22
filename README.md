@@ -26,19 +26,21 @@ Pypi: https://pypi.org/project/plytix-pim-client/
 ## Usage
 
 ### Synchronous client
+
 ```python
-from plytix_pim_client import PlytixPimClientSync
+from plytix_pim_client import PlytixSync
 
 # Set the environment variables PLYTIX_API_KEY and PLYTIX_API_PASSWORD
-client = PlytixPimClientSync()
+plytix = PlytixSync()
 ```
 
 ### Asynchronous client
+
 ```python
-from plytix_pim_client import PlytixPimClientAsync
+from plytix_pim_client import PlytixAsync
 
 # Set the environment variables PLYTIX_API_KEY and PLYTIX_API_PASSWORD
-client = PlytixPimClientAsync()
+plytix = PlytixAsync()
 ```
 
 All methods are available in both synchronous and asynchronous clients with the same I/O interface.
@@ -47,10 +49,11 @@ For the sake of simplicity, only the synchronous client is shown in the examples
 ### Available resources
 Any of the following resources can be accessed through the client:
 - `products`
-- `families`
+  - `families`
+    - `attributes`
+  - `attributes`
 - `assets`
 - `categories`
-- `attributes`
 - `relationships`
 
 Each resource has specific methods to interact with the API. 
@@ -60,9 +63,21 @@ Also, you may have a look to the integration tests for more examples.
 
 ## Examples
 ### Create a product
-```python
-from plytix_pim_client import PlytixPimClientSync
-client = PlytixPimClientSync()
 
-client.products.create_product(sku="My First Product", label="My First Product")
+```python
+from plytix_pim_client import PlytixSync
+
+plytix = PlytixSync()
+
+plytix.products.create_product(sku="My First Product", label="My First Product")
+```
+
+### Create a product family
+
+```python
+from plytix_pim_client import PlytixSync
+
+plytix = PlytixSync()
+
+plytix.products.families.create_family(name="My First Family")
 ```

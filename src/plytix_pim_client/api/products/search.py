@@ -5,7 +5,7 @@ from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
-from plytix_pim_client.dtos.product import Product
+from plytix_pim_client.dtos.products.product import Product
 
 
 class ProductsSearchAPI(SearchResourceAPI):

@@ -4,7 +4,7 @@ from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.get import GetResourceAPI
-from plytix_pim_client.dtos.product import Product
+from plytix_pim_client.dtos.products.product import Product
 
 
 class ProductGetAPI(GetResourceAPI):

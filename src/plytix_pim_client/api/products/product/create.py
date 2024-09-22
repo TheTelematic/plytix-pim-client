@@ -4,7 +4,7 @@ from typing import TypedDict
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
-from plytix_pim_client.dtos.product import Product
+from plytix_pim_client.dtos.products.product import Product
 
 
 class CreateProductDict(TypedDict):

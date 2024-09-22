@@ -2,7 +2,7 @@ from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
 from plytix_pim_client.dtos.pagination import Pagination
 
 
-async def test_search_products(client, new_product_data):
+async def test_search_products(plytix, new_product_data):
     new_product_data_1 = new_product_data.copy()
     new_product_data_2 = new_product_data.copy()
     new_product_data_3 = new_product_data.copy()
@@ -16,9 +16,9 @@ async def test_search_products(client, new_product_data):
         new_product_data_2,
         new_product_data_3,
     ]
-    await client.products.create_products(products)
+    await plytix.products.create_products(products)
 
-    search_results = await client.products.search_products(
+    search_results = await plytix.products.search_products(
         filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
         attributes=["sku", "label"],
         relationship_filters=[],
@@ -37,7 +37,7 @@ async def test_search_products(client, new_product_data):
     assert search_results[2].label == new_product_data_3["label"]
 
 
-async def test_search_all_products(client, new_product_data):
+async def test_search_all_products(plytix, new_product_data):
     new_product_data_1 = new_product_data.copy()
     new_product_data_2 = new_product_data.copy()
     new_product_data_3 = new_product_data.copy()
@@ -51,10 +51,10 @@ async def test_search_all_products(client, new_product_data):
         new_product_data_2,
         new_product_data_3,
     ]
-    await client.products.create_products(products)
+    await plytix.products.create_products(products)
 
     search_results = []
-    async for products in client.products.search_all_products(
+    async for products in plytix.products.search_all_products(
         filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
         attributes=["sku", "label"],
         relationship_filters=[],
