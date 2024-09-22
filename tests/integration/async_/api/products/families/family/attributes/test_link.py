@@ -10,6 +10,9 @@ async def test_link_attribute_to_family(client, new_product_family_data, new_pro
     assert result is True
     family = await client.products.families.get_family(new_family.id)
     assert family.total_attributes == 1
+    attributes = await client.products.families.attributes.get_family_attributes(new_family.id)
+    assert len(attributes) == 1
+    assert attributes[0].id == new_attribute.id
 
 
 async def test_link_attributes_to_families(client, new_product_family_data, new_product_attribute_data):
@@ -40,3 +43,11 @@ async def test_link_attributes_to_families(client, new_product_family_data, new_
     family2 = await client.products.families.get_family(new_family2.id)
     assert family1.total_attributes == 1
     assert family2.total_attributes == 1
+    attributes1 = await client.products.families.attributes.get_family_attributes(new_family1.id)
+    attributes2 = await client.products.families.attributes.get_family_attributes(new_family2.id)
+    assert len(attributes1) == 1
+    assert len(attributes2) == 1
+    assert attributes1[0].id == new_attribute1.id
+    assert attributes2[0].id == new_attribute2.id
+    assert attributes1[0].attribute_level == ProductAttributeFamilyLevel.OFF
+    assert attributes2[0].attribute_level == ProductAttributeFamilyLevel.ON
