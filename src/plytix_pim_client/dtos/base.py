@@ -4,7 +4,7 @@ from dataclasses import dataclass, asdict
 @dataclass(frozen=True, slots=True, kw_only=True)
 class BaseDTO:
     @classmethod
-    def from_dict(cls, data: dict) -> "BaseDTO":
+    def from_dict(cls, data: dict):
         return cls(**data)
 
     def to_dict(self) -> dict:

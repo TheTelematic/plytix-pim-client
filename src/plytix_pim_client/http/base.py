@@ -17,6 +17,12 @@ class ClientBase:
         self.base_url_auth = config.PLYTIX_AUTH_BASE_URL
         self.auth_token: str | None = None
 
+        if not self.api_key or not self.api_password:
+            raise ValueError(
+                "API key and password are required, please pass to the client or "
+                "set the env vars PLYTIX_API_KEY and PLYTIX_API_PASSWORD"
+            )
+
     def _get_headers(self) -> dict:
         return {
             "Authorization": f"Bearer {self.auth_token}",

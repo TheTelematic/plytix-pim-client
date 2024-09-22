@@ -1,6 +1,6 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from typing import TypedDict, List
+from typing import TypedDict, List, Dict
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
@@ -51,7 +51,14 @@ class ProductAttributeCreateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The product attribute created.
         """
-        data = {
+        data: Dict[
+            str,
+            str
+            | List[ProductAttributeCreateProductFamiliesDict]
+            | List[str]
+            | bool
+            | List[ProductAttributeCreateRelatedAttributesDict],
+        ] = {
             "name": name,
             "type_class": type_class,
         }
@@ -102,7 +109,14 @@ class ProductAttributeCreateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The product attribute created.
         """
-        data = {
+        data: Dict[
+            str,
+            str
+            | List[ProductAttributeCreateProductFamiliesDict]
+            | List[str]
+            | bool
+            | List[ProductAttributeCreateRelatedAttributesDict],
+        ] = {
             "name": name,
             "type_class": type_class,
         }
