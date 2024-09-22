@@ -1,4 +1,3 @@
-raise Exception("Not implemented")
 from typing import List, Generator, AsyncGenerator
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
@@ -6,32 +5,32 @@ from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
-from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.attribute import ProductAttribute
 
 
-class ProductsSearchAPI(SearchResourceAPI):
-    endpoint = "/api/v1/products/search"
-    resource_dto_class = Product
+class ProductAttributesSearchAPI(SearchResourceAPI):
+    endpoint = "/api/v1/attributes/product/search"
+    resource_dto_class = ProductAttribute
 
 
-class ProductsSearchAPISyncMixin(BaseAPISyncMixin):
-    def search_products(
+class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
+    def search_product_attributes(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Product]:
+    ) -> List[ProductAttribute]:
         """
         Search for products matching the filters.
 
         :return: The products found.
         """
-        request = ProductsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductsSearchAPI.process_response(response)
+        return ProductAttributesSearchAPI.process_response(response)
 
-    def search_all_products(
+    def search_all_product_attributes(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
@@ -39,7 +38,7 @@ class ProductsSearchAPISyncMixin(BaseAPISyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> Generator[List[Product], None, None]:
+    ) -> Generator[List[ProductAttribute], None, None]:
         """
         Iterate over all products matching the filters.
 
@@ -53,31 +52,31 @@ class ProductsSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products = self.search_products(filters, attributes, relationship_filters, pagination)
+            products = self.search_product_attributes(filters, attributes, relationship_filters, pagination)
             if not products:
                 break
             yield products
             current_page += 1
 
 
-class ProductsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def search_products(
+class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def search_product_attributes(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Product]:
+    ) -> List[ProductAttribute]:
         """
         Search for products matching the filters.
 
         :return: The products found.
         """
-        request = ProductsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductsSearchAPI.process_response(response)
+        return ProductAttributesSearchAPI.process_response(response)
 
-    async def search_all_products(
+    async def search_all_product_attributes(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
@@ -85,7 +84,7 @@ class ProductsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> AsyncGenerator[List[Product], None]:
+    ) -> AsyncGenerator[List[ProductAttribute], None]:
         """
         Iterate over all products matching the filters.
 
@@ -99,7 +98,7 @@ class ProductsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products = await self.search_products(filters, attributes, relationship_filters, pagination)
+            products = await self.search_product_attributes(filters, attributes, relationship_filters, pagination)
             if not products:
                 break
             yield products
