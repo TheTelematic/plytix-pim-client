@@ -30,6 +30,10 @@ from plytix_pim_client.api.products.families.family.attributes.link import (
     ProductFamilyLinkAttributeAPISyncMixin,
     ProductFamilyLinkAttributeAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.families.family.attributes.unlink import (
+    ProductFamilyUnlinkAttributeAPIAsyncMixin,
+    ProductFamilyUnlinkAttributeAPISyncMixin,
+)
 from plytix_pim_client.api.products.families.family.create import (
     ProductFamilyCreateAPISyncMixin,
     ProductFamilyCreateAPIAsyncMixin,
@@ -66,6 +70,7 @@ class _ProductFamiliesAttributesAPISync(
     ProductFamilyGetAttributesAPISyncMixin,
     ProductFamilyLinkAttributeAPISyncMixin,
     ProductFamilyEditAttributeInheritanceAPISyncMixin,
+    ProductFamilyUnlinkAttributeAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -73,6 +78,7 @@ class _ProductFamiliesAttributesAPIAsync(
     ProductFamilyGetAttributesAPIAsyncMixin,
     ProductFamilyLinkAttributeAPIAsyncMixin,
     ProductFamilyEditAttributeInheritanceAPIAsyncMixin,
+    ProductFamilyUnlinkAttributeAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
