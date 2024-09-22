@@ -2,7 +2,7 @@ from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
 from plytix_pim_client.dtos.pagination import Pagination
 
 
-def test_search_product_attributes(client, new_product_attribute_data):
+def test_search_product_attributes(plytix, new_product_attribute_data):
     new_product_attribute_data_1 = new_product_attribute_data.copy()
     new_product_attribute_data_2 = new_product_attribute_data.copy()
     new_product_attribute_data_3 = new_product_attribute_data.copy()
@@ -16,9 +16,9 @@ def test_search_product_attributes(client, new_product_attribute_data):
         new_product_attribute_data_2,
         new_product_attribute_data_3,
     ]
-    client.products.attributes.create_attributes(product_attributes)
+    plytix.products.attributes.create_attributes(product_attributes)
 
-    search_results = client.products.attributes.search_product_attributes(
+    search_results = plytix.products.attributes.search_product_attributes(
         filters=[
             [SearchFilter(field="name", operator=OperatorEnum.CONTAINS, value=new_product_attribute_data["name"])]
         ],
@@ -36,7 +36,7 @@ def test_search_product_attributes(client, new_product_attribute_data):
     assert search_results[2].name == new_product_attribute_data_3["name"]
 
 
-def test_search_all_product_attributes(client, new_product_attribute_data):
+def test_search_all_product_attributes(plytix, new_product_attribute_data):
     new_product_attribute_data_1 = new_product_attribute_data.copy()
     new_product_attribute_data_2 = new_product_attribute_data.copy()
     new_product_attribute_data_3 = new_product_attribute_data.copy()
@@ -50,10 +50,10 @@ def test_search_all_product_attributes(client, new_product_attribute_data):
         new_product_attribute_data_2,
         new_product_attribute_data_3,
     ]
-    client.products.attributes.create_attributes(product_attributes)
+    plytix.products.attributes.create_attributes(product_attributes)
 
     search_results = []
-    for product_attributes in client.products.attributes.search_all_product_attributes(
+    for product_attributes in plytix.products.attributes.search_all_product_attributes(
         filters=[
             [SearchFilter(field="name", operator=OperatorEnum.CONTAINS, value=new_product_attribute_data["name"])]
         ],

@@ -1,20 +1,20 @@
-def test_update_product(client, new_product_data):
-    result = client.products.create_product(new_product_data["sku"], new_product_data["label"])
+def test_update_product(plytix, new_product_data):
+    result = plytix.products.create_product(new_product_data["sku"], new_product_data["label"])
 
     new_label = "new label"
-    result = client.products.update_product(result.id, {"label": new_label})
+    result = plytix.products.update_product(result.id, {"label": new_label})
 
     assert result.sku == new_product_data["sku"]
     assert result.label == new_label
 
 
-def test_update_product_not_found(client):
-    result = client.products.update_product("non-existing-id", {"label": "new label"})
+def test_update_product_not_found(plytix):
+    result = plytix.products.update_product("non-existing-id", {"label": "new label"})
 
     assert result is None
 
 
-def test_update_multiple_products(client, new_product_data):
+def test_update_multiple_products(plytix, new_product_data):
     new_product_data_1 = new_product_data.copy()
     new_product_data_2 = new_product_data.copy()
     new_product_data_3 = new_product_data.copy()
@@ -28,11 +28,11 @@ def test_update_multiple_products(client, new_product_data):
         new_product_data_2,
         new_product_data_3,
     ]
-    results = client.products.create_products(products)
+    results = plytix.products.create_products(products)
 
     new_label = "new label"
     updated_products = [(result.id, {"label": new_label}) for result in results]
-    results = client.products.update_products(updated_products)
+    results = plytix.products.update_products(updated_products)
 
     assert results[0].sku == new_product_data_1["sku"]
     assert results[0].label == new_label

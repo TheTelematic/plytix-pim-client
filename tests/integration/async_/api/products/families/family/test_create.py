@@ -1,5 +1,5 @@
-async def test_create_family_ok(client, new_product_family_data):
-    family = await client.products.families.create_family(**new_product_family_data)
+async def test_create_family_ok(plytix, new_product_family_data):
+    family = await plytix.products.families.create_family(**new_product_family_data)
 
     assert family.name == new_product_family_data["name"]
     assert family.total_attributes == 0
@@ -7,13 +7,13 @@ async def test_create_family_ok(client, new_product_family_data):
     assert family.total_products == 0
 
 
-async def test_create_family_multiple_ok(client, new_product_family_data):
+async def test_create_family_multiple_ok(plytix, new_product_family_data):
     family1 = new_product_family_data.copy()
     family2 = new_product_family_data.copy()
     family1["name"] = f"{family1['name']}-1"
     family2["name"] = f"{family2['name']}-2"
 
-    families = await client.products.families.create_families([family1, family2])
+    families = await plytix.products.families.create_families([family1, family2])
 
     assert len(families) == 2
     assert families[0].name == family1["name"]

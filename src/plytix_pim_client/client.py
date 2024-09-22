@@ -3,7 +3,7 @@ from plytix_pim_client.http.sync import SyncClient
 from plytix_pim_client.mixins import _ProductsAPISync, _ProductsAPIAsync
 
 
-class PlytixPimClientSync:
+class PlytixSync:
     def __init__(self, api_key: str | None = None, api_password: str | None = None):
         self._client = SyncClient(api_key, api_password)
 
@@ -15,7 +15,7 @@ class PlytixPimClientSync:
         return _ProductsAPISync(self._client)
 
 
-class PlytixPimClientAsync:
+class PlytixAsync:
     def __init__(self, api_key: str | None = None, api_password: str | None = None):
         self._client = AsyncClient(api_key, api_password)
 

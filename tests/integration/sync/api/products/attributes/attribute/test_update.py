@@ -1,7 +1,7 @@
-def test_update_attribute(client, new_product_attribute_data):
-    attribute = client.products.attributes.create_attribute(**new_product_attribute_data)
+def test_update_attribute(plytix, new_product_attribute_data):
+    attribute = plytix.products.attributes.create_attribute(**new_product_attribute_data)
 
-    updated_attribute = client.products.attributes.update_attribute(
+    updated_attribute = plytix.products.attributes.update_attribute(
         attribute.id,
         new_name=f"Updated {attribute.name}",
         description=f"Updated {attribute.description}",
@@ -13,8 +13,8 @@ def test_update_attribute(client, new_product_attribute_data):
     assert updated_attribute.description == f"Updated {attribute.description}"
 
 
-def test_update_not_existing_attribute(client):
-    updated_attribute = client.products.attributes.update_attribute(
+def test_update_not_existing_attribute(plytix):
+    updated_attribute = plytix.products.attributes.update_attribute(
         "not-existing-attribute-id",
         new_name="Updated Name",
         description="Updated Description",
@@ -23,17 +23,17 @@ def test_update_not_existing_attribute(client):
     assert updated_attribute is None
 
 
-def test_update_attributes(client, new_product_attribute_data):
+def test_update_attributes(plytix, new_product_attribute_data):
     attribute1 = new_product_attribute_data.copy()
     attribute2 = new_product_attribute_data.copy()
 
     attribute1["name"] = f"{attribute1['name']} 1"
     attribute2["name"] = f"{attribute2['name']} 2"
 
-    attribute1 = client.products.attributes.create_attribute(**attribute1)
-    attribute2 = client.products.attributes.create_attribute(**attribute2)
+    attribute1 = plytix.products.attributes.create_attribute(**attribute1)
+    attribute2 = plytix.products.attributes.create_attribute(**attribute2)
 
-    updated_attributes = client.products.attributes.update_attributes(
+    updated_attributes = plytix.products.attributes.update_attributes(
         [
             (attribute1.id, f"Updated {attribute1.name}", f"Updated {attribute1.description}"),
             (attribute2.id, f"Updated {attribute2.name}", f"Updated {attribute2.description}"),

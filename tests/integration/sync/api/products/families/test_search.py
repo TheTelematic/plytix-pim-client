@@ -2,7 +2,7 @@ from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
 from plytix_pim_client.dtos.pagination import Pagination
 
 
-def test_search_families(client, new_product_family_data):
+def test_search_families(plytix, new_product_family_data):
     new_family_data_1 = new_product_family_data.copy()
     new_family_data_2 = new_product_family_data.copy()
     new_family_data_3 = new_product_family_data.copy()
@@ -16,9 +16,9 @@ def test_search_families(client, new_product_family_data):
         new_family_data_2,
         new_family_data_3,
     ]
-    client.products.families.create_families(families)
+    plytix.products.families.create_families(families)
 
-    search_results = client.products.families.search_families(
+    search_results = plytix.products.families.search_families(
         filters=[[SearchFilter(field="name", operator=OperatorEnum.CONTAINS, value=new_product_family_data["name"])]],
         attributes=[
             "name",
@@ -34,7 +34,7 @@ def test_search_families(client, new_product_family_data):
     assert search_results[2].name == new_family_data_3["name"]
 
 
-def test_search_all_families(client, new_product_family_data):
+def test_search_all_families(plytix, new_product_family_data):
     new_family_data_1 = new_product_family_data.copy()
     new_family_data_2 = new_product_family_data.copy()
     new_family_data_3 = new_product_family_data.copy()
@@ -48,10 +48,10 @@ def test_search_all_families(client, new_product_family_data):
         new_family_data_2,
         new_family_data_3,
     ]
-    client.products.families.create_families(families)
+    plytix.products.families.create_families(families)
 
     search_results = []
-    for families in client.products.families.search_all_families(
+    for families in plytix.products.families.search_all_families(
         filters=[[SearchFilter(field="name", operator=OperatorEnum.CONTAINS, value=new_product_family_data["name"])]],
         attributes=["name", "label"],
         relationship_filters=[],

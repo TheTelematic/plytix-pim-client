@@ -1,19 +1,19 @@
-def test_rename_family(client, new_product_family_data):
-    result = client.products.families.create_family(**new_product_family_data)
+def test_rename_family(plytix, new_product_family_data):
+    result = plytix.products.families.create_family(**new_product_family_data)
 
     new_name = f"{new_product_family_data['name']}-new"
-    result = client.products.families.rename_family(result.id, new_name)
+    result = plytix.products.families.rename_family(result.id, new_name)
 
     assert result.name == new_name
 
 
-def test_rename_family_not_found(client):
-    result = client.products.families.rename_family("non-existing-id", "new name")
+def test_rename_family_not_found(plytix):
+    result = plytix.products.families.rename_family("non-existing-id", "new name")
 
     assert result is None
 
 
-def test_update_multiple_families(client, new_product_family_data):
+def test_update_multiple_families(plytix, new_product_family_data):
     new_family_data_1 = new_product_family_data.copy()
     new_family_data_2 = new_product_family_data.copy()
     new_family_data_3 = new_product_family_data.copy()
@@ -27,10 +27,10 @@ def test_update_multiple_families(client, new_product_family_data):
         new_family_data_2,
         new_family_data_3,
     ]
-    results = client.products.families.create_families(families)
+    results = plytix.products.families.create_families(families)
 
     updated_families = [(result.id, f"{result.name}-new") for result in results]
-    results = client.products.families.rename_families(updated_families)
+    results = plytix.products.families.rename_families(updated_families)
 
     assert results[0].name == f"{new_family_data_1['name']}-new"
     assert results[1].name == f"{new_family_data_2['name']}-new"

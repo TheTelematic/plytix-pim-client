@@ -1,12 +1,12 @@
 from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 
 
-def test_get_family_attributes(client, new_product_family_data, new_product_attribute_data):
-    family = client.products.families.create_family(**new_product_family_data)
-    attribute = client.products.attributes.create_attribute(**new_product_attribute_data)
-    client.products.families.link_attribute_to_family(family.id, [attribute.id])
+def test_get_family_attributes(plytix, new_product_family_data, new_product_attribute_data):
+    family = plytix.products.families.create_family(**new_product_family_data)
+    attribute = plytix.products.attributes.create_attribute(**new_product_attribute_data)
+    plytix.products.families.link_attribute_to_family(family.id, [attribute.id])
 
-    results = client.products.families.attributes.get_family_attributes(family.id)
+    results = plytix.products.families.attributes.get_family_attributes(family.id)
 
     assert len(results) == 1
     assert results[0].id == attribute.id
@@ -15,30 +15,30 @@ def test_get_family_attributes(client, new_product_family_data, new_product_attr
     assert results[0].attribute_level == ProductAttributeFamilyLevel.OFF
 
 
-def test_get_family_attributes_not_found(client):
-    results = client.products.families.attributes.get_family_attributes("not-found")
+def test_get_family_attributes_not_found(plytix):
+    results = plytix.products.families.attributes.get_family_attributes("not-found")
     assert results is None
 
 
-def test_get_families_attributes(client, new_product_family_data, new_product_attribute_data):
+def test_get_families_attributes(plytix, new_product_family_data, new_product_attribute_data):
     family1 = new_product_family_data.copy()
     family2 = new_product_family_data.copy()
     family1["name"] = f"{family1['name']} 1"
     family2["name"] = f"{family2['name']} 2"
-    family1 = client.products.families.create_family(**family1)
-    family2 = client.products.families.create_family(**family2)
+    family1 = plytix.products.families.create_family(**family1)
+    family2 = plytix.products.families.create_family(**family2)
 
     attribute1 = new_product_attribute_data.copy()
     attribute2 = new_product_attribute_data.copy()
     attribute1["name"] = f"{attribute1['name']} 1"
     attribute2["name"] = f"{attribute2['name']} 2"
-    attribute1 = client.products.attributes.create_attribute(**attribute1)
-    attribute2 = client.products.attributes.create_attribute(**attribute2)
+    attribute1 = plytix.products.attributes.create_attribute(**attribute1)
+    attribute2 = plytix.products.attributes.create_attribute(**attribute2)
 
-    client.products.families.link_attribute_to_family(family1.id, [attribute1.id])
-    client.products.families.link_attribute_to_family(family2.id, [attribute2.id])
+    plytix.products.families.link_attribute_to_family(family1.id, [attribute1.id])
+    plytix.products.families.link_attribute_to_family(family2.id, [attribute2.id])
 
-    results = client.products.families.attributes.get_families_attributes([family1.id, family2.id])
+    results = plytix.products.families.attributes.get_families_attributes([family1.id, family2.id])
 
     assert len(results) == 2
     assert len(results[0]) == 1

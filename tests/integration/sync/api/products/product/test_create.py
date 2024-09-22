@@ -1,18 +1,18 @@
-def test_create_product_ok(client, new_product_data):
-    result = client.products.create_product(new_product_data["sku"], new_product_data["label"])
+def test_create_product_ok(plytix, new_product_data):
+    result = plytix.products.create_product(new_product_data["sku"], new_product_data["label"])
 
     assert result.sku == new_product_data["sku"]
     assert result.label == new_product_data["label"]
 
 
-def test_create_product_no_label(client, new_product_data):
-    result = client.products.create_product(new_product_data["sku"])
+def test_create_product_no_label(plytix, new_product_data):
+    result = plytix.products.create_product(new_product_data["sku"])
 
     assert result.sku == new_product_data["sku"]
     assert result.label is None
 
 
-def test_create_multiple_products(client, new_product_data):
+def test_create_multiple_products(plytix, new_product_data):
     new_product_data_1 = new_product_data.copy()
     new_product_data_2 = new_product_data.copy()
     new_product_data_3 = new_product_data.copy()
@@ -26,7 +26,7 @@ def test_create_multiple_products(client, new_product_data):
         new_product_data_2,
         new_product_data_3,
     ]
-    results = client.products.create_products(products)
+    results = plytix.products.create_products(products)
 
     assert results[0].sku == new_product_data_1["sku"]
     assert results[0].label == new_product_data_1["label"]
