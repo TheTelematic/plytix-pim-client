@@ -1,3 +1,4 @@
+raise Exception("Not implemented")
 from typing import List, Generator, AsyncGenerator
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin

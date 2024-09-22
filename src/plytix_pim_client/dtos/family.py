@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from enum import StrEnum
 
 from plytix_pim_client.dtos.base import BaseDTO
 
@@ -15,3 +16,8 @@ class Family(BaseDTO):
     total_products: int | None = None
     created_user_audit: dict | None = field(default_factory=dict)
     modified_user_audit: dict | None = field(default_factory=dict)
+
+
+class AttributeLevel(StrEnum):
+    ON = "parent_level"
+    OFF = "no_level"

@@ -1,3 +1,7 @@
+from plytix_pim_client.api.product_families.product_family.attributes.link import (
+    LinkAttributeToFamilyAPISyncMixin,
+    LinkAttributeToFamilyAPIAsyncMixin,
+)
 from plytix_pim_client.api.product_families.product_family.create import (
     FamilyCreateAPISyncMixin,
     FamilyCreateAPIAsyncMixin,
@@ -12,6 +16,10 @@ from plytix_pim_client.api.product_families.product_family.update import (
     FamilyUpdateAPIAsyncMixin,
 )
 from plytix_pim_client.api.product_families.search import FamiliesSearchAPISyncMixin, FamiliesSearchAPIAsyncMixin
+from plytix_pim_client.api.products.attributes.attribute.create import (
+    ProductAttributeCreateAPISyncMixin,
+    ProductAttributeCreateAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
 from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
 from plytix_pim_client.api.products.product.family import (
@@ -30,6 +38,7 @@ class _ProductsAPISync(
     ProductUpdateAPISyncMixin,
     ProductDeleteAPISyncMixin,
     ProductAssignFamilyAPISyncMixin,
+    ProductAttributeCreateAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -40,6 +49,7 @@ class _ProductsAPIAsync(
     ProductUpdateAPIAsyncMixin,
     ProductDeleteAPIAsyncMixin,
     ProductAssignFamilyAPIAsyncMixin,
+    ProductAttributeCreateAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
@@ -49,6 +59,7 @@ class _FamiliesAPISync(
     FamilyGetAPISyncMixin,
     FamilyUpdateAPISyncMixin,
     FamilyDeleteAPISyncMixin,
+    LinkAttributeToFamilyAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -58,4 +69,5 @@ class _FamiliesAPIAsync(
     FamilyGetAPIAsyncMixin,
     FamilyUpdateAPIAsyncMixin,
     FamilyDeleteAPIAsyncMixin,
+    LinkAttributeToFamilyAPIAsyncMixin,
 ): ...  # noqa: E701
