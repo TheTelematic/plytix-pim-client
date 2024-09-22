@@ -22,6 +22,10 @@ from plytix_pim_client.api.products.families.family.attributes.get import (
     ProductFamilyGetAttributesAPISyncMixin,
     ProductFamilyGetAttributesAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.families.family.attributes.inheritance import (
+    ProductFamilyEditAttributeInheritanceAPISyncMixin,
+    ProductFamilyEditAttributeInheritanceAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.families.family.attributes.link import (
     ProductFamilyLinkAttributeAPISyncMixin,
     ProductFamilyLinkAttributeAPIAsyncMixin,
@@ -60,11 +64,15 @@ from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, Pr
 # Product Families Attributes API
 class _ProductFamiliesAttributesAPISync(
     ProductFamilyGetAttributesAPISyncMixin,
+    ProductFamilyLinkAttributeAPISyncMixin,
+    ProductFamilyEditAttributeInheritanceAPISyncMixin,
 ): ...  # noqa: E701
 
 
 class _ProductFamiliesAttributesAPIAsync(
     ProductFamilyGetAttributesAPIAsyncMixin,
+    ProductFamilyLinkAttributeAPIAsyncMixin,
+    ProductFamilyEditAttributeInheritanceAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
@@ -75,7 +83,6 @@ class _ProductFamiliesAPISync(
     ProductFamilyGetAPISyncMixin,
     ProductFamilyUpdateAPISyncMixin,
     ProductFamilyDeleteAPISyncMixin,
-    ProductFamilyLinkAttributeAPISyncMixin,
 ):
     @property
     def attributes(self) -> _ProductFamiliesAttributesAPISync:
@@ -88,7 +95,6 @@ class _FamiliesAPIAsync(
     ProductFamilyGetAPIAsyncMixin,
     ProductFamilyUpdateAPIAsyncMixin,
     ProductFamilyDeleteAPIAsyncMixin,
-    ProductFamilyLinkAttributeAPIAsyncMixin,
 ):
     @property
     def attributes(self) -> _ProductFamiliesAttributesAPIAsync:

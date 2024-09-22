@@ -5,7 +5,7 @@ async def test_link_attribute_to_family(plytix, new_product_family_data, new_pro
     new_family = await plytix.products.families.create_family(**new_product_family_data)
     new_attribute = await plytix.products.attributes.create_attribute(**new_product_attribute_data)
 
-    result = await plytix.products.families.link_attribute_to_family(new_family.id, [new_attribute.id])
+    result = await plytix.products.families.attributes.link_attribute_to_family(new_family.id, [new_attribute.id])
 
     assert result is True
     family = await plytix.products.families.get_family(new_family.id)
@@ -31,7 +31,7 @@ async def test_link_attributes_to_families(plytix, new_product_family_data, new_
     new_attribute1 = await plytix.products.attributes.create_attribute(**attribute1)
     new_attribute2 = await plytix.products.attributes.create_attribute(**attribute2)
 
-    result = await plytix.products.families.link_attributes_to_families(
+    result = await plytix.products.families.attributes.link_attributes_to_families(
         [
             (new_family1.id, [new_attribute1.id], ProductAttributeFamilyLevel.OFF),
             (new_family2.id, [new_attribute2.id], ProductAttributeFamilyLevel.ON),
