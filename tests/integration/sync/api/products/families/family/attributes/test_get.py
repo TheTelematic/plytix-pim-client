@@ -4,7 +4,7 @@ from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 def test_get_family_attributes(plytix, new_product_family_data, new_product_attribute_data):
     family = plytix.products.families.create_family(**new_product_family_data)
     attribute = plytix.products.attributes.create_attribute(**new_product_attribute_data)
-    plytix.products.families.link_attribute_to_family(family.id, [attribute.id])
+    plytix.products.families.attributes.link_attribute_to_family(family.id, [attribute.id])
 
     results = plytix.products.families.attributes.get_family_attributes(family.id)
 
@@ -35,8 +35,8 @@ def test_get_families_attributes(plytix, new_product_family_data, new_product_at
     attribute1 = plytix.products.attributes.create_attribute(**attribute1)
     attribute2 = plytix.products.attributes.create_attribute(**attribute2)
 
-    plytix.products.families.link_attribute_to_family(family1.id, [attribute1.id])
-    plytix.products.families.link_attribute_to_family(family2.id, [attribute2.id])
+    plytix.products.families.attributes.link_attribute_to_family(family1.id, [attribute1.id])
+    plytix.products.families.attributes.link_attribute_to_family(family2.id, [attribute2.id])
 
     results = plytix.products.families.attributes.get_families_attributes([family1.id, family2.id])
 
