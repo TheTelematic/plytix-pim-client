@@ -56,6 +56,7 @@ Any of the following resources can be accessed through the client:
 Each resource has specific methods to interact with the API. 
 If you use an IDE with code completion, you can see all available methods.
 If you find a method that is not available or confusing, please open an issue.
+Also, you may have a look to the integration tests for more examples.
 
 ## Examples
 ### Create a product
