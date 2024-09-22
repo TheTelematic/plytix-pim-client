@@ -6,22 +6,22 @@ from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.delete import DeleteResourceAPI
 
 
-class FamilyDeleteAPI(DeleteResourceAPI):
+class ProductFamilyDeleteAPI(DeleteResourceAPI):
     endpoint_prefix = "/api/v1/product_families"
 
 
-class FamilyDeleteAPISyncMixin(BaseAPISyncMixin):
+class ProductFamilyDeleteAPISyncMixin(BaseAPISyncMixin):
     def delete_family(self, product_family_id: str) -> bool:
         """
         Delete a family.
 
         :return: True if deleted, False if it didn't exist.
         """
-        request = FamilyDeleteAPI.get_request(product_family_id)
+        request = ProductFamilyDeleteAPI.get_request(product_family_id)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return FamilyDeleteAPI.process_response(response)
+        return ProductFamilyDeleteAPI.process_response(response)
 
     def delete_families(self, product_family_ids: list[str]) -> list[bool]:
         """
@@ -36,18 +36,18 @@ class FamilyDeleteAPISyncMixin(BaseAPISyncMixin):
             return [future.result() for future in futures]
 
 
-class FamilyDeleteAPIAsyncMixin(BaseAPIAsyncMixin):
+class ProductFamilyDeleteAPIAsyncMixin(BaseAPIAsyncMixin):
     async def delete_family(self, product_family_id: str) -> bool:
         """
         Delete a family.
 
         :return: True if deleted, False if it didn't exist.
         """
-        request = FamilyDeleteAPI.get_request(product_family_id)
+        request = ProductFamilyDeleteAPI.get_request(product_family_id)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return FamilyDeleteAPI.process_response(response)
+        return ProductFamilyDeleteAPI.process_response(response)
 
     async def delete_families(self, product_family_ids: list[str]) -> list[bool]:
         """

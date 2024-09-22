@@ -8,12 +8,12 @@ from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilte
 from plytix_pim_client.dtos.pagination import Pagination
 
 
-class FamilySearchAPI(SearchResourceAPI):
+class ProductFamilySearchAPI(SearchResourceAPI):
     endpoint = "/api/v1/product_families/search"
     resource_dto_class = Family
 
 
-class FamiliesSearchAPISyncMixin(BaseAPISyncMixin):
+class ProductFamiliesSearchAPISyncMixin(BaseAPISyncMixin):
     def search_families(
         self,
         filters: List[List[SearchFilter]],
@@ -26,9 +26,9 @@ class FamiliesSearchAPISyncMixin(BaseAPISyncMixin):
 
         :return: The families found.
         """
-        request = FamilySearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductFamilySearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return FamilySearchAPI.process_response(response)
+        return ProductFamilySearchAPI.process_response(response)
 
     def search_all_families(
         self,
@@ -59,7 +59,7 @@ class FamiliesSearchAPISyncMixin(BaseAPISyncMixin):
             current_page += 1
 
 
-class FamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
+class ProductFamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
     async def search_families(
         self,
         filters: List[List[SearchFilter]],
@@ -72,9 +72,9 @@ class FamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The families found.
         """
-        request = FamilySearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductFamilySearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return FamilySearchAPI.process_response(response)
+        return ProductFamilySearchAPI.process_response(response)
 
     async def search_all_families(
         self,

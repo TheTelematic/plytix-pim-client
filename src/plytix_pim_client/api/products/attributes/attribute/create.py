@@ -8,43 +8,43 @@ from plytix_pim_client.dtos.family import AttributeLevel
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 
 
-class CreateProductAttributeProductFamiliesDict(TypedDict):
+class ProductAttributeCreateProductFamiliesDict(TypedDict):
     id: str
     attribute_level: AttributeLevel
 
 
-class CreateProductAttributeRelatedAttributesDict(TypedDict):
+class ProductAttributeCreateRelatedAttributesDict(TypedDict):
     id: str
     label: str
 
 
-class CreateProductAttributeDict(TypedDict):
+class ProductAttributeCreateDict(TypedDict):
     name: str
     type_class: ProductAttributeTypeClass
     description: str | None
-    product_families: List[CreateProductAttributeProductFamiliesDict] | None
+    product_families: List[ProductAttributeCreateProductFamiliesDict] | None
     options: List[str] | None
     manual_sorting: bool | None
     sort_ascending: bool | None
-    attributes: List[CreateProductAttributeRelatedAttributesDict] | None
+    attributes: List[ProductAttributeCreateRelatedAttributesDict] | None
 
 
-class CreateProductAttributeAPI(CreateResourceAPI):
+class ProductAttributeCreateAPI(CreateResourceAPI):
     endpoint = "/api/v1/attributes/product"
     resource_dto_class = ProductAttribute
 
 
 class ProductAttributeCreateAPISyncMixin(BaseAPISyncMixin):
-    def create_product_attribute(
+    def create_attribute(
         self,
         name: str,
         type_class: ProductAttributeTypeClass,
         description: str | None = None,
-        product_families: List[CreateProductAttributeProductFamiliesDict] | None = None,
+        product_families: List[ProductAttributeCreateProductFamiliesDict] | None = None,
         options: List[str] | None = None,
         manual_sorting: bool | None = None,
         sort_ascending: bool | None = None,
-        attributes: List[CreateProductAttributeRelatedAttributesDict] | None = None,
+        attributes: List[ProductAttributeCreateRelatedAttributesDict] | None = None,
     ) -> ProductAttribute:
         """
         Create a product attribute.
@@ -68,11 +68,11 @@ class ProductAttributeCreateAPISyncMixin(BaseAPISyncMixin):
         if attributes:
             data["attributes"] = attributes
 
-        request = CreateProductAttributeAPI.get_request(**data)
+        request = ProductAttributeCreateAPI.get_request(**data)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return CreateProductAttributeAPI.process_response(response)
+        return ProductAttributeCreateAPI.process_response(response)
 
-    def create_product_attributes(self, product_attributes: list[CreateProductAttributeDict]) -> list[ProductAttribute]:
+    def create_attributes(self, product_attributes: list[ProductAttributeCreateDict]) -> list[ProductAttribute]:
         """
         Create multiple product attributes. This uses threading to make the requests concurrently.
 
@@ -80,23 +80,22 @@ class ProductAttributeCreateAPISyncMixin(BaseAPISyncMixin):
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.create_product_attribute, **product_attribute)
-                for product_attribute in product_attributes
+                executor.submit(self.create_attribute, **product_attribute) for product_attribute in product_attributes
             ]
             return [future.result() for future in futures]
 
 
 class ProductAttributeCreateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def create_product_attribute(
+    async def create_attribute(
         self,
         name: str,
         type_class: ProductAttributeTypeClass,
         description: str | None = None,
-        product_families: List[CreateProductAttributeProductFamiliesDict] | None = None,
+        product_families: List[ProductAttributeCreateProductFamiliesDict] | None = None,
         options: List[str] | None = None,
         manual_sorting: bool | None = None,
         sort_ascending: bool | None = None,
-        attributes: List[CreateProductAttributeRelatedAttributesDict] | None = None,
+        attributes: List[ProductAttributeCreateRelatedAttributesDict] | None = None,
     ) -> ProductAttribute:
         """
         Create a product attribute.
@@ -120,13 +119,11 @@ class ProductAttributeCreateAPIAsyncMixin(BaseAPIAsyncMixin):
         if attributes:
             data["attributes"] = attributes
 
-        request = CreateProductAttributeAPI.get_request(**data)
+        request = ProductAttributeCreateAPI.get_request(**data)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return CreateProductAttributeAPI.process_response(response)
+        return ProductAttributeCreateAPI.process_response(response)
 
-    async def create_product_attributes(
-        self, product_attributes: list[CreateProductAttributeDict]
-    ) -> list[ProductAttribute]:
+    async def create_attributes(self, product_attributes: list[ProductAttributeCreateDict]) -> list[ProductAttribute]:
         """
         Create multiple product attributes. This uses asyncio to make the requests concurrently.
 
@@ -134,6 +131,6 @@ class ProductAttributeCreateAPIAsyncMixin(BaseAPIAsyncMixin):
         """
         return list(
             await asyncio.gather(
-                *[self.create_product_attribute(**product_attribute) for product_attribute in product_attributes]
+                *[self.create_attribute(**product_attribute) for product_attribute in product_attributes]
             )
         )

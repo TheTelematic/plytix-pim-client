@@ -10,7 +10,7 @@ from plytix_pim_client.dtos.family import AttributeLevel
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class LinkAttributeToFamilyAPI:
+class ProductFamilyLinkAttributeAPI:
     @staticmethod
     def get_request(
         product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
@@ -31,8 +31,8 @@ class LinkAttributeToFamilyAPI:
         return True
 
 
-class LinkAttributeToFamilyAPISyncMixin(BaseAPISyncMixin):
-    def assign_family_to_product(
+class ProductFamilyLinkAttributeAPISyncMixin(BaseAPISyncMixin):
+    def link_attribute_to_family(
         self, product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
     ) -> bool | None:
         """
@@ -40,7 +40,7 @@ class LinkAttributeToFamilyAPISyncMixin(BaseAPISyncMixin):
 
         :return: The product.
         """
-        request = LinkAttributeToFamilyAPI.get_request(product_family_id, attribute_ids, attributes_level)
+        request = ProductFamilyLinkAttributeAPI.get_request(product_family_id, attribute_ids, attributes_level)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -49,9 +49,9 @@ class LinkAttributeToFamilyAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return LinkAttributeToFamilyAPI.process_response(response)
+        return ProductFamilyLinkAttributeAPI.process_response(response)
 
-    def assign_family_to_products(
+    def link_attributes_to_families(
         self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], AttributeLevel]]
     ) -> list[bool | None]:
         """
@@ -61,14 +61,14 @@ class LinkAttributeToFamilyAPISyncMixin(BaseAPISyncMixin):
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.assign_family_to_product, product_family_id, attribute_ids, attributes_level)
+                executor.submit(self.link_attribute_to_family, product_family_id, attribute_ids, attributes_level)
                 for product_family_id, attribute_ids, attributes_level in family_ids_with_attributes_and_level
             ]
             return [future.result() for future in futures]
 
 
-class LinkAttributeToFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def assign_family_to_product(
+class ProductFamilyLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def link_attribute_to_family(
         self, product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
     ) -> bool | None:
         """
@@ -76,7 +76,7 @@ class LinkAttributeToFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The product.
         """
-        request = LinkAttributeToFamilyAPI.get_request(product_family_id, attribute_ids, attributes_level)
+        request = ProductFamilyLinkAttributeAPI.get_request(product_family_id, attribute_ids, attributes_level)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -85,9 +85,9 @@ class LinkAttributeToFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return LinkAttributeToFamilyAPI.process_response(response)
+        return ProductFamilyLinkAttributeAPI.process_response(response)
 
-    async def assign_family_to_products(
+    async def link_attributes_to_families(
         self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], AttributeLevel]]
     ) -> list[bool | None]:
         """
@@ -98,7 +98,7 @@ class LinkAttributeToFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
         return list(
             await asyncio.gather(
                 *[
-                    self.assign_family_to_product(product_family_id, attribute_ids, attributes_level)
+                    self.link_attribute_to_family(product_family_id, attribute_ids, attributes_level)
                     for product_family_id, attribute_ids, attributes_level in family_ids_with_attributes_and_level
                 ]
             )

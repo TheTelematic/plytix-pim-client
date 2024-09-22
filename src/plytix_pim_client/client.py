@@ -1,6 +1,6 @@
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
-from plytix_pim_client.mixins import _ProductsAPISync, _ProductsAPIAsync, _FamiliesAPISync, _FamiliesAPIAsync
+from plytix_pim_client.mixins import _ProductsAPISync, _ProductsAPIAsync
 
 
 class PlytixPimClientSync:
@@ -14,10 +14,6 @@ class PlytixPimClientSync:
     def products(self) -> _ProductsAPISync:
         return _ProductsAPISync(self._client)
 
-    @property
-    def families(self) -> _FamiliesAPISync:
-        return _FamiliesAPISync(self._client)
-
 
 class PlytixPimClientAsync:
     def __init__(self, api_key: str | None = None, api_password: str | None = None):
@@ -29,7 +25,3 @@ class PlytixPimClientAsync:
     @property
     def products(self) -> _ProductsAPIAsync:
         return _ProductsAPIAsync(self._client)
-
-    @property
-    def families(self) -> _FamiliesAPIAsync:
-        return _FamiliesAPIAsync(self._client)

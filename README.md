@@ -47,10 +47,10 @@ For the sake of simplicity, only the synchronous client is shown in the examples
 ### Available resources
 Any of the following resources can be accessed through the client:
 - `products`
-- `families`
+  - `families`
+  - `attributes`
 - `assets`
 - `categories`
-- `attributes`
 - `relationships`
 
 Each resource has specific methods to interact with the API. 
@@ -65,4 +65,12 @@ from plytix_pim_client import PlytixPimClientSync
 client = PlytixPimClientSync()
 
 client.products.create_product(sku="My First Product", label="My First Product")
+```
+
+### Create a product family
+```python
+from plytix_pim_client import PlytixPimClientSync
+client = PlytixPimClientSync()
+
+client.products.families.create_family(name="My First Family")
 ```

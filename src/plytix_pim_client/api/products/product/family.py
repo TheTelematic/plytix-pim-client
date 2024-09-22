@@ -9,7 +9,7 @@ from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductAssignFamilyAPI:
+class ProductFamilyAssignAPI:
     @staticmethod
     def get_request(product_id: str, product_family_id: str) -> PlytixRequest:
         return PlytixRequest(
@@ -26,23 +26,23 @@ class ProductAssignFamilyAPI:
         return True
 
 
-class ProductAssignFamilyAPISyncMixin(BaseAPISyncMixin):
-    def assign_family_to_product(self, product_id: str, product_family_id: str) -> bool | None:
+class ProductFamilyAssignAPISyncMixin(BaseAPISyncMixin):
+    def assign_family(self, product_id: str, product_family_id: str) -> bool | None:
         """
         Assign a family to product.
 
         :return: The product.
         """
-        request = ProductAssignFamilyAPI.get_request(product_id, product_family_id)
+        request = ProductFamilyAssignAPI.get_request(product_id, product_family_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
             accepted_error_codes=[HTTPStatus.NOT_FOUND, HTTPStatus.INTERNAL_SERVER_ERROR],
             **request.kwargs,
         )
-        return ProductAssignFamilyAPI.process_response(response)
+        return ProductFamilyAssignAPI.process_response(response)
 
-    def assign_family_to_products(self, product_ids_and_family_ids: list[Tuple[str, str]]) -> list[bool | None]:
+    def assign_families(self, product_ids_and_family_ids: list[Tuple[str, str]]) -> list[bool | None]:
         """
         Assign a family to multiple products. This uses threading to make the requests concurrently.
 
@@ -50,29 +50,29 @@ class ProductAssignFamilyAPISyncMixin(BaseAPISyncMixin):
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.assign_family_to_product, product_id, product_family_id)
+                executor.submit(self.assign_family, product_id, product_family_id)
                 for product_id, product_family_id in product_ids_and_family_ids
             ]
             return [future.result() for future in futures]
 
 
-class ProductAssignFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def assign_family_to_product(self, product_id: str, product_family_id: str) -> bool | None:
+class ProductFamilyAssignAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def assign_family(self, product_id: str, product_family_id: str) -> bool | None:
         """
         Assign a family to a product.
 
         :return: The product.
         """
-        request = ProductAssignFamilyAPI.get_request(product_id, product_family_id)
+        request = ProductFamilyAssignAPI.get_request(product_id, product_family_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
             accepted_error_codes=[HTTPStatus.NOT_FOUND, HTTPStatus.INTERNAL_SERVER_ERROR],
             **request.kwargs,
         )
-        return ProductAssignFamilyAPI.process_response(response)
+        return ProductFamilyAssignAPI.process_response(response)
 
-    async def assign_family_to_products(self, product_ids_and_family_ids: list[Tuple[str, str]]) -> list[bool | None]:
+    async def assign_families(self, product_ids_and_family_ids: list[Tuple[str, str]]) -> list[bool | None]:
         """
         Assign a family to multiple products. This uses asyncio to make the requests concurrently.
 
@@ -81,7 +81,7 @@ class ProductAssignFamilyAPIAsyncMixin(BaseAPIAsyncMixin):
         return list(
             await asyncio.gather(
                 *[
-                    self.assign_family_to_product(product_id, product_family_id)
+                    self.assign_family(product_id, product_family_id)
                     for product_id, product_family_id in product_ids_and_family_ids
                 ]
             )

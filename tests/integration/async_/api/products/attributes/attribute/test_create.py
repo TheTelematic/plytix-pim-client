@@ -1,5 +1,5 @@
 async def test_create_product_attribute(client, new_product_attribute_data):
-    product_attribute = await client.products.create_product_attribute(**new_product_attribute_data)
+    product_attribute = await client.products.attributes.create_attribute(**new_product_attribute_data)
 
     assert product_attribute.name == new_product_attribute_data["name"]
     assert product_attribute.type_class == new_product_attribute_data["type_class"]
@@ -17,7 +17,7 @@ async def test_create_multiple_product_attributes(client, new_product_attribute_
     new_product_attribute_data1["name"] = f"{new_product_attribute_data1['name']}-1"
     new_product_attribute_data2["name"] = f"{new_product_attribute_data2['name']}-2"
 
-    product_attributes = await client.products.create_product_attributes(
+    product_attributes = await client.products.attributes.create_attributes(
         [new_product_attribute_data1, new_product_attribute_data2]
     )
 

@@ -23,7 +23,7 @@ def new_product_data() -> dict:
 
 
 @pytest.fixture
-def new_family_data() -> dict:
+def new_product_family_data() -> dict:
     now = datetime.now()
     return dict(
         name=f"test-family-{now.isoformat()}",

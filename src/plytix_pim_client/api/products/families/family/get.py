@@ -7,23 +7,23 @@ from plytix_pim_client.api.common.get import GetResourceAPI
 from plytix_pim_client.dtos.family import Family
 
 
-class FamilyGetAPI(GetResourceAPI):
+class ProductFamilyGetAPI(GetResourceAPI):
     endpoint_prefix = "/api/v1/product_families"
     resource_dto_class = Family
 
 
-class FamilyGetAPISyncMixin(BaseAPISyncMixin):
+class ProductFamilyGetAPISyncMixin(BaseAPISyncMixin):
     def get_family(self, product_family_id: str) -> Family | None:
         """
         Get a family.
 
         :return: The family.
         """
-        request = FamilyGetAPI.get_request(product_family_id)
+        request = ProductFamilyGetAPI.get_request(product_family_id)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return FamilyGetAPI.process_response(response)
+        return ProductFamilyGetAPI.process_response(response)
 
     def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
@@ -36,18 +36,18 @@ class FamilyGetAPISyncMixin(BaseAPISyncMixin):
             return [future.result() for future in futures]
 
 
-class FamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
+class ProductFamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
     async def get_family(self, product_family_id: str) -> Family | None:
         """
         Get a family.
 
         :return: The family.
         """
-        request = FamilyGetAPI.get_request(product_family_id)
+        request = ProductFamilyGetAPI.get_request(product_family_id)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return FamilyGetAPI.process_response(response)
+        return ProductFamilyGetAPI.process_response(response)
 
     async def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
         """
