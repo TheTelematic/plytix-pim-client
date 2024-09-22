@@ -18,7 +18,7 @@ def new_product_data() -> dict:
     now = datetime.now()
     return dict(
         sku=f"test-product-{now.isoformat()}",
-        label=f"test_product_{str(now.timestamp()).replace('.', '')}",
+        label=f"test product {now.timestamp()}",
     )
 
 
