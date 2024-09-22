@@ -5,16 +5,16 @@ from typing import Tuple
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
-from plytix_pim_client.dtos.family import Family
+from plytix_pim_client.dtos.products.family import ProductFamily
 
 
 class ProductFamilyUpdateAPI(UpdateResourceAPI):
     endpoint_prefix = "/api/v1/product_families"
-    resource_dto_class = Family
+    resource_dto_class = ProductFamily
 
 
 class ProductFamilyUpdateAPISyncMixin(BaseAPISyncMixin):
-    def rename_family(self, product_family_id: str, new_name: str) -> Family | None:
+    def rename_family(self, product_family_id: str, new_name: str) -> ProductFamily | None:
         """
         Update a family.
 
@@ -26,7 +26,7 @@ class ProductFamilyUpdateAPISyncMixin(BaseAPISyncMixin):
         )
         return ProductFamilyUpdateAPI.process_response(response)
 
-    def rename_families(self, product_family_ids_with_new_names: list[Tuple[str, str]]) -> list[Family | None]:
+    def rename_families(self, product_family_ids_with_new_names: list[Tuple[str, str]]) -> list[ProductFamily | None]:
         """
         Update multiple families. This uses threading to make the requests concurrently.
 
@@ -41,7 +41,7 @@ class ProductFamilyUpdateAPISyncMixin(BaseAPISyncMixin):
 
 
 class ProductFamilyUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def rename_family(self, product_family_id: str, new_name: str) -> Family | None:
+    async def rename_family(self, product_family_id: str, new_name: str) -> ProductFamily | None:
         """
         Update a family.
 
@@ -53,7 +53,9 @@ class ProductFamilyUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
         )
         return ProductFamilyUpdateAPI.process_response(response)
 
-    async def rename_families(self, product_family_ids_with_new_names: list[Tuple[str, str]]) -> list[Family | None]:
+    async def rename_families(
+        self, product_family_ids_with_new_names: list[Tuple[str, str]]
+    ) -> list[ProductFamily | None]:
         """
         Update multiple families. This uses asyncio to make the requests concurrently.
 

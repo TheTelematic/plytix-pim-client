@@ -48,6 +48,7 @@ For the sake of simplicity, only the synchronous client is shown in the examples
 Any of the following resources can be accessed through the client:
 - `products`
   - `families`
+    - `attributes`
   - `attributes`
 - `assets`
 - `categories`

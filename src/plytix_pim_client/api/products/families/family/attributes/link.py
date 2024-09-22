@@ -6,14 +6,16 @@ from typing import Tuple, List
 import httpx
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
-from plytix_pim_client.dtos.family import AttributeLevel
+from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
 class ProductFamilyLinkAttributeAPI:
     @staticmethod
     def get_request(
-        product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
+        product_family_id: str,
+        attribute_ids: List[str],
+        attributes_level: ProductAttributeFamilyLevel = ProductAttributeFamilyLevel.OFF,
     ) -> PlytixRequest:
         return PlytixRequest(
             method=HTTPMethod.POST,
@@ -33,12 +35,15 @@ class ProductFamilyLinkAttributeAPI:
 
 class ProductFamilyLinkAttributeAPISyncMixin(BaseAPISyncMixin):
     def link_attribute_to_family(
-        self, product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
+        self,
+        product_family_id: str,
+        attribute_ids: List[str],
+        attributes_level: ProductAttributeFamilyLevel = ProductAttributeFamilyLevel.OFF,
     ) -> bool | None:
         """
-        Assign a family to product.
+        Link attributes to family.
 
-        :return: The product.
+        :return: If linked successfully.
         """
         request = ProductFamilyLinkAttributeAPI.get_request(product_family_id, attribute_ids, attributes_level)
         response = self._client.make_request(
@@ -52,12 +57,12 @@ class ProductFamilyLinkAttributeAPISyncMixin(BaseAPISyncMixin):
         return ProductFamilyLinkAttributeAPI.process_response(response)
 
     def link_attributes_to_families(
-        self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], AttributeLevel]]
+        self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], ProductAttributeFamilyLevel]]
     ) -> list[bool | None]:
         """
-        Assign a family to multiple products. This uses threading to make the requests concurrently.
+        Link attributes to multiple families. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: If linked successfully each.
         """
         with ThreadPoolExecutor() as executor:
             futures = [
@@ -69,12 +74,15 @@ class ProductFamilyLinkAttributeAPISyncMixin(BaseAPISyncMixin):
 
 class ProductFamilyLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
     async def link_attribute_to_family(
-        self, product_family_id: str, attribute_ids: List[str], attributes_level: AttributeLevel = AttributeLevel.OFF
+        self,
+        product_family_id: str,
+        attribute_ids: List[str],
+        attributes_level: ProductAttributeFamilyLevel = ProductAttributeFamilyLevel.OFF,
     ) -> bool | None:
         """
-        Assign a family to a product.
+        Link attributes to family.
 
-        :return: The product.
+        :return: If linked successfully.
         """
         request = ProductFamilyLinkAttributeAPI.get_request(product_family_id, attribute_ids, attributes_level)
         response = await self._client.make_request(
@@ -88,12 +96,12 @@ class ProductFamilyLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
         return ProductFamilyLinkAttributeAPI.process_response(response)
 
     async def link_attributes_to_families(
-        self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], AttributeLevel]]
+        self, family_ids_with_attributes_and_level: list[Tuple[str, List[str], ProductAttributeFamilyLevel]]
     ) -> list[bool | None]:
         """
-        Assign a family to multiple products. This uses asyncio to make the requests concurrently.
+        Link attributes to multiple families. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: If linked successfully each.
         """
         return list(
             await asyncio.gather(

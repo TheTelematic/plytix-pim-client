@@ -5,7 +5,7 @@ from plytix_pim_client.dtos.base import BaseDTO
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class Family(BaseDTO):
+class ProductFamily(BaseDTO):
     created: str | None = None
     created_at: str | None = None
     id: str | None = None
@@ -18,6 +18,14 @@ class Family(BaseDTO):
     modified_user_audit: dict | None = field(default_factory=dict)
 
 
-class AttributeLevel(StrEnum):
+class ProductAttributeFamilyLevel(StrEnum):
     ON = "parent_level"
     OFF = "no_level"
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ProductFamilyAttribute(BaseDTO):
+    attribute_level: ProductAttributeFamilyLevel | None = None
+    id: str | None = None
+    label: str | None = None
+    name: str | None = None

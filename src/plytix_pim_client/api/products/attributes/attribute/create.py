@@ -4,13 +4,13 @@ from typing import TypedDict, List
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
-from plytix_pim_client.dtos.family import AttributeLevel
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
+from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 
 
 class ProductAttributeCreateProductFamiliesDict(TypedDict):
     id: str
-    attribute_level: AttributeLevel
+    attribute_level: ProductAttributeFamilyLevel
 
 
 class ProductAttributeCreateRelatedAttributesDict(TypedDict):

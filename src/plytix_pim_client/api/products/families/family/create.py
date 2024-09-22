@@ -4,7 +4,7 @@ from typing import TypedDict, List, Dict
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
-from plytix_pim_client.dtos.family import Family
+from plytix_pim_client.dtos.products.family import ProductFamily
 
 
 class CreateProductFamilyDict(TypedDict):
@@ -15,13 +15,13 @@ class CreateProductFamilyDict(TypedDict):
 
 class ProductFamilyCreateAPI(CreateResourceAPI):
     endpoint = "/api/v1/product_families"
-    resource_dto_class = Family
+    resource_dto_class = ProductFamily
 
 
 class ProductFamilyCreateAPISyncMixin(BaseAPISyncMixin):
     def create_family(
         self, name: str, attribute_ids: List[str] | None = None, parent_attribute_ids: List[str] | None = None
-    ) -> Family:
+    ) -> ProductFamily:
         """
         Create a family.
 
@@ -37,7 +37,7 @@ class ProductFamilyCreateAPISyncMixin(BaseAPISyncMixin):
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return ProductFamilyCreateAPI.process_response(response)
 
-    def create_families(self, families: list[CreateProductFamilyDict]) -> list[Family]:
+    def create_families(self, families: list[CreateProductFamilyDict]) -> list[ProductFamily]:
         """
         Create multiple families. This uses threading to make the requests concurrently.
 
@@ -51,7 +51,7 @@ class ProductFamilyCreateAPISyncMixin(BaseAPISyncMixin):
 class ProductFamilyCreateAPIAsyncMixin(BaseAPIAsyncMixin):
     async def create_family(
         self, name: str, attribute_ids: List[str] | None = None, parent_attribute_ids: List[str] | None = None
-    ) -> Family:
+    ) -> ProductFamily:
         """
         Create a family.
 
@@ -67,7 +67,7 @@ class ProductFamilyCreateAPIAsyncMixin(BaseAPIAsyncMixin):
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return ProductFamilyCreateAPI.process_response(response)
 
-    async def create_families(self, families: list[CreateProductFamilyDict]) -> list[Family]:
+    async def create_families(self, families: list[CreateProductFamilyDict]) -> list[ProductFamily]:
         """
         Create multiple families. This uses asyncio to make the requests concurrently.
 

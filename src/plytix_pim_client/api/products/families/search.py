@@ -3,14 +3,14 @@ from typing import List, Generator, AsyncGenerator
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
-from plytix_pim_client.dtos.family import Family
 from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
+from plytix_pim_client.dtos.products.family import ProductFamily
 
 
 class ProductFamilySearchAPI(SearchResourceAPI):
     endpoint = "/api/v1/product_families/search"
-    resource_dto_class = Family
+    resource_dto_class = ProductFamily
 
 
 class ProductFamiliesSearchAPISyncMixin(BaseAPISyncMixin):
@@ -20,7 +20,7 @@ class ProductFamiliesSearchAPISyncMixin(BaseAPISyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Family]:
+    ) -> List[ProductFamily]:
         """
         Search for families matching the filters.
 
@@ -38,7 +38,7 @@ class ProductFamiliesSearchAPISyncMixin(BaseAPISyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> Generator[List[Family], None, None]:
+    ) -> Generator[List[ProductFamily], None, None]:
         """
         Iterate over all families matching the filters.
 
@@ -66,7 +66,7 @@ class ProductFamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Family]:
+    ) -> List[ProductFamily]:
         """
         Search for families matching the filters.
 
@@ -84,7 +84,7 @@ class ProductFamiliesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> AsyncGenerator[List[Family], None]:
+    ) -> AsyncGenerator[List[ProductFamily], None]:
         """
         Iterate over all families matching the filters.
 

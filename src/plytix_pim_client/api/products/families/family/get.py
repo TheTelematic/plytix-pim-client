@@ -4,16 +4,16 @@ from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.get import GetResourceAPI
-from plytix_pim_client.dtos.family import Family
+from plytix_pim_client.dtos.products.family import ProductFamily
 
 
 class ProductFamilyGetAPI(GetResourceAPI):
     endpoint_prefix = "/api/v1/product_families"
-    resource_dto_class = Family
+    resource_dto_class = ProductFamily
 
 
 class ProductFamilyGetAPISyncMixin(BaseAPISyncMixin):
-    def get_family(self, product_family_id: str) -> Family | None:
+    def get_family(self, product_family_id: str) -> ProductFamily | None:
         """
         Get a family.
 
@@ -25,7 +25,7 @@ class ProductFamilyGetAPISyncMixin(BaseAPISyncMixin):
         )
         return ProductFamilyGetAPI.process_response(response)
 
-    def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
+    def get_families(self, product_family_ids: list[str]) -> list[ProductFamily | None]:
         """
         Get multiple families. This uses threading to make the requests concurrently.
 
@@ -37,7 +37,7 @@ class ProductFamilyGetAPISyncMixin(BaseAPISyncMixin):
 
 
 class ProductFamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def get_family(self, product_family_id: str) -> Family | None:
+    async def get_family(self, product_family_id: str) -> ProductFamily | None:
         """
         Get a family.
 
@@ -49,7 +49,7 @@ class ProductFamilyGetAPIAsyncMixin(BaseAPIAsyncMixin):
         )
         return ProductFamilyGetAPI.process_response(response)
 
-    async def get_families(self, product_family_ids: list[str]) -> list[Family | None]:
+    async def get_families(self, product_family_ids: list[str]) -> list[ProductFamily | None]:
         """
         Get multiple families. This uses asyncio to make the requests concurrently.
 
