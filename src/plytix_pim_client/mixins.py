@@ -2,8 +2,18 @@ from plytix_pim_client.api.products.attributes.attribute.create import (
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeCreateAPIAsyncMixin,
 )
-from plytix_pim_client.api.products.families.family.attributes.get import ProductFamilyGetAttributesAPISyncMixin, \
-    ProductFamilyGetAttributesAPIAsyncMixin
+from plytix_pim_client.api.products.attributes.attribute.delete import (
+    ProductAttributeDeleteAPIAsyncMixin,
+    ProductAttributeDeleteAPISyncMixin,
+)
+from plytix_pim_client.api.products.attributes.attribute.get import (
+    ProductAttributeGetAPIAsyncMixin,
+    ProductAttributeGetAPISyncMixin,
+)
+from plytix_pim_client.api.products.families.family.attributes.get import (
+    ProductFamilyGetAttributesAPISyncMixin,
+    ProductFamilyGetAttributesAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.families.family.attributes.link import (
     ProductFamilyLinkAttributeAPISyncMixin,
     ProductFamilyLinkAttributeAPIAsyncMixin,
@@ -38,14 +48,17 @@ from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, P
 from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
 
+
 # Product Families Attributes API
 class _ProductFamiliesAttributesAPISync(
     ProductFamilyGetAttributesAPISyncMixin,
 ): ...  # noqa: E701
 
+
 class _ProductFamiliesAttributesAPIAsync(
     ProductFamilyGetAttributesAPIAsyncMixin,
 ): ...  # noqa: E701
+
 
 # Product Families API
 class _ProductFamiliesAPISync(
@@ -77,11 +90,15 @@ class _FamiliesAPIAsync(
 # Product Attributes API
 class _ProductAttributesAPISync(
     ProductAttributeCreateAPISyncMixin,
+    ProductAttributeDeleteAPISyncMixin,
+    ProductAttributeGetAPISyncMixin,
 ): ...  # noqa: E701
 
 
 class _ProductAttributesAPIAsync(
     ProductAttributeCreateAPIAsyncMixin,
+    ProductAttributeDeleteAPIAsyncMixin,
+    ProductAttributeGetAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

@@ -1,59 +1,58 @@
-raise Exception("Not implemented")
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.get import GetResourceAPI
-from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.attribute import ProductAttribute
 
 
-class ProductGetAPI(GetResourceAPI):
-    endpoint_prefix = "/api/v1/products"
-    resource_dto_class = Product
+class ProductAttributeGetAPI(GetResourceAPI):
+    endpoint_prefix = "/api/v1/attributes/product"
+    resource_dto_class = ProductAttribute
 
 
-class ProductGetAPISyncMixin(BaseAPISyncMixin):
-    def get_product(self, product_id: str) -> Product | None:
+class ProductAttributeGetAPISyncMixin(BaseAPISyncMixin):
+    def get_attribute(self, attribute_id: str) -> ProductAttribute | None:
         """
-        Get a product.
+        Get a product attribute.
 
-        :return: The product.
+        :return: The product attribute if exists, None otherwise.
         """
-        request = ProductGetAPI.get_request(product_id)
+        request = ProductAttributeGetAPI.get_request(attribute_id)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductGetAPI.process_response(response)
+        return ProductAttributeGetAPI.process_response(response)
 
-    def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    def get_attributes(self, attribute_ids: list[str]) -> list[ProductAttribute | None]:
         """
-        Get multiple products. This uses threading to make the requests concurrently.
+        Get multiple products attributes. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: List of product attributes and/or None if any doesn't exist.
         """
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.get_product, product_id) for product_id in product_ids]
+            futures = [executor.submit(self.get_attribute, attribute_id) for attribute_id in attribute_ids]
             return [future.result() for future in futures]
 
 
-class ProductGetAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def get_product(self, product_id: str) -> Product | None:
+class ProductAttributeGetAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def get_attribute(self, attribute_id: str) -> ProductAttribute | None:
         """
-        Get a product.
+        Get a product attribute.
 
-        :return: The product.
+        :return: The product attribute if exists, None otherwise.
         """
-        request = ProductGetAPI.get_request(product_id)
+        request = ProductAttributeGetAPI.get_request(attribute_id)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductGetAPI.process_response(response)
+        return ProductAttributeGetAPI.process_response(response)
 
-    async def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    async def get_attributes(self, attribute_ids: list[str]) -> list[ProductAttribute | None]:
         """
-        Get multiple products. This uses asyncio to make the requests concurrently.
+        Get multiple products attributes. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: List of product attributes and/or None if any doesn't exist.
         """
-        return list(await asyncio.gather(*[self.get_product(product_id) for product_id in product_ids]))
+        return list(await asyncio.gather(*[self.get_attribute(attribute_id) for attribute_id in attribute_ids]))
