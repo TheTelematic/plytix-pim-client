@@ -79,7 +79,8 @@ class ProductFamilyEditAttributeInheritanceAPISyncMixin(BaseAPISyncMixin):
                     attribute_labels_with_inheritance_on,
                     attribute_labels_with_inheritance_off,
                 )
-                for product_family_id, attribute_labels_with_inheritance_on, attribute_labels_with_inheritance_off in family_ids_with_attributes_ids_on_and_off
+                for product_family_id, attribute_labels_with_inheritance_on, attribute_labels_with_inheritance_off
+                in family_ids_with_attributes_ids_on_and_off  # fmt: skip
             ]
             return [future.result() for future in futures]
 
@@ -113,7 +114,8 @@ class ProductFamilyEditAttributeInheritanceAPIAsyncMixin(BaseAPIAsyncMixin):
         self, family_ids_with_attributes_ids_on_and_off: list[Tuple[str, List[str], List[str]]]
     ) -> list[bool | None]:
         """
-        Edit the inheritance of the given attributes in the given families. This uses asyncio to make the requests concurrently.
+        Edit the inheritance of the given attributes in the given families.
+        This uses asyncio to make the requests concurrently.
 
         :return: If edited successfully each.
         """
@@ -123,7 +125,8 @@ class ProductFamilyEditAttributeInheritanceAPIAsyncMixin(BaseAPIAsyncMixin):
                     self.edit_attributes_inheritance(
                         product_family_id, attribute_labels_with_inheritance_on, attribute_labels_with_inheritance_off
                     )
-                    for product_family_id, attribute_labels_with_inheritance_on, attribute_labels_with_inheritance_off in family_ids_with_attributes_ids_on_and_off
+                    for product_family_id, attribute_labels_with_inheritance_on, attribute_labels_with_inheritance_off
+                    in family_ids_with_attributes_ids_on_and_off  # fmt: skip
                 ]
             )
         )
