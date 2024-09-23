@@ -1,7 +1,7 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPStatus
-from typing import Tuple
+from typing import Tuple, Dict
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
@@ -26,7 +26,7 @@ class AssetUpdateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The asset.
         """
-        data = {}
+        data: Dict[str, str | bool | list[str]] = {}
         if filename:
             data["filename"] = filename
         if public:
@@ -64,7 +64,7 @@ class AssetUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The asset.
         """
-        data = {}
+        data: Dict[str, str | bool | list[str]] = {}
         if filename:
             data["filename"] = filename
         if public:
