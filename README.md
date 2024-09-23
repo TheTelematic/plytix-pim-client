@@ -1,6 +1,8 @@
 # plytix-pim-client
 An HTTP client in Python for Plytix PIM API.
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/plytix-pim-client?style=for-the-badge)
+
 API documentation: https://apidocs.plytix.com
 
 ![Example](https://raw.githubusercontent.com/TheTelematic/plytix-pim-client/main/doc/images/example.png)
