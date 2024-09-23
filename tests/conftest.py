@@ -59,8 +59,11 @@ def new_asset_data_from_url_factory() -> Callable[[], dict]:
 
 # TODO: To fix in #26
 # @pytest.fixture
-# def new_asset_data_from_local_file() -> dict:
-#     destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
-#     shutil.copy(__file__, destination_file)
+# def new_asset_data_from_local_file_factory() -> Callable[[], dict]:
+#     def factory() -> dict:
+#         destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
+#         shutil.copy(__file__, destination_file)
 #
-#     return dict(file_path=destination_file)
+#         return dict(file_path=destination_file)
+#
+#     return factory

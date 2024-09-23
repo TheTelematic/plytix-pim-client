@@ -76,6 +76,7 @@ class _AssetsAPISync(
     AssetDeleteAPISyncMixin,
     AssetGetAPISyncMixin,
     AssetUpdateAPISyncMixin,
+    # AssetReplaceAPISyncMixin,  # TODO: To fix in #26
     AssetsSearchAPISyncMixin,
 ): ...  # noqa: E701
 
@@ -85,6 +86,7 @@ class _AssetsAPIAsync(
     AssetDeleteAPIAsyncMixin,
     AssetGetAPIAsyncMixin,
     AssetUpdateAPIAsyncMixin,
+    # AssetReplaceAPIAsyncMixin,  # TODO: To fix in #26
     AssetsSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 
