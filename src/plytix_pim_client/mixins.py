@@ -1,4 +1,5 @@
 from plytix_pim_client.api.assets.asset.create import AssetCreateAPISyncMixin, AssetCreateAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.get import AssetGetAPISyncMixin, AssetGetAPIAsyncMixin
 from plytix_pim_client.api.assets.search import AssetsSearchAPISyncMixin, AssetsSearchAPIAsyncMixin
 from plytix_pim_client.api.products.attributes.attribute.create import (
     ProductAttributeCreateAPISyncMixin,
@@ -70,12 +71,14 @@ from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, Pr
 # Assets API
 class _AssetsAPISync(
     AssetCreateAPISyncMixin,
+    AssetGetAPISyncMixin,
     AssetsSearchAPISyncMixin,
 ): ...  # noqa: E701
 
 
 class _AssetsAPIAsync(
     AssetCreateAPIAsyncMixin,
+    AssetGetAPIAsyncMixin,
     AssetsSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 

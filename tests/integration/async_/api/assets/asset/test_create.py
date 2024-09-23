@@ -5,10 +5,13 @@ async def test_create_asset_from_url(plytix, new_asset_data_from_url_factory):
 
 
 async def test_create_assets_from_urls(plytix, new_asset_data_from_url_factory):
-    assets = await plytix.assets.create_assets_by_urls([new_asset_data_from_url_factory()])
+    assets = await plytix.assets.create_assets_by_urls(
+        [new_asset_data_from_url_factory(), new_asset_data_from_url_factory()]
+    )
 
-    assert len(assets) == 1
+    assert len(assets) == 2
     assert assets[0].id is not None
+    assert assets[1].id is not None
 
 
 # TODO: To fix in #26

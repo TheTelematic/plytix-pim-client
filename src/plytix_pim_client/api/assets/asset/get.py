@@ -4,55 +4,55 @@ from http import HTTPStatus
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.get import GetResourceAPI
-from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.asset import Asset
 
 
-class ProductGetAPI(GetResourceAPI):
-    endpoint_prefix = "/api/v1/products"
-    resource_dto_class = Product
+class AssetGetAPI(GetResourceAPI):
+    endpoint_prefix = "/api/v1/assets"
+    resource_dto_class = Asset
 
 
-class ProductGetAPISyncMixin(BaseAPISyncMixin):
-    def get_product(self, product_id: str) -> Product | None:
+class AssetGetAPISyncMixin(BaseAPISyncMixin):
+    def get_asset(self, asset_id: str) -> Asset | None:
         """
-        Get a product.
+        Get an asset.
 
-        :return: The product.
+        :return: The asset.
         """
-        request = ProductGetAPI.get_request(product_id)
+        request = AssetGetAPI.get_request(asset_id)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductGetAPI.process_response(response)
+        return AssetGetAPI.process_response(response)
 
-    def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    def get_assets(self, asset_ids: list[str]) -> list[Asset | None]:
         """
-        Get multiple products. This uses threading to make the requests concurrently.
+        Get multiple assets. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: The assets.
         """
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.get_product, product_id) for product_id in product_ids]
+            futures = [executor.submit(self.get_asset, asset_id) for asset_id in asset_ids]
             return [future.result() for future in futures]
 
 
-class ProductGetAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def get_product(self, product_id: str) -> Product | None:
+class AssetGetAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def get_asset(self, asset_id: str) -> Asset | None:
         """
-        Get a product.
+        Get an asset.
 
-        :return: The product.
+        :return: The asset.
         """
-        request = ProductGetAPI.get_request(product_id)
+        request = AssetGetAPI.get_request(asset_id)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductGetAPI.process_response(response)
+        return AssetGetAPI.process_response(response)
 
-    async def get_products(self, product_ids: list[str]) -> list[Product | None]:
+    async def get_assets(self, asset_ids: list[str]) -> list[Asset | None]:
         """
-        Get multiple products. This uses asyncio to make the requests concurrently.
+        Get multiple assets. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: The assets.
         """
-        return list(await asyncio.gather(*[self.get_product(product_id) for product_id in product_ids]))
+        return list(await asyncio.gather(*[self.get_asset(asset_id) for asset_id in asset_ids]))
