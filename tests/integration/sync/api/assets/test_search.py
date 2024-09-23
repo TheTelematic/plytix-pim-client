@@ -43,7 +43,7 @@ def test_search_all_assets(plytix, new_asset_data_from_url_factory):
     )
 
     search_results = []
-    async for results in plytix.assets.search_all_assets(
+    for results in plytix.assets.search_all_assets(
         filters=[[SearchFilter(field="id", operator=OperatorEnum.IN, value=[asset.id for asset in assets])]],
         attributes=[
             "created",
