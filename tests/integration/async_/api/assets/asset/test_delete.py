@@ -16,8 +16,8 @@ async def test_delete_multiple_assets(plytix, new_asset_data_from_url_factory):
     assets = await plytix.assets.create_assets_by_urls(
         [new_asset_data_from_url_factory(), new_asset_data_from_url_factory()]
     )
-
     asset_ids = [result.id for result in assets]
+
     results = await plytix.assets.delete_assets(asset_ids)
 
     assert results[0] is True

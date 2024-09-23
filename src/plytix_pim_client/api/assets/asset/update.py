@@ -5,59 +5,85 @@ from typing import Tuple
 
 from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
-from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.asset import Asset
 
 
-class ProductUpdateAPI(UpdateResourceAPI):
-    endpoint_prefix = "/api/v1/products"
-    resource_dto_class = Product
+class AssetUpdateAPI(UpdateResourceAPI):
+    endpoint_prefix = "/api/v1/assets"
+    resource_dto_class = Asset
 
 
-class ProductUpdateAPISyncMixin(BaseAPISyncMixin):
-    def update_product(self, product_id: str, data: dict) -> Product | None:
+class AssetUpdateAPISyncMixin(BaseAPISyncMixin):
+    def update_asset(
+        self,
+        asset_id: str,
+        filename: str,
+        public: bool,
+        category_ids: list[str],
+    ) -> Asset | None:
         """
-        Update a product.
+        Update an asset.
 
-        :return: The product.
+        :return: The asset.
         """
-        request = ProductUpdateAPI.get_request(product_id, data)
+        data = {}
+        if filename:
+            data["filename"] = filename
+        if public:
+            data["public"] = public
+        if category_ids:
+            data["categories"] = category_ids
+
+        request = AssetUpdateAPI.get_request(asset_id, data)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductUpdateAPI.process_response(response)
+        return AssetUpdateAPI.process_response(response)
 
-    def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    def update_assets(self, asset_ids_and_data: list[Tuple[str, dict]]) -> list[Asset | None]:
         """
-        Update multiple products. This uses threading to make the requests concurrently.
+        Update multiple assets. This uses threading to make the requests concurrently.
 
-        :return: The products.
+        :return: The assets.
         """
         with ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(self.update_product, product_id, data) for product_id, data in product_ids_and_data
-            ]
+            futures = [executor.submit(self.update_asset, asset_id, **data) for asset_id, data in asset_ids_and_data]
             return [future.result() for future in futures]
 
 
-class ProductUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def update_product(self, product_id: str, data: dict) -> Product | None:
+class AssetUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def update_asset(
+        self,
+        asset_id: str,
+        filename: str | None = None,
+        public: bool | None = None,
+        category_ids: list[str] | None = None,
+    ) -> Asset | None:
         """
-        Update a product.
+        Update an asset.
 
-        :return: The product.
+        :return: The asset.
         """
-        request = ProductUpdateAPI.get_request(product_id, data)
+        data = {}
+        if filename:
+            data["filename"] = filename
+        if public:
+            data["public"] = public
+        if category_ids:
+            data["categories"] = category_ids
+
+        request = AssetUpdateAPI.get_request(asset_id, data)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
         )
-        return ProductUpdateAPI.process_response(response)
+        return AssetUpdateAPI.process_response(response)
 
-    async def update_products(self, product_ids_and_data: list[Tuple[str, dict]]) -> list[Product | None]:
+    async def update_assets(self, asset_ids_and_data: list[Tuple[str, dict]]) -> list[Asset | None]:
         """
-        Update multiple products. This uses asyncio to make the requests concurrently.
+        Update multiple assets. This uses asyncio to make the requests concurrently.
 
-        :return: The products.
+        :return: The assets.
         """
         return list(
-            await asyncio.gather(*[self.update_product(product_id, data) for product_id, data in product_ids_and_data])
+            await asyncio.gather(*[self.update_asset(asset_id, **data) for asset_id, data in asset_ids_and_data])
         )
