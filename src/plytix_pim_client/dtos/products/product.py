@@ -23,3 +23,4 @@ class Product(BaseDTO):
     sku: str | None = None
     status: str | None = None
     thumbnail: str | None = None
+    product_level: str | None = None
