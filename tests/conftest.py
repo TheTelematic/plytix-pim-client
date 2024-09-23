@@ -1,6 +1,8 @@
 import asyncio
 from datetime import datetime
+from typing import Callable
 
+import httpx
 import pytest
 
 from plytix_pim_client.dtos.products.attribute import ProductAttributeTypeClass
@@ -40,3 +42,25 @@ def new_product_attribute_data() -> dict:
         type_class=ProductAttributeTypeClass.TEXT,
         description="Test description",
     )
+
+
+@pytest.fixture
+def new_asset_data_from_url_factory() -> Callable[[], dict]:
+    def factory() -> dict:
+        with httpx.Client() as client:
+            response = client.get("https://picsum.photos/200/300")
+            return dict(
+                url=response.headers["Location"],
+                filename=f"test-{str(datetime.now().timestamp()).replace('.', '')}.jpg",
+            )
+
+    return factory
+
+
+# TODO: To fix in #26
+# @pytest.fixture
+# def new_asset_data_from_local_file() -> dict:
+#     destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
+#     shutil.copy(__file__, destination_file)
+#
+#     return dict(file_path=destination_file)

@@ -1,3 +1,5 @@
+from plytix_pim_client.api.assets.asset.create import AssetCreateAPISyncMixin, AssetCreateAPIAsyncMixin
+from plytix_pim_client.api.assets.search import AssetsSearchAPISyncMixin, AssetsSearchAPIAsyncMixin
 from plytix_pim_client.api.products.attributes.attribute.create import (
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeCreateAPIAsyncMixin,
@@ -63,6 +65,19 @@ from plytix_pim_client.api.products.product.family import (
 from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
 from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
+
+
+# Assets API
+class _AssetsAPISync(
+    AssetCreateAPISyncMixin,
+    AssetsSearchAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _AssetsAPIAsync(
+    AssetCreateAPIAsyncMixin,
+    AssetsSearchAPIAsyncMixin,
+): ...  # noqa: E701
 
 
 # Product Families Attributes API
