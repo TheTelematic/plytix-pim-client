@@ -3,6 +3,7 @@ An HTTP client in Python for Plytix PIM API.
 
 ![PyPI](https://img.shields.io/pypi/v/plytix-pim-client?label=pypi%20package)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/plytix-pim-client)
+![GitHub Action Publish to PyPI](https://github.com/TheTelematic/plytix-pim-client/actions/workflows/publish-to-pypi/badge.svg)
 
 API documentation: https://apidocs.plytix.com
 
@@ -12,7 +13,7 @@ API documentation: https://apidocs.plytix.com
 ```bash
 pip install plytix-pim-client
 ```
-Pypi: https://pypi.org/project/plytix-pim-client/
+PyPI: https://pypi.org/project/plytix-pim-client/
 
 ## Requirements
 - Python 3.11+
