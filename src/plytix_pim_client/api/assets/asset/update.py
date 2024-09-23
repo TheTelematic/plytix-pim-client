@@ -17,9 +17,9 @@ class AssetUpdateAPISyncMixin(BaseAPISyncMixin):
     def update_asset(
         self,
         asset_id: str,
-        filename: str,
-        public: bool,
-        category_ids: list[str],
+        filename: str | None = None,
+        public: bool | None = None,
+        category_ids: list[str] | None = None,
     ) -> Asset | None:
         """
         Update an asset.
