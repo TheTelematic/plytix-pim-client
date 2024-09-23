@@ -1,3 +1,8 @@
+from plytix_pim_client.api.assets.asset.create import AssetCreateAPISyncMixin, AssetCreateAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.delete import AssetDeleteAPISyncMixin, AssetDeleteAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.get import AssetGetAPISyncMixin, AssetGetAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.update import AssetUpdateAPISyncMixin, AssetUpdateAPIAsyncMixin
+from plytix_pim_client.api.assets.search import AssetsSearchAPISyncMixin, AssetsSearchAPIAsyncMixin
 from plytix_pim_client.api.products.attributes.attribute.create import (
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeCreateAPIAsyncMixin,
@@ -63,6 +68,27 @@ from plytix_pim_client.api.products.product.family import (
 from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
 from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
 from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
+
+
+# Assets API
+class _AssetsAPISync(
+    AssetCreateAPISyncMixin,
+    AssetDeleteAPISyncMixin,
+    AssetGetAPISyncMixin,
+    AssetUpdateAPISyncMixin,
+    # AssetReplaceAPISyncMixin,  # TODO: To fix in #26
+    AssetsSearchAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _AssetsAPIAsync(
+    AssetCreateAPIAsyncMixin,
+    AssetDeleteAPIAsyncMixin,
+    AssetGetAPIAsyncMixin,
+    AssetUpdateAPIAsyncMixin,
+    # AssetReplaceAPIAsyncMixin,  # TODO: To fix in #26
+    AssetsSearchAPIAsyncMixin,
+): ...  # noqa: E701
 
 
 # Product Families Attributes API

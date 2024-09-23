@@ -11,8 +11,8 @@ class OperatorEnum(StrEnum):
     EQUALS = "eq"
     NOT_EQUALS = "!eq"
     CONTAINS = "like"
-    MATCHES = "in"
-    NOT_MATCHES = "!in"
+    IN = "in"
+    NOT_IN = "!in"
     GREATER_THAN = "gt"
     GREATER_THAN_OR_EQUAL = "gte"
     LESS_THAN = "lt"
@@ -25,7 +25,7 @@ class OperatorEnum(StrEnum):
 class SearchFilter(BaseDTO):
     field: str
     operator: OperatorEnum
-    value: str | int | float | bool | None
+    value: str | int | float | bool | None | list[str | int | float | bool]
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
