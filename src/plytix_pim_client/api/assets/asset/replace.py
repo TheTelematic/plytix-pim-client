@@ -7,7 +7,7 @@ from typing import IO, Tuple
 import httpx
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
-from plytix_pim_client.dtos.asset import Asset
+from plytix_pim_client.dtos.assets.asset import Asset
 from plytix_pim_client.dtos.request import PlytixRequest
 
 

@@ -25,5 +25,7 @@ class UpdateResourceAPI(Generic[T]):
     def process_response(cls, response: httpx.Response) -> T | None:
         if response.status_code == HTTPStatus.NOT_FOUND:
             return None
+        if data := response.json().get("data", []):
+            return cls.resource_dto_class.from_dict(data[0])
 
-        return cls.resource_dto_class.from_dict(response.json()["data"][0])
+        return None
