@@ -1,29 +1,48 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
+from http import HTTPMethod
 from typing import TypedDict
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
 from plytix_pim_client.dtos.assets.category import AssetCategory
+from plytix_pim_client.dtos.request import PlytixRequest
 
 
 class CreateAssetCategoryDict(TypedDict):
     name: str
+    parent_category_id: str | None
 
 
 class AssetCategoryCreateAPI(CreateResourceAPI):
     endpoint = "/api/v1/categories/file"
     resource_dto_class = AssetCategory
 
+    @classmethod
+    def get_request(cls, name: str, parent_category_id: str | None = None) -> PlytixRequest:
+        if parent_category_id:
+            return PlytixRequest(
+                method=HTTPMethod.POST,
+                endpoint=f"{cls.endpoint}/{parent_category_id}",
+                kwargs={"json": {"name": name}},
+            )
+
+        else:
+            return PlytixRequest(
+                method=HTTPMethod.POST,
+                endpoint=cls.endpoint,
+                kwargs={"json": {"name": name}},
+            )
+
 
 class AssetCategoryCreateAPISyncMixin(BaseAPISyncMixin):
-    def create_asset_category(self, name: str) -> AssetCategory:
+    def create_asset_category(self, name: str, parent_category_id: str | None = None) -> AssetCategory:
         """
         Create an asset category.
 
         :return: The asset category created.
         """
-        request = AssetCategoryCreateAPI.get_request(name=name)
+        request = AssetCategoryCreateAPI.get_request(name=name, parent_category_id=parent_category_id)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return AssetCategoryCreateAPI.process_response(response)
 
@@ -39,13 +58,13 @@ class AssetCategoryCreateAPISyncMixin(BaseAPISyncMixin):
 
 
 class AssetCategoryCreateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def create_asset_category(self, name: str) -> AssetCategory:
+    async def create_asset_category(self, name: str, parent_category_id: str | None = None) -> AssetCategory:
         """
         Create an asset category.
 
         :return: The asset category created.
         """
-        request = AssetCategoryCreateAPI.get_request(name=name)
+        request = AssetCategoryCreateAPI.get_request(name=name, parent_category_id=parent_category_id)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
         return AssetCategoryCreateAPI.process_response(response)
 
