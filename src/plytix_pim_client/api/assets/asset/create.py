@@ -116,7 +116,7 @@ class AssetCreateAPIAsyncMixin(BaseAPIAsyncMixin):
         """
         return list(await asyncio.gather(*[self.create_asset_by_url(**asset) for asset in assets]))
 
-    async def create_assets_from_local_files(self, assets: list[CreateAssetFromURLDict]) -> list[Asset]:
+    async def create_assets_from_local_files(self, assets: list[CreateAssetFromLocalFileDict]) -> list[Asset]:
         """
         Create multiple assets uploading local files. This uses asyncio to make the requests concurrently.
 
