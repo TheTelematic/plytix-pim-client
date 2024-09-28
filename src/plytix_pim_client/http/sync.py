@@ -42,7 +42,9 @@ class SyncClient(ClientBase):
             logger.warning(f"Rate limit exceeded, waiting {waiting_time} seconds before retrying...")
             time.sleep(waiting_time)
             waiting_time *= 2
-            return self.make_request(method, path, waiting_time=waiting_time, **kwargs)
+            return self.make_request(
+                method, path, waiting_time=waiting_time, accepted_error_codes=accepted_error_codes, **kwargs
+            )
 
     def _refresh_token(self):
         response = self.client.post(

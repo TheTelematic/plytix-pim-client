@@ -68,3 +68,9 @@ def new_asset_data_from_local_file_factory() -> Callable[[], dict]:
         return dict(file_path=destination_file)
 
     return factory
+
+
+@pytest.fixture
+def new_asset_category_data() -> dict:
+    now = datetime.now()
+    return dict(name=f"test-category-{now.isoformat()}")

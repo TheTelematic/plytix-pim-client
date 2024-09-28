@@ -4,7 +4,7 @@ from typing import TypedDict
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
-from plytix_pim_client.dtos.asset import Asset
+from plytix_pim_client.dtos.assets.asset import Asset
 
 
 class CreateAssetFromURLDict(TypedDict):
