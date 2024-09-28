@@ -27,9 +27,7 @@ class ProductAttributeUpdateAPISyncMixin(BaseAPISyncMixin):
         )
         return ProductAttributeUpdateAPI.process_response(response)
 
-    def update_attributes(
-        self, attribute_ids_with_new_name: list[Tuple[str, str, str | None]]
-    ) -> list[ProductAttribute | None]:
+    def update_attributes(self, attribute_ids_with_new_name: list[Tuple[str, str]]) -> list[ProductAttribute | None]:
         """
         Update multiple products attributes. This uses threading to make the requests concurrently.
 
@@ -58,7 +56,7 @@ class ProductAttributeUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
         return ProductAttributeUpdateAPI.process_response(response)
 
     async def update_attributes(
-        self, attribute_ids_with_new_name: list[Tuple[str, str, str | None]]
+        self, attribute_ids_with_new_name: list[Tuple[str, str]]
     ) -> list[ProductAttribute | None]:
         """
         Update multiple products attributes. This uses asyncio to make the requests concurrently.
