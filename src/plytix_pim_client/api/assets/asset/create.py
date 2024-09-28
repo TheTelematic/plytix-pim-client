@@ -83,7 +83,7 @@ class AssetCreateAPISyncMixin(BaseAPISyncMixin):
         :return: The assets created.
         """
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.create_asset_by_url, **asset) for asset in assets]
+            futures = [executor.submit(self.create_asset_from_local_file, **asset) for asset in assets]
             return [future.result() for future in futures]
 
 
