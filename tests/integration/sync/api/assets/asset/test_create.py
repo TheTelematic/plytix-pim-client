@@ -12,16 +12,14 @@ def test_create_assets_from_urls(plytix, new_asset_data_from_url_factory):
     assert assets[1].id is not None
 
 
-# TODO: To fix in #26
-# def test_create_asset_from_local_file(plytix, new_asset_data_from_local_file):
-#     asset = plytix.assets.create_asset_from_local_file(**new_asset_data_from_local_file)
-#
-#     assert asset.id is not None
+def test_create_asset_from_local_file(plytix, new_asset_data_from_local_file):
+    asset = plytix.assets.create_asset_from_local_file(**new_asset_data_from_local_file)
+
+    assert asset.id is not None
 
 
-# TODO: To fix in #26
-# def test_create_assets_from_local_files(plytix, new_asset_data_from_local_file):
-#     assets = plytix.assets.create_assets_from_local_files([new_asset_data_from_local_file])
-#
-#     assert len(assets) == 1
-#     assert assets[0].id is not None
+def test_create_assets_from_local_files(plytix, new_asset_data_from_local_file):
+    assets = plytix.assets.create_assets_from_local_files([new_asset_data_from_local_file])
+
+    assert len(assets) == 1
+    assert assets[0].id is not None

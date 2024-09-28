@@ -1,4 +1,4 @@
-from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
+from plytix_pim_client.dtos.filters import OperatorEnum, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
 

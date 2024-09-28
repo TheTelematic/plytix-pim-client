@@ -1,11 +1,12 @@
-from plytix_pim_client.api.assets.asset.create import AssetCreateAPISyncMixin, AssetCreateAPIAsyncMixin
-from plytix_pim_client.api.assets.asset.delete import AssetDeleteAPISyncMixin, AssetDeleteAPIAsyncMixin
-from plytix_pim_client.api.assets.asset.get import AssetGetAPISyncMixin, AssetGetAPIAsyncMixin
-from plytix_pim_client.api.assets.asset.update import AssetUpdateAPISyncMixin, AssetUpdateAPIAsyncMixin
-from plytix_pim_client.api.assets.search import AssetsSearchAPISyncMixin, AssetsSearchAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.create import AssetCreateAPIAsyncMixin, AssetCreateAPISyncMixin
+from plytix_pim_client.api.assets.asset.delete import AssetDeleteAPIAsyncMixin, AssetDeleteAPISyncMixin
+from plytix_pim_client.api.assets.asset.get import AssetGetAPIAsyncMixin, AssetGetAPISyncMixin
+from plytix_pim_client.api.assets.asset.replace import AssetReplaceAPIAsyncMixin, AssetReplaceAPISyncMixin
+from plytix_pim_client.api.assets.asset.update import AssetUpdateAPIAsyncMixin, AssetUpdateAPISyncMixin
+from plytix_pim_client.api.assets.search import AssetsSearchAPIAsyncMixin, AssetsSearchAPISyncMixin
 from plytix_pim_client.api.products.attributes.attribute.create import (
-    ProductAttributeCreateAPISyncMixin,
     ProductAttributeCreateAPIAsyncMixin,
+    ProductAttributeCreateAPISyncMixin,
 )
 from plytix_pim_client.api.products.attributes.attribute.delete import (
     ProductAttributeDeleteAPIAsyncMixin,
@@ -16,58 +17,58 @@ from plytix_pim_client.api.products.attributes.attribute.get import (
     ProductAttributeGetAPISyncMixin,
 )
 from plytix_pim_client.api.products.attributes.attribute.update import (
-    ProductAttributeUpdateAPISyncMixin,
     ProductAttributeUpdateAPIAsyncMixin,
+    ProductAttributeUpdateAPISyncMixin,
 )
 from plytix_pim_client.api.products.attributes.search import (
-    ProductAttributesSearchAPISyncMixin,
     ProductAttributesSearchAPIAsyncMixin,
+    ProductAttributesSearchAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.attributes.get import (
-    ProductFamilyGetAttributesAPISyncMixin,
     ProductFamilyGetAttributesAPIAsyncMixin,
+    ProductFamilyGetAttributesAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.attributes.inheritance import (
-    ProductFamilyEditAttributeInheritanceAPISyncMixin,
     ProductFamilyEditAttributeInheritanceAPIAsyncMixin,
+    ProductFamilyEditAttributeInheritanceAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.attributes.link import (
-    ProductFamilyLinkAttributeAPISyncMixin,
     ProductFamilyLinkAttributeAPIAsyncMixin,
+    ProductFamilyLinkAttributeAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.attributes.unlink import (
     ProductFamilyUnlinkAttributeAPIAsyncMixin,
     ProductFamilyUnlinkAttributeAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.create import (
-    ProductFamilyCreateAPISyncMixin,
     ProductFamilyCreateAPIAsyncMixin,
+    ProductFamilyCreateAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.delete import (
-    ProductFamilyDeleteAPISyncMixin,
     ProductFamilyDeleteAPIAsyncMixin,
+    ProductFamilyDeleteAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.get import (
-    ProductFamilyGetAPISyncMixin,
     ProductFamilyGetAPIAsyncMixin,
+    ProductFamilyGetAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.family.update import (
-    ProductFamilyUpdateAPISyncMixin,
     ProductFamilyUpdateAPIAsyncMixin,
+    ProductFamilyUpdateAPISyncMixin,
 )
 from plytix_pim_client.api.products.families.search import (
-    ProductFamiliesSearchAPISyncMixin,
     ProductFamiliesSearchAPIAsyncMixin,
+    ProductFamiliesSearchAPISyncMixin,
 )
-from plytix_pim_client.api.products.product.create import ProductCreateAPISyncMixin, ProductCreateAPIAsyncMixin
-from plytix_pim_client.api.products.product.delete import ProductDeleteAPISyncMixin, ProductDeleteAPIAsyncMixin
+from plytix_pim_client.api.products.product.create import ProductCreateAPIAsyncMixin, ProductCreateAPISyncMixin
+from plytix_pim_client.api.products.product.delete import ProductDeleteAPIAsyncMixin, ProductDeleteAPISyncMixin
 from plytix_pim_client.api.products.product.family import (
-    ProductFamilyAssignAPISyncMixin,
     ProductFamilyAssignAPIAsyncMixin,
+    ProductFamilyAssignAPISyncMixin,
 )
-from plytix_pim_client.api.products.product.get import ProductGetAPISyncMixin, ProductGetAPIAsyncMixin
-from plytix_pim_client.api.products.product.update import ProductUpdateAPISyncMixin, ProductUpdateAPIAsyncMixin
-from plytix_pim_client.api.products.search import ProductsSearchAPISyncMixin, ProductsSearchAPIAsyncMixin
+from plytix_pim_client.api.products.product.get import ProductGetAPIAsyncMixin, ProductGetAPISyncMixin
+from plytix_pim_client.api.products.product.update import ProductUpdateAPIAsyncMixin, ProductUpdateAPISyncMixin
+from plytix_pim_client.api.products.search import ProductsSearchAPIAsyncMixin, ProductsSearchAPISyncMixin
 
 
 # Assets API
@@ -76,7 +77,7 @@ class _AssetsAPISync(
     AssetDeleteAPISyncMixin,
     AssetGetAPISyncMixin,
     AssetUpdateAPISyncMixin,
-    # AssetReplaceAPISyncMixin,  # TODO: To fix in #26
+    AssetReplaceAPISyncMixin,
     AssetsSearchAPISyncMixin,
 ): ...  # noqa: E701
 
@@ -86,7 +87,7 @@ class _AssetsAPIAsync(
     AssetDeleteAPIAsyncMixin,
     AssetGetAPIAsyncMixin,
     AssetUpdateAPIAsyncMixin,
-    # AssetReplaceAPIAsyncMixin,  # TODO: To fix in #26
+    AssetReplaceAPIAsyncMixin,
     AssetsSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 

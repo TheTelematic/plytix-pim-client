@@ -1,5 +1,5 @@
 from http import HTTPMethod, HTTPStatus
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 import httpx
 

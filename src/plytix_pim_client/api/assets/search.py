@@ -1,10 +1,10 @@
-from typing import List, Generator, AsyncGenerator
+from typing import AsyncGenerator, Generator, List
 
-from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.asset import Asset
-from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
+from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
 

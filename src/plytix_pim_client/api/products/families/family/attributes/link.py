@@ -1,11 +1,11 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPMethod, HTTPStatus
-from typing import Tuple, List
+from typing import List, Tuple
 
 import httpx
 
-from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 from plytix_pim_client.dtos.request import PlytixRequest
 

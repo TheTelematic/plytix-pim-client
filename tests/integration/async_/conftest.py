@@ -2,7 +2,7 @@ from typing import AsyncGenerator
 
 import pytest
 
-from plytix_pim_client import SearchFilter, OperatorEnum
+from plytix_pim_client import OperatorEnum, SearchFilter
 from plytix_pim_client.client import PlytixAsync
 
 

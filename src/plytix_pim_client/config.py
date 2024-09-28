@@ -3,10 +3,10 @@ import platform
 import sys
 
 from plytix_pim_client.constants import (
-    DEFAULT_PIM_BASE_URL,
     DEFAULT_AUTH_BASE_URL,
     DEFAULT_HTTP_RETRIES,
     DEFAULT_HTTP_TIMEOUT,
+    DEFAULT_PIM_BASE_URL,
 )
 from plytix_pim_client.version import __version__
 
