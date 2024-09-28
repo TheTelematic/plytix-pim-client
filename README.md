@@ -13,7 +13,7 @@ API documentation: https://apidocs.plytix.com
 ```bash
 pip install plytix-pim-client
 ```
-PyPI: <a href="https://pypi.org/project/plytix-pim-client/" target="_blank">plytix-pim-client</a> 
+PyPI: https://pypi.org/project/plytix-pim-client/
 
 ## Requirements
 - Python 3.11+
