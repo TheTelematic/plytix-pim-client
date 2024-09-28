@@ -3,13 +3,17 @@ from plytix_pim_client.api.assets.asset.delete import AssetDeleteAPIAsyncMixin, 
 from plytix_pim_client.api.assets.asset.get import AssetGetAPIAsyncMixin, AssetGetAPISyncMixin
 from plytix_pim_client.api.assets.asset.replace import AssetReplaceAPIAsyncMixin, AssetReplaceAPISyncMixin
 from plytix_pim_client.api.assets.asset.update import AssetUpdateAPIAsyncMixin, AssetUpdateAPISyncMixin
-from plytix_pim_client.api.assets.categories.create import (
+from plytix_pim_client.api.assets.categories.category.create import (
     AssetCategoryCreateAPISyncMixin,
     AssetCategoryCreateAPIAsyncMixin,
 )
-from plytix_pim_client.api.assets.categories.delete import (
+from plytix_pim_client.api.assets.categories.category.delete import (
     AssetCategoryDeleteAPISyncMixin,
     AssetCategoryDeleteAPIAsyncMixin,
+)
+from plytix_pim_client.api.assets.categories.search import (
+    AssetCategoriesSearchAPISyncMixin,
+    AssetCategoriesSearchAPIAsyncMixin,
 )
 from plytix_pim_client.api.assets.search import AssetsSearchAPIAsyncMixin, AssetsSearchAPISyncMixin
 from plytix_pim_client.api.filters import FiltersGetAPISyncMixin, FiltersGetAPIAsyncMixin
@@ -85,7 +89,7 @@ class _CategoriesAPISync(
     AssetCategoryCreateAPISyncMixin,
     AssetCategoryDeleteAPISyncMixin,
     # AssetCategoryUpdateAPISyncMixin,
-    # AssetCategoriesSearchAPISyncMixin,
+    AssetCategoriesSearchAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -93,7 +97,7 @@ class _CategoriesAPIAsync(
     AssetCategoryCreateAPIAsyncMixin,
     AssetCategoryDeleteAPIAsyncMixin,
     # AssetCategoryUpdateAPIAsyncMixin,
-    # AssetCategoriesSearchAPIAsyncMixin,
+    AssetCategoriesSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
