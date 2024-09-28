@@ -1,6 +1,7 @@
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
-from plytix_pim_client.mixins import _ProductsAPISync, _ProductsAPIAsync, _AssetsAPISync, _AssetsAPIAsync
+from plytix_pim_client.mixins import (_AssetsAPIAsync, _AssetsAPISync,
+                                      _ProductsAPIAsync, _ProductsAPISync)
 
 
 class PlytixSync:

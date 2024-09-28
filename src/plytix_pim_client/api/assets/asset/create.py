@@ -4,7 +4,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPMethod
 from typing import TypedDict
 
-from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
 from plytix_pim_client.dtos.asset import Asset
 from plytix_pim_client.dtos.request import PlytixRequest

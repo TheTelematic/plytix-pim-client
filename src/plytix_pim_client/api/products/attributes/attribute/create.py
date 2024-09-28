@@ -1,10 +1,11 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
-from typing import TypedDict, List, Dict
+from typing import Dict, List, TypedDict
 
-from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
-from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
+from plytix_pim_client.dtos.products.attribute import (
+    ProductAttribute, ProductAttributeTypeClass)
 from plytix_pim_client.dtos.products.family import ProductAttributeFamilyLevel
 
 

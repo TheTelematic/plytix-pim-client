@@ -1,10 +1,11 @@
 from http import HTTPMethod
-from typing import List, TypeVar, Generic
+from typing import Generic, List, TypeVar
 
 import httpx
 
 from plytix_pim_client.dtos.base import BaseDTO
-from plytix_pim_client.dtos.filters import SearchFilter, RelationshipSearchFilter
+from plytix_pim_client.dtos.filters import (RelationshipSearchFilter,
+                                            SearchFilter)
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.request import PlytixRequest
 

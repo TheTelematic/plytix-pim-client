@@ -4,7 +4,9 @@ from typing import List
 import httpx
 
 from plytix_pim_client import config
-from plytix_pim_client.exceptions import TokenExpiredError, RateLimitExceededError, UnprocessableEntityError
+from plytix_pim_client.exceptions import (RateLimitExceededError,
+                                          TokenExpiredError,
+                                          UnprocessableEntityError)
 from plytix_pim_client.logger import logger
 
 

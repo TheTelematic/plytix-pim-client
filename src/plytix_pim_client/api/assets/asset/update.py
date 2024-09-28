@@ -1,9 +1,9 @@
 import asyncio
 from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPStatus
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
-from plytix_pim_client.api.base import BaseAPISyncMixin, BaseAPIAsyncMixin
+from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
 from plytix_pim_client.dtos.asset import Asset
 
