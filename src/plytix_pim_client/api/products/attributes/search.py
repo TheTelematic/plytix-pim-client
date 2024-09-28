@@ -22,9 +22,9 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
         pagination: Pagination,
     ) -> List[ProductAttribute]:
         """
-        Search for products matching the filters.
+        Search for products_attributes matching the filters.
 
-        :return: The products found.
+        :return: The products_attributes found.
         """
         request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
@@ -40,9 +40,9 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> Generator[List[ProductAttribute], None, None]:
         """
-        Iterate over all products matching the filters.
+        Iterate over all products attributes matching the filters.
 
-        :return: The products found.
+        :return: The products attributes found.
         """
         current_page = 1
         while True:
@@ -52,10 +52,10 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products = self.search_product_attributes(filters, attributes, relationship_filters, pagination)
-            if not products:
+            products_attributes = self.search_product_attributes(filters, attributes, relationship_filters, pagination)
+            if not products_attributes:
                 break
-            yield products
+            yield products_attributes
             current_page += 1
 
 
@@ -68,9 +68,9 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         pagination: Pagination,
     ) -> List[ProductAttribute]:
         """
-        Search for products matching the filters.
+        Search for products attributes matching the filters.
 
-        :return: The products found.
+        :return: The products attributes found.
         """
         request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
@@ -86,9 +86,9 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         page_size: int = DEFAULT_PAGE_SIZE,
     ) -> AsyncGenerator[List[ProductAttribute], None]:
         """
-        Iterate over all products matching the filters.
+        Iterate over all products attributes matching the filters.
 
-        :return: The products found.
+        :return: The products attributes found.
         """
         current_page = 1
         while True:
@@ -98,8 +98,10 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products = await self.search_product_attributes(filters, attributes, relationship_filters, pagination)
-            if not products:
+            products_attributes = await self.search_product_attributes(
+                filters, attributes, relationship_filters, pagination
+            )
+            if not products_attributes:
                 break
-            yield products
+            yield products_attributes
             current_page += 1
