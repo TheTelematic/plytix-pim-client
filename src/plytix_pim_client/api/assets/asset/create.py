@@ -122,4 +122,4 @@ class AssetCreateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The assets created.
         """
-        return list(await asyncio.gather(*[self.create_asset_by_url(**asset) for asset in assets]))
+        return list(await asyncio.gather(*[self.create_asset_from_local_file(**asset) for asset in assets]))
