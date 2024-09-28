@@ -5,7 +5,7 @@ from typing import Dict, Tuple
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.update import UpdateResourceAPI
-from plytix_pim_client.dtos.asset import Asset
+from plytix_pim_client.dtos.assets.asset import Asset
 
 
 class AssetUpdateAPI(UpdateResourceAPI):
