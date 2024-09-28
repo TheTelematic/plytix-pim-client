@@ -22,6 +22,3 @@ class Asset(BaseDTO):
     status: str | None = None
     thumbnail: str | None = None
     url: str | None = None
-    created_user_audit: dict | None = None
-    modified_user_audit: dict | None = None
-    has_custom_thumb: bool | None = None

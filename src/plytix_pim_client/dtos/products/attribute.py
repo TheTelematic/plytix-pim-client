@@ -23,14 +23,9 @@ class ProductAttributeTypeClass(StrEnum):
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ProductAttribute(BaseDTO):
     id: str | None = None
-    label: str | None = None
     name: str | None = None
-    description: str | None = None
-    groups: list = field(default_factory=list)
+    label: str | None = None
     type_class: ProductAttributeTypeClass | None = None
-    created: str | None = None
-    modified: str | None = None
-    created_at: str | None = None
-    created_user_audit: dict | None = field(default_factory=dict)
-    modified_user_audit: dict | None = field(default_factory=dict)
-    filter_type: str | None = None
+    groups: list = field(default_factory=list)
+    options: list[str] = field(default_factory=list)
+    attributes: list[dict] = field(default_factory=list)
