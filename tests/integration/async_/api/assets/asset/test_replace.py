@@ -7,8 +7,8 @@ async def test_replace_asset(plytix, new_asset_data_from_url_factory, new_asset_
     assert result.modified != old_modified_at
 
 
-async def test_replace_asset_not_found(plytix, new_asset_data_from_local_file):
-    result = await plytix.assets.replace_asset("non-existing-id", new_asset_data_from_local_file["file_path"])
+async def test_replace_asset_not_found(plytix, new_asset_data_from_local_file_factory):
+    result = await plytix.assets.replace_asset("non-existing-id", new_asset_data_from_local_file_factory()["file_path"])
 
     assert result is None
 

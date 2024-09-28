@@ -14,18 +14,13 @@ class ProductAttributeUpdateAPI(UpdateResourceAPI):
 
 
 class ProductAttributeUpdateAPISyncMixin(BaseAPISyncMixin):
-    def update_attribute(
-        self, attribute_id: str, new_name: str, description: str | None = None
-    ) -> ProductAttribute | None:
+    def update_attribute(self, attribute_id: str, new_name: str) -> ProductAttribute | None:
         """
         Update a product attribute.
 
         :return: The product attribute if exists, None otherwise.
         """
         data = {"name": new_name}
-        if description:
-            data["description"] = description
-
         request = ProductAttributeUpdateAPI.get_request(attribute_id, data)
         response = self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
@@ -33,7 +28,7 @@ class ProductAttributeUpdateAPISyncMixin(BaseAPISyncMixin):
         return ProductAttributeUpdateAPI.process_response(response)
 
     def update_attributes(
-        self, attribute_ids_with_new_name_and_description: list[Tuple[str, str, str | None]]
+        self, attribute_ids_with_new_name: list[Tuple[str, str, str | None]]
     ) -> list[ProductAttribute | None]:
         """
         Update multiple products attributes. This uses threading to make the requests concurrently.
@@ -42,25 +37,20 @@ class ProductAttributeUpdateAPISyncMixin(BaseAPISyncMixin):
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.update_attribute, attribute_id, new_name, description)
-                for attribute_id, new_name, description in attribute_ids_with_new_name_and_description
+                executor.submit(self.update_attribute, attribute_id, new_name)
+                for attribute_id, new_name in attribute_ids_with_new_name
             ]
             return [future.result() for future in futures]
 
 
 class ProductAttributeUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def update_attribute(
-        self, attribute_id: str, new_name: str, description: str | None = None
-    ) -> ProductAttribute | None:
+    async def update_attribute(self, attribute_id: str, new_name: str) -> ProductAttribute | None:
         """
         Update a product attribute.
 
         :return: The product attribute if exists, None otherwise.
         """
         data = {"name": new_name}
-        if description:
-            data["description"] = description
-
         request = ProductAttributeUpdateAPI.get_request(attribute_id, data)
         response = await self._client.make_request(
             request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
@@ -68,7 +58,7 @@ class ProductAttributeUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
         return ProductAttributeUpdateAPI.process_response(response)
 
     async def update_attributes(
-        self, attribute_ids_with_new_name_and_description: list[Tuple[str, str, str | None]]
+        self, attribute_ids_with_new_name: list[Tuple[str, str, str | None]]
     ) -> list[ProductAttribute | None]:
         """
         Update multiple products attributes. This uses asyncio to make the requests concurrently.
@@ -78,8 +68,8 @@ class ProductAttributeUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
         return list(
             await asyncio.gather(
                 *[
-                    self.update_attribute(attribute_id, new_name, description)
-                    for attribute_id, new_name, description in attribute_ids_with_new_name_and_description
+                    self.update_attribute(attribute_id, new_name)
+                    for attribute_id, new_name in attribute_ids_with_new_name
                 ]
             )
         )
