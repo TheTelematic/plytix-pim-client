@@ -40,3 +40,11 @@ class RelationshipSearchFilter(BaseDTO):
     relationship_id: str
     operator: OperatorEnum
     product_ids: List[ProductsRelationshipFilter]
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class AvailableSearchFilter(BaseDTO):
+    filter_type: str
+    key: str
+    operators: List[str]
+    options: List[str] | None = None
