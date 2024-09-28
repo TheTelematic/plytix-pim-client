@@ -12,3 +12,7 @@ class RateLimitExceededError(PlytixPimClientException):
 
 class UnprocessableEntityError(PlytixPimClientException):
     """Raised when the request is unprocessable"""
+
+
+class BadRequestError(PlytixPimClientException):
+    """Raised when the request is bad"""

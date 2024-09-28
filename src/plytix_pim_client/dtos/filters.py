@@ -25,7 +25,7 @@ class OperatorEnum(StrEnum):
 class SearchFilter(BaseDTO):
     field: str
     operator: OperatorEnum
-    value: str | int | float | bool | None | list[str | int | float | bool]
+    value: str | int | float | bool | None | list[str | int | float | bool] = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
