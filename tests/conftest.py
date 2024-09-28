@@ -1,6 +1,7 @@
 import asyncio
 import shutil
 from datetime import datetime
+from pathlib import Path
 from typing import Callable
 
 import httpx
@@ -62,7 +63,7 @@ def new_asset_data_from_url_factory() -> Callable[[], dict]:
 def new_asset_data_from_local_file_factory() -> Callable[[], dict]:
     def factory() -> dict:
         destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
-        shutil.copy(__file__, destination_file)
+        shutil.copy(Path(Path(__file__).parent.resolve(), "resources", "assets", "Plytix.jpeg"), destination_file)
 
         return dict(file_path=destination_file)
 

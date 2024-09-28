@@ -1,2 +1,1 @@
 httpx~=0.27.2
-aiofiles~=24.1.0

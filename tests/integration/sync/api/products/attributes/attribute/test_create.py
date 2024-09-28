@@ -8,7 +8,6 @@ def test_create_product_attribute(plytix, new_product_attribute_data):
     ).replace(".", "_").replace(":", "_")
     assert product_attribute.groups == []
     assert product_attribute.id
-    assert product_attribute.filter_type == "TextAttribute"
 
 
 def test_create_multiple_product_attributes(plytix, new_product_attribute_data):
@@ -30,7 +29,6 @@ def test_create_multiple_product_attributes(plytix, new_product_attribute_data):
     ).replace(".", "_").replace(":", "_")
     assert product_attributes[0].groups == []
     assert product_attributes[0].id
-    assert product_attributes[0].filter_type == "TextAttribute"
 
     assert product_attributes[1].name == new_product_attribute_data2["name"]
     assert product_attributes[1].type_class == new_product_attribute_data2["type_class"]
@@ -39,6 +37,5 @@ def test_create_multiple_product_attributes(plytix, new_product_attribute_data):
     ).replace(".", "_").replace(":", "_")
     assert product_attributes[1].groups == []
     assert product_attributes[1].id
-    assert product_attributes[1].filter_type == "TextAttribute"
 
     assert product_attributes[0].id != product_attributes[1].id

@@ -4,7 +4,12 @@ from typing import List
 import httpx
 
 from plytix_pim_client import config
-from plytix_pim_client.exceptions import RateLimitExceededError, TokenExpiredError, UnprocessableEntityError
+from plytix_pim_client.exceptions import (
+    RateLimitExceededError,
+    TokenExpiredError,
+    UnprocessableEntityError,
+    BadRequestError,
+)
 from plytix_pim_client.logger import logger
 
 
@@ -47,6 +52,10 @@ class ClientBase:
                 message = f"Error with {exc.request.method} {exc.request.url} - {exc.response.json()}"
                 logger.error(message)
                 raise UnprocessableEntityError(message)
+            elif exc.response.status_code == HTTPStatus.BAD_REQUEST:
+                message = f"Error with {exc.request.method} {exc.request.url} - {exc.response.json()}"
+                logger.error(message)
+                raise BadRequestError(message)
             else:
                 raise exc
 

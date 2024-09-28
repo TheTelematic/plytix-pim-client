@@ -1,11 +1,13 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class BaseDTO:
     @classmethod
     def from_dict(cls, data: dict):
-        return cls(**data)
+        _fields = fields(cls)
+        filtered_data = {k: v for k, v in data.items() if k in [f.name for f in _fields]}
+        return cls(**filtered_data)
 
     def to_dict(self) -> dict:
         return asdict(self)

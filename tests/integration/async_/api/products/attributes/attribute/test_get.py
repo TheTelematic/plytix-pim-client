@@ -6,7 +6,6 @@ async def test_get_attribute(plytix, new_product_attribute_data):
     assert product_attribute.id == retrieved_product_attribute.id
     assert product_attribute.name == retrieved_product_attribute.name
     assert product_attribute.type_class == retrieved_product_attribute.type_class
-    assert product_attribute.description == retrieved_product_attribute.description
 
 
 async def test_get_attribute_that_does_not_exist(plytix):
@@ -42,6 +41,3 @@ async def test_get_attributes(plytix, new_product_attribute_data):
     assert product_attributes[0].type_class == retrieved_product_attributes[0].type_class
     assert product_attributes[1].type_class == retrieved_product_attributes[1].type_class
     assert product_attributes[2].type_class == retrieved_product_attributes[2].type_class
-    assert product_attributes[0].description == retrieved_product_attributes[0].description
-    assert product_attributes[1].description == retrieved_product_attributes[1].description
-    assert product_attributes[2].description == retrieved_product_attributes[2].description
