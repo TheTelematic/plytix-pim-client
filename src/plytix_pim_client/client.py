@@ -1,6 +1,13 @@
 from plytix_pim_client.http.async_ import AsyncClient
 from plytix_pim_client.http.sync import SyncClient
-from plytix_pim_client.mixins import _AssetsAPIAsync, _AssetsAPISync, _ProductsAPIAsync, _ProductsAPISync
+from plytix_pim_client.mixins import (
+    _AssetsAPIAsync,
+    _AssetsAPISync,
+    _ProductsAPIAsync,
+    _ProductsAPISync,
+    _FiltersAPISync,
+    _FiltersAPIAsync,
+)
 
 
 class PlytixSync:
@@ -13,6 +20,10 @@ class PlytixSync:
     @property
     def assets(self) -> _AssetsAPISync:
         return _AssetsAPISync(self._client)
+
+    @property
+    def filters(self) -> _FiltersAPISync:
+        return _FiltersAPISync(self._client)
 
     @property
     def products(self) -> _ProductsAPISync:
@@ -29,6 +40,10 @@ class PlytixAsync:
     @property
     def assets(self) -> _AssetsAPIAsync:
         return _AssetsAPIAsync(self._client)
+
+    @property
+    def filters(self) -> _FiltersAPIAsync:
+        return _FiltersAPIAsync(self._client)
 
     @property
     def products(self) -> _ProductsAPIAsync:
