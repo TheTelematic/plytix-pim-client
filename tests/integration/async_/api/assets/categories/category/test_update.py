@@ -1,4 +1,4 @@
-from plytix_pim_client import SearchFilter, OperatorEnum
+import pytest
 
 
 async def test_convert_to_first_level_category(plytix, new_asset_category_data):
@@ -33,45 +33,66 @@ async def test_move_category(plytix, new_asset_category_data):
 
 
 async def test_sorting_category(plytix, new_asset_category_data):
+    with pytest.raises(NotImplementedError):
+        await plytix.assets.categories.sorting_category("category_id", ["subcategory_id"])
+
+
+async def test_sorting_root_category(plytix, new_asset_category_data):
+    with pytest.raises(NotImplementedError):
+        await plytix.assets.categories.sorting_root_category(["subcategory_id"])
+
+
+async def test_convert_to_first_level_multiple_categories(plytix, new_asset_category_data):
     parent_category = new_asset_category_data.copy()
-    subcategory_data1 = new_asset_category_data.copy()
-    subcategory_data2 = new_asset_category_data.copy()
+    subcategory1 = new_asset_category_data.copy()
+    subcategory2 = new_asset_category_data.copy()
     parent_category["name"] = f"{parent_category['name']}-parent"
-    subcategory_data1["name"] = f"{subcategory_data1['name']}-sub1"
-    subcategory_data2["name"] = f"{subcategory_data2['name']}-sub2"
+    subcategory1["name"] = f"{subcategory1['name']}-sub1"
+    subcategory2["name"] = f"{subcategory2['name']}-sub2"
     parent_category = await plytix.assets.categories.create_asset_category(**parent_category)
     subcategory1 = await plytix.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory_data1
+        parent_category_id=parent_category.id, **subcategory1
     )
     subcategory2 = await plytix.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory_data2
+        parent_category_id=parent_category.id, **subcategory2
     )
 
-    await plytix.assets.categories.sorting_category(parent_category.id, [subcategory2.id, subcategory1.id])
+    subcategories = await plytix.assets.categories.convert_to_first_level_categories([subcategory1.id, subcategory2.id])
 
-    subcategories = []
-    async for categories in plytix.assets.categories.search_all_asset_categories(
-        [[SearchFilter(field="id", operator=OperatorEnum.IN, value=[subcategory2.id, subcategory1.id])]],
-        ["id", "order"],
-        [],
-        "id",
-        False,
-    ):
-        subcategories.extend(categories)
-
-    assert subcategories[0].id == subcategory2.id
-    assert subcategories[1].id == subcategory1.id
-    assert int(subcategories[0].order) == 1
-    assert int(subcategories[1].order) == 2
+    assert subcategories[0].parents_ids == []
+    assert subcategories[1].parents_ids == []
 
 
-async def test_sorting_root_category(plytix, new_asset_category_data): ...
+async def test_move_multiple_categories(plytix, new_asset_category_data):
+    parent_category1 = new_asset_category_data.copy()
+    parent_category2 = new_asset_category_data.copy()
+    subcategory1 = new_asset_category_data.copy()
+    subcategory2 = new_asset_category_data.copy()
+    parent_category1["name"] = f"{parent_category1['name']}-parent1"
+    parent_category2["name"] = f"{parent_category2['name']}-parent2"
+    subcategory1["name"] = f"{subcategory1['name']}-sub1"
+    subcategory2["name"] = f"{subcategory2['name']}-sub2"
+    parent_category1 = await plytix.assets.categories.create_asset_category(**parent_category1)
+    parent_category2 = await plytix.assets.categories.create_asset_category(**parent_category2)
+    subcategory1 = await plytix.assets.categories.create_asset_category(
+        parent_category_id=parent_category1.id, **subcategory1
+    )
+    subcategory2 = await plytix.assets.categories.create_asset_category(
+        parent_category_id=parent_category1.id, **subcategory2
+    )
+
+    subcategories = await plytix.assets.categories.move_categories(
+        [(subcategory1.id, parent_category2.id), (subcategory2.id, parent_category2.id)],
+    )
+
+    assert subcategories[0].parents_ids == [parent_category2.id]
+    assert subcategories[1].parents_ids == [parent_category2.id]
 
 
-async def test_convert_to_first_level_multiple_categories(plytix, new_asset_category_data): ...
-
-
-async def test_move_multiple_categories(plytix, new_asset_category_data): ...
-
-
-async def test_sorting_multiple_categories(plytix, new_asset_category_data): ...
+async def test_sorting_multiple_categories(plytix, new_asset_category_data):
+    with pytest.raises(NotImplementedError):
+        await plytix.assets.categories.sorting_categories(
+            [
+                ("category_id", ["subcategory_id"]),
+            ]
+        )

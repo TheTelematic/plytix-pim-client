@@ -47,11 +47,15 @@ class AssetCategoryUpdateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The category.
         """
-        request = AssetCategoryUpdateAPI.get_request(category_id, {"sort_children": subcategory_ids})
-        response = self._client.make_request(
-            request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
         )
-        return AssetCategoryUpdateAPI.process_response(response)
+        # request = AssetCategoryUpdateAPI.get_request(category_id, {"sort_children": subcategory_ids})
+        # response = self._client.make_request(
+        #     request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        # )
+        # return AssetCategoryUpdateAPI.process_response(response)
 
     def sorting_root_category(self, subcategory_ids: list[str]) -> None:
         """
@@ -59,11 +63,15 @@ class AssetCategoryUpdateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The category.
         """
-        request = AssetCategoryUpdateAPI.get_request("root", {"sort_children": subcategory_ids})
-        response = self._client.make_request(
-            request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
         )
-        return AssetCategoryUpdateAPI.process_response(response)
+        # request = AssetCategoryUpdateAPI.get_request("root", {"sort_children": subcategory_ids})
+        # response = self._client.make_request(
+        #     request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        # )
+        # return AssetCategoryUpdateAPI.process_response(response)
 
     def convert_to_first_level_categories(self, category_ids: list[str]) -> list[AssetCategory | None]:
         """
@@ -98,12 +106,16 @@ class AssetCategoryUpdateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The categories.
         """
-        with ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(self.sorting_category, category_id, subcategory_ids)
-                for category_id, subcategory_ids in category_ids_and_subcategory_ids
-            ]
-            return [future.result() for future in futures]
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
+        )
+        # with ThreadPoolExecutor() as executor:
+        #     futures = [
+        #         executor.submit(self.sorting_category, category_id, subcategory_ids)
+        #         for category_id, subcategory_ids in category_ids_and_subcategory_ids
+        #     ]
+        #     return [future.result() for future in futures]
 
 
 class AssetCategoryUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
@@ -140,11 +152,15 @@ class AssetCategoryUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The category.
         """
-        request = AssetCategoryUpdateAPI.get_request(category_id, {"sort_children": subcategory_ids})
-        response = await self._client.make_request(
-            request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
         )
-        return AssetCategoryUpdateAPI.process_response(response)
+        # request = AssetCategoryUpdateAPI.get_request(category_id, {"sort_children": subcategory_ids})
+        # response = await self._client.make_request(
+        #     request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        # )
+        # return AssetCategoryUpdateAPI.process_response(response)
 
     async def sorting_root_category(self, subcategory_ids: list[str]) -> None:
         """
@@ -152,11 +168,15 @@ class AssetCategoryUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The category.
         """
-        request = AssetCategoryUpdateAPI.get_request("root", {"sort_children": subcategory_ids})
-        response = await self._client.make_request(
-            request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
         )
-        return AssetCategoryUpdateAPI.process_response(response)
+        # request = AssetCategoryUpdateAPI.get_request("root", {"sort_children": subcategory_ids})
+        # response = await self._client.make_request(
+        #     request.method, request.endpoint, accepted_error_codes=[HTTPStatus.NOT_FOUND], **request.kwargs
+        # )
+        # return AssetCategoryUpdateAPI.process_response(response)
 
     async def convert_to_first_level_categories(self, category_ids: list[str]) -> list[AssetCategory | None]:
         """
@@ -188,11 +208,15 @@ class AssetCategoryUpdateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The categories.
         """
-        return list(
-            await asyncio.gather(
-                *[
-                    self.sorting_category(category_id, subcategory_ids)
-                    for category_id, subcategory_ids in category_ids_and_subcategory_ids
-                ]
-            )
+        raise NotImplementedError(
+            "This method doesn't work yet, "
+            "it will be fixed on https://github.com/TheTelematic/plytix-pim-client/issues/37"
         )
+        # return list(
+        #     await asyncio.gather(
+        #         *[
+        #             self.sorting_category(category_id, subcategory_ids)
+        #             for category_id, subcategory_ids in category_ids_and_subcategory_ids
+        #         ]
+        #     )
+        # )
