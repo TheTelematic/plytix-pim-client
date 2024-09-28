@@ -1,13 +1,10 @@
 import asyncio
-import os
 from concurrent.futures.thread import ThreadPoolExecutor
-from http import HTTPMethod
 from typing import TypedDict
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.create import CreateResourceAPI
 from plytix_pim_client.dtos.asset import Asset
-from plytix_pim_client.dtos.request import PlytixRequest
 
 
 class CreateAssetFromURLDict(TypedDict):
@@ -22,21 +19,6 @@ class CreateAssetFromLocalFileDict(TypedDict):
 class AssetCreateAPI(CreateResourceAPI):
     endpoint = "/api/v1/assets"
     resource_dto_class = Asset
-
-    @classmethod
-    def get_request(cls, **data) -> PlytixRequest:
-        if "url" in data:
-            return PlytixRequest(
-                method=HTTPMethod.POST,
-                endpoint=cls.endpoint,
-                kwargs={"json": data},
-            )
-        else:
-            return PlytixRequest(
-                method=HTTPMethod.POST,
-                endpoint=cls.endpoint,
-                kwargs={"files": {"file": (data["filename"], data["file_object"])}},
-            )
 
 
 class AssetCreateAPISyncMixin(BaseAPISyncMixin):
@@ -60,11 +42,17 @@ class AssetCreateAPISyncMixin(BaseAPISyncMixin):
 
         :return: The asset created.
         """
-        filename = os.path.basename(file_path)
-        with open(file_path, "rb") as file_obj:
-            request = AssetCreateAPI.get_request(filename=filename, file_object=file_obj)
-            response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return AssetCreateAPI.process_response(response)
+        raise NotImplementedError(
+            f"This method is producing Internal Server Errors, please use {self.create_asset_by_url} instead."
+            f"To be fixed in https://github.com/TheTelematic/plytix-pim-client/issues/26"
+        )
+        # filename = os.path.basename(file_path)
+        # with open(file_path, "rb") as file_obj:
+        #     content = b64encode(file_obj.read()).decode("utf-8")
+        #
+        # request = AssetCreateAPI.get_request(filename=filename, content=content)
+        # response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
+        # return AssetCreateAPI.process_response(response)
 
     def create_assets_by_urls(self, assets: list[CreateAssetFromURLDict]) -> list[Asset]:
         """
@@ -108,11 +96,17 @@ class AssetCreateAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: The asset created.
         """
-        filename = os.path.basename(file_path)
-        with open(file_path, "rb") as file_obj:
-            request = AssetCreateAPI.get_request(filename=filename, file_object=file_obj)
-            response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return AssetCreateAPI.process_response(response)
+        raise NotImplementedError(
+            f"This method is producing Internal Server Errors, please use {self.create_asset_by_url} instead."
+            f"To be fixed in https://github.com/TheTelematic/plytix-pim-client/issues/26"
+        )
+        # filename = os.path.basename(file_path)
+        # async with aiofiles.open(file_path, "rb") as file_obj:
+        #     content = b64encode(await file_obj.read()).decode("utf-8")
+        #
+        # request = AssetCreateAPI.get_request(filename=filename, content=content)
+        # response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
+        # return AssetCreateAPI.process_response(response)
 
     async def create_assets_by_urls(self, assets: list[CreateAssetFromURLDict]) -> list[Asset]:
         """
