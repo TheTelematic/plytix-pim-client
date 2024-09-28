@@ -19,20 +19,17 @@ class AssetCategoryCreateAPI(CreateResourceAPI):
     resource_dto_class = AssetCategory
 
     @classmethod
-    def get_request(cls, name: str, parent_category_id: str | None = None) -> PlytixRequest:
-        if parent_category_id:
-            return PlytixRequest(
-                method=HTTPMethod.POST,
-                endpoint=f"{cls.endpoint}/{parent_category_id}",
-                kwargs={"json": {"name": name}},
-            )
-
+    def get_request(cls, **data) -> PlytixRequest:
+        if data.get("parent_category_id"):
+            endpoint = f"{cls.endpoint}/{data['parent_category_id']}"
         else:
-            return PlytixRequest(
-                method=HTTPMethod.POST,
-                endpoint=cls.endpoint,
-                kwargs={"json": {"name": name}},
-            )
+            endpoint = cls.endpoint
+
+        return PlytixRequest(
+            method=HTTPMethod.POST,
+            endpoint=endpoint,
+            kwargs={"json": {"name": data["name"]}},
+        )
 
 
 class AssetCategoryCreateAPISyncMixin(BaseAPISyncMixin):

@@ -27,3 +27,5 @@ class UpdateResourceAPI(Generic[T]):
             return None
         if data := response.json().get("data", []):
             return cls.resource_dto_class.from_dict(data[0])
+
+        return None
