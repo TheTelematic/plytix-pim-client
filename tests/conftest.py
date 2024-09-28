@@ -1,4 +1,5 @@
 import asyncio
+import shutil
 from datetime import datetime
 from typing import Callable
 
@@ -57,13 +58,12 @@ def new_asset_data_from_url_factory() -> Callable[[], dict]:
     return factory
 
 
-# TODO: To fix in #26
-# @pytest.fixture
-# def new_asset_data_from_local_file_factory() -> Callable[[], dict]:
-#     def factory() -> dict:
-#         destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
-#         shutil.copy(__file__, destination_file)
-#
-#         return dict(file_path=destination_file)
-#
-#     return factory
+@pytest.fixture
+def new_asset_data_from_local_file_factory() -> Callable[[], dict]:
+    def factory() -> dict:
+        destination_file = f"/tmp/test-{str(datetime.now().timestamp()).replace('.', '')}.py"
+        shutil.copy(__file__, destination_file)
+
+        return dict(file_path=destination_file)
+
+    return factory

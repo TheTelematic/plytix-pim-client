@@ -1,6 +1,7 @@
 from plytix_pim_client.api.assets.asset.create import AssetCreateAPISyncMixin, AssetCreateAPIAsyncMixin
 from plytix_pim_client.api.assets.asset.delete import AssetDeleteAPISyncMixin, AssetDeleteAPIAsyncMixin
 from plytix_pim_client.api.assets.asset.get import AssetGetAPISyncMixin, AssetGetAPIAsyncMixin
+from plytix_pim_client.api.assets.asset.replace import AssetReplaceAPISyncMixin, AssetReplaceAPIAsyncMixin
 from plytix_pim_client.api.assets.asset.update import AssetUpdateAPISyncMixin, AssetUpdateAPIAsyncMixin
 from plytix_pim_client.api.assets.search import AssetsSearchAPISyncMixin, AssetsSearchAPIAsyncMixin
 from plytix_pim_client.api.products.attributes.attribute.create import (
@@ -76,7 +77,7 @@ class _AssetsAPISync(
     AssetDeleteAPISyncMixin,
     AssetGetAPISyncMixin,
     AssetUpdateAPISyncMixin,
-    # AssetReplaceAPISyncMixin,  # TODO: To fix in #26
+    AssetReplaceAPISyncMixin,
     AssetsSearchAPISyncMixin,
 ): ...  # noqa: E701
 
@@ -86,7 +87,7 @@ class _AssetsAPIAsync(
     AssetDeleteAPIAsyncMixin,
     AssetGetAPIAsyncMixin,
     AssetUpdateAPIAsyncMixin,
-    # AssetReplaceAPIAsyncMixin,  # TODO: To fix in #26
+    AssetReplaceAPIAsyncMixin,
     AssetsSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 
