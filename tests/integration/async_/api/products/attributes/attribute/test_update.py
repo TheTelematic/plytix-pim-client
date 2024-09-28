@@ -15,7 +15,6 @@ async def test_update_not_existing_attribute(plytix):
     updated_attribute = await plytix.products.attributes.update_attribute(
         "not-existing-attribute-id",
         new_name="Updated Name",
-        description="Updated Description",
     )
 
     assert updated_attribute is None
