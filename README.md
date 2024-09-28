@@ -88,4 +88,4 @@ plytix.products.families.create_family(name="My First Family")
 
 
 ## * Known issues
-Check out the [open Issues](https://github.com/TheTelematic/plytix-pim-client/issues?q=is%3Aopen+is%3Aissue+label%3Abug) with "bug" label.
+Check out the [open Issues with "bug" label](https://github.com/TheTelematic/plytix-pim-client/issues?q=is%3Aopen+is%3Aissue+label%3Abug).
