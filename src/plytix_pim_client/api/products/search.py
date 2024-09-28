@@ -3,8 +3,7 @@ from typing import AsyncGenerator, Generator, List
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
-from plytix_pim_client.dtos.filters import (RelationshipSearchFilter,
-                                            SearchFilter)
+from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.products.product import Product
 

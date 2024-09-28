@@ -13,8 +13,7 @@ async def test_replace_asset_not_found(plytix, new_asset_data_from_local_file):
     assert result is None
 
 
-async def test_replace_multiple_assets(
-      plytix, new_asset_data_from_url_factory, new_asset_data_from_local_file_factory):
+async def test_replace_multiple_assets(plytix, new_asset_data_from_url_factory, new_asset_data_from_local_file_factory):
     assets = await plytix.assets.create_assets_by_urls(
         [new_asset_data_from_url_factory(), new_asset_data_from_url_factory()]
     )
