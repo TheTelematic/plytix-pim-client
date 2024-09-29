@@ -2,7 +2,9 @@ from typing import Generator
 
 import pytest
 
+from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixSync
+from plytix_pim_client.dtos.products.category import ProductCategory
 
 
 @pytest.fixture(scope="session")
@@ -40,3 +42,14 @@ def _clean_up(plytix: PlytixSync) -> None:
         plytix.products.categories.delete_product_categories(
             [category.id for category in product_categories if category.id]
         )
+
+
+# Fixtures
+@pytest.fixture
+def product(plytix, new_product_data) -> Product:
+    return plytix.products.create_product(**new_product_data)
+
+
+@pytest.fixture
+def product_category(plytix, new_product_category_data) -> ProductCategory:
+    return plytix.products.categories.create_product_category(**new_product_category_data)
