@@ -35,3 +35,6 @@ def _clean_up(plytix: PlytixSync) -> None:
 
     for category in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
         plytix.assets.categories.delete_asset_categories([category.id for category in category if category.id])
+
+    for category in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
+        plytix.products.categories.delete_product_categories([category.id for category in category if category.id])

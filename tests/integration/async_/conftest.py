@@ -35,3 +35,8 @@ async def _clean_up(plytix: PlytixAsync) -> None:
 
     async for category in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
         await plytix.assets.categories.delete_asset_categories([category.id for category in category if category.id])
+
+    async for category in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
+        await plytix.products.categories.delete_product_categories(
+            [category.id for category in category if category.id]
+        )
