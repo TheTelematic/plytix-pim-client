@@ -53,7 +53,8 @@ class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
 
     def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories. This NOT uses threading to make the requests concurrently, due to race condition on server side.
+        Link multiple products to categories.
+        This NOT uses threading to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
@@ -87,7 +88,8 @@ class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
 
     async def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories. This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
+        Link multiple products to categories.
+        This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
