@@ -30,8 +30,13 @@ def _clean_up(plytix: PlytixSync) -> None:
     for families in plytix.products.families.search_all_families([], ["id", "name"], [], "id"):
         plytix.products.families.delete_families([family.id for family in families if family.id])
 
-    for asset in plytix.assets.search_all_assets([], ["id"], [], "id"):
-        plytix.assets.delete_assets([asset.id for asset in asset if asset.id])
+    for assets in plytix.assets.search_all_assets([], ["id"], [], "id"):
+        plytix.assets.delete_assets([asset.id for asset in assets if asset.id])
 
-    for category in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
-        plytix.assets.categories.delete_asset_categories([category.id for category in category if category.id])
+    for asset_categories in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
+        plytix.assets.categories.delete_asset_categories([category.id for category in asset_categories if category.id])
+
+    for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
+        plytix.products.categories.delete_product_categories(
+            [category.id for category in product_categories if category.id]
+        )

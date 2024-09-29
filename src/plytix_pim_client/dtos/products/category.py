@@ -4,5 +4,5 @@ from plytix_pim_client.dtos.common.category import Category
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class AssetCategory(Category):
+class ProductCategory(Category):
     ...  # fmt: skip
