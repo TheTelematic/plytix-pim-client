@@ -93,6 +93,10 @@ from plytix_pim_client.api.products.families.search import (
     ProductFamiliesSearchAPIAsyncMixin,
     ProductFamiliesSearchAPISyncMixin,
 )
+from plytix_pim_client.api.products.product.categories.get import (
+    ProductCategoriesGetAPISyncMixin,
+    ProductCategoriesGetAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.categories.link import (
     ProductCategoryLinkAttributeAPISyncMixin,
     ProductCategoryLinkAttributeAPIAsyncMixin,
@@ -192,6 +196,7 @@ class _ProductCategoriesAPISync(
     ProductCategoriesSearchAPISyncMixin,
     ProductCategoryLinkAttributeAPISyncMixin,
     ProductCategoryUnlinkAttributeAPISyncMixin,
+    ProductCategoriesGetAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -202,6 +207,7 @@ class _ProductCategoriesAPIAsync(
     ProductCategoriesSearchAPIAsyncMixin,
     ProductCategoryLinkAttributeAPIAsyncMixin,
     ProductCategoryUnlinkAttributeAPIAsyncMixin,
+    ProductCategoriesGetAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

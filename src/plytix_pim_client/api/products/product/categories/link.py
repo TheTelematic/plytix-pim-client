@@ -1,5 +1,3 @@
-import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPMethod, HTTPStatus
 from typing import Tuple
 
@@ -55,16 +53,14 @@ class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
 
     def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories. This uses threading to make the requests concurrently.
+        Link multiple products to categories. This NOT uses threading to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
-        with ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(self.link_product_to_category, product_id, product_category_id)
-                for product_id, product_category_id in product_ids_and_category_ids
-            ]
-            return [future.result() for future in futures]
+        return [
+            self.link_product_to_category(product_id, product_category_id)
+            for product_id, product_category_id in product_ids_and_category_ids
+        ]
 
 
 class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
@@ -91,15 +87,11 @@ class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
 
     async def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories. This uses asyncio to make the requests concurrently.
+        Link multiple products to categories. This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
-        return list(
-            await asyncio.gather(
-                *[
-                    self.link_product_to_category(product_id, product_category_id)
-                    for product_id, product_category_id in product_ids_and_category_ids
-                ]
-            )
-        )
+        return [
+            await self.link_product_to_category(product_id, product_category_id)
+            for product_id, product_category_id in product_ids_and_category_ids
+        ]
