@@ -6,7 +6,6 @@ from typing import Tuple
 import httpx
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
-from plytix_pim_client.dtos.products.category import ProductCategory
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
@@ -23,13 +22,13 @@ class ProductCategoryLinkAttributeAPI:
         )
 
     @staticmethod
-    def process_response(response: httpx.Response) -> ProductCategory | None:
+    def process_response(response: httpx.Response) -> bool:
         if response.status_code in [
             HTTPStatus.NOT_FOUND,
         ]:
-            return None
+            return False
 
-        return ProductCategory.from_dict(response.json()["data"][0])
+        return True
 
 
 class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
@@ -37,7 +36,7 @@ class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
         self,
         product_id: str,
         product_category_id: str,
-    ) -> ProductCategory | None:
+    ) -> bool:
         """
         Link product to a category.
 
@@ -54,9 +53,7 @@ class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
         )
         return ProductCategoryLinkAttributeAPI.process_response(response)
 
-    def link_product_to_categories(
-        self, product_ids_and_category_ids: list[Tuple[str, str]]
-    ) -> list[ProductCategory | None]:
+    def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
         Link multiple products to categories. This uses threading to make the requests concurrently.
 
@@ -75,7 +72,7 @@ class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
         self,
         product_id: str,
         product_category_id: str,
-    ) -> ProductCategory | None:
+    ) -> bool:
         """
         Link product to a category.
 
@@ -92,9 +89,7 @@ class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
         )
         return ProductCategoryLinkAttributeAPI.process_response(response)
 
-    async def link_product_to_categories(
-        self, product_ids_and_category_ids: list[Tuple[str, str]]
-    ) -> list[ProductCategory | None]:
+    async def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
         Link multiple products to categories. This uses asyncio to make the requests concurrently.
 
