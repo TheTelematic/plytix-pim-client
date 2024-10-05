@@ -11,14 +11,14 @@ from plytix_pim_client.dtos.products.category import ProductCategory
 
 
 @pytest.fixture()
-def plytix() -> Generator[PlytixSync, None]:
+def plytix() -> Generator[PlytixSync, None, None]:
     _plytix = PlytixSync(response_cooldown_seconds=2.0)
     yield _plytix
     _plytix.close()
 
 
 @pytest.fixture(autouse=True)
-def setup(plytix: PlytixSync) -> Generator[None, None]:
+def setup(plytix: PlytixSync) -> Generator[None, None, None]:
     yield
 
     plytix._client._response_cooldown_seconds = 0.0
