@@ -116,11 +116,11 @@ def test_get_all_assets_for_multiple_products(
     assert len(assets_groups) == 2
     assert len(assets_groups[0]) == 2
     assert len(assets_groups[1]) == 2
-    assert assets_groups[0][0].id == asset2.id
-    assert assets_groups[0][0].filename == asset2.filename
-    assert assets_groups[0][1].id == asset.id
-    assert assets_groups[0][2].filename == asset.filename
-    assert assets_groups[1][0].id == asset2.id
-    assert assets_groups[1][0].filename == asset2.filename
-    assert assets_groups[1][1].id == asset.id
-    assert assets_groups[1][1].filename == asset.filename
+    assert assets_groups[0][0].id == asset.id
+    assert assets_groups[0][0].filename == asset.filename
+    assert assets_groups[0][1].id == asset2.id
+    assert assets_groups[0][1].filename == asset2.filename
+    assert assets_groups[1][0].id == asset.id
+    assert assets_groups[1][0].filename == asset.filename
+    assert assets_groups[1][1].id == asset2.id
+    assert assets_groups[1][1].filename == asset2.filename
