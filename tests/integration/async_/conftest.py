@@ -9,7 +9,7 @@ from plytix_pim_client.dtos.products.category import ProductCategory
 
 @pytest.fixture(scope="session")
 async def plytix() -> AsyncGenerator[PlytixAsync, None]:
-    _plytix = PlytixAsync()
+    _plytix = PlytixAsync(response_cooldown_seconds=2.0)
     yield _plytix
     await _plytix.close()
 

@@ -11,8 +11,8 @@ from plytix_pim_client.logger import logger
 
 
 class SyncClient(ClientBase):
-    def __init__(self, api_key: str | None = None, api_password: str | None = None):
-        super().__init__(api_key, api_password)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None, **kwargs):
+        super().__init__(api_key, api_password, **kwargs)
         self.client = httpx.Client(
             base_url=self.base_url_pim,
             transport=httpx.HTTPTransport(retries=config.HTTP_RETRIES),
@@ -33,7 +33,11 @@ class SyncClient(ClientBase):
         kwargs["headers"] = self._get_headers()
         response = self.client.request(method, path, **kwargs)
         try:
-            return self._process_response(response, accepted_error_codes=accepted_error_codes)
+            processed_response = self._process_response(response, accepted_error_codes=accepted_error_codes)
+            if self._response_cooldown_seconds:
+                logger.debug(f"Sleeping for {self._response_cooldown_seconds} seconds...")
+                time.sleep(self._response_cooldown_seconds)
+            return processed_response
         except TokenExpiredError:
             logger.debug("Token expired, refreshing token...")
             self._refresh_token()

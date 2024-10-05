@@ -11,8 +11,8 @@ from plytix_pim_client.logger import logger
 
 
 class AsyncClient(ClientBase):
-    def __init__(self, api_key: str | None = None, api_password: str | None = None):
-        super().__init__(api_key, api_password)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None, **kwargs):
+        super().__init__(api_key, api_password, **kwargs)
         self.client = httpx.AsyncClient(
             base_url=self.base_url_pim,
             transport=httpx.AsyncHTTPTransport(retries=config.HTTP_RETRIES),
@@ -33,7 +33,11 @@ class AsyncClient(ClientBase):
         kwargs["headers"] = self._get_headers()
         response = await self.client.request(method, path, **kwargs)
         try:
-            return self._process_response(response, accepted_error_codes=accepted_error_codes)
+            processed_response = self._process_response(response, accepted_error_codes=accepted_error_codes)
+            if self._response_cooldown_seconds:
+                logger.debug(f"Sleeping for {self._response_cooldown_seconds} seconds...")
+                await asyncio.sleep(self._response_cooldown_seconds)
+            return processed_response
         except TokenExpiredError:
             logger.debug("Token expired, refreshing token...")
             await self._refresh_token()
