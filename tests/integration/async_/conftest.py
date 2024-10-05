@@ -66,5 +66,13 @@ async def product_category(plytix, new_product_category_data) -> ProductCategory
 
 
 @pytest.fixture
+async def product_subcategory(plytix, new_product_category_data, product_category) -> ProductCategory:
+    new_product_category_data["name"] = f"{new_product_category_data['name']}-sub"
+    return await plytix.products.categories.create_product_category(
+        parent_category_id=product_category.id, **new_product_category_data
+    )
+
+
+@pytest.fixture
 async def asset(plytix, new_asset_data_from_url_factory) -> Asset:
     return await plytix.assets.create_asset_by_url(**new_asset_data_from_url_factory())

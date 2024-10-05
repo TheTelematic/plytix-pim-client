@@ -1,5 +1,7 @@
 import pytest
 
+from plytix_pim_client import SearchFilter, OperatorEnum
+
 
 async def test_convert_to_first_level_category(plytix, new_product_category_data):
     parent_category = new_product_category_data.copy()
@@ -32,14 +34,72 @@ async def test_move_category(plytix, new_product_category_data):
     assert subcategory.parents_ids == [new_parent_category.id]
 
 
-async def test_sorting_category(plytix, new_product_category_data):
-    with pytest.raises(NotImplementedError):
-        await plytix.products.categories.sorting_category("category_id", ["subcategory_id"])
+async def test_sorting_category(plytix, product_category, product_subcategory, new_product_category_data):
+    product_subcategory2 = new_product_category_data.copy()
+    product_subcategory2["name"] = f"{product_subcategory2['name']}-sub2"
+    product_subcategory2 = await plytix.products.categories.create_product_category(
+        parent_category_id=product_category.id, **product_subcategory2
+    )
+
+    await plytix.products.categories.sorting_category(
+        product_category.id, [product_subcategory2.id, product_subcategory.id]
+    )
+
+    categories = list(
+        _
+        async for _ in plytix.products.categories.search_all_product_categories(
+            [
+                [
+                    SearchFilter(
+                        field="id",
+                        operator=OperatorEnum.IN,
+                        value=[product_category.id, product_subcategory.id, product_subcategory2.id],
+                    )
+                ]
+            ],
+            ["id", "order", "n_children"],
+            [],
+            "id",
+        )
+    )[0]
+    assert len(categories) == 3
+    assert categories[0].id == product_subcategory2.id
+    assert categories[1].id == product_subcategory.id
+    assert categories[2].id == product_category.id
+    assert categories[2].n_children == 2
+    assert categories[1].order == "2"
+    assert categories[2].order == "1"
 
 
-async def test_sorting_root_category(plytix, new_product_category_data):
-    with pytest.raises(NotImplementedError):
-        await plytix.products.categories.sorting_root_category(["subcategory_id"])
+async def test_sorting_root_category(plytix, product_category, new_product_category_data):
+    product_category2 = new_product_category_data.copy()
+    product_category2["name"] = f"{product_category2['name']}-sub2"
+    product_category2 = await plytix.products.categories.create_product_category(**product_category2)
+
+    await plytix.products.categories.sorting_root_category([product_category2.id, product_category.id])
+
+    categories = list(
+        _
+        async for _ in plytix.products.categories.search_all_product_categories(
+            [
+                [
+                    SearchFilter(
+                        field="id",
+                        operator=OperatorEnum.IN,
+                        value=[product_category.id, product_category2.id],
+                    )
+                ]
+            ],
+            ["id", "order"],
+            [],
+            "id",
+        )
+    )[0]
+    assert len(categories) == 2
+    assert categories[0].id == product_category2.id
+    assert categories[1].id == product_category.id
+    assert categories[0].order == "1"
+    assert categories[1].order == "2"
 
 
 async def test_convert_to_first_level_multiple_categories(plytix, new_product_category_data):

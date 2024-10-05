@@ -54,3 +54,11 @@ def product(plytix, new_product_data) -> Product:
 @pytest.fixture
 def product_category(plytix, new_product_category_data) -> ProductCategory:
     return plytix.products.categories.create_product_category(**new_product_category_data)
+
+
+@pytest.fixture
+def product_subcategory(plytix, new_product_category_data, product_category) -> ProductCategory:
+    new_product_category_data["name"] = f"{new_product_category_data['name']}-sub"
+    return plytix.products.categories.create_product_category(
+        parent_category_id=product_category.id, **new_product_category_data
+    )
