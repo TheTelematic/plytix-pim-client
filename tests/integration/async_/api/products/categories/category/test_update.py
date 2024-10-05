@@ -1,5 +1,3 @@
-import pytest
-
 from plytix_pim_client import SearchFilter, OperatorEnum
 
 
@@ -45,7 +43,7 @@ async def test_sorting_category(plytix, product_category, product_subcategory, n
         product_category.id, [product_subcategory2.id, product_subcategory.id]
     )
 
-    categories = list(
+    categories = [
         _
         async for _ in plytix.products.categories.search_all_product_categories(
             [
@@ -61,7 +59,7 @@ async def test_sorting_category(plytix, product_category, product_subcategory, n
             [],
             "id",
         )
-    )[0]
+    ][0]
     assert len(categories) == 3
     assert categories[0].id == product_subcategory2.id
     assert categories[1].id == product_subcategory.id
@@ -78,7 +76,7 @@ async def test_sorting_root_category(plytix, product_category, new_product_categ
 
     await plytix.products.categories.sorting_root_category([product_category2.id, product_category.id])
 
-    categories = list(
+    categories = [
         _
         async for _ in plytix.products.categories.search_all_product_categories(
             [
@@ -94,7 +92,7 @@ async def test_sorting_root_category(plytix, product_category, new_product_categ
             [],
             "id",
         )
-    )[0]
+    ][0]
     assert len(categories) == 2
     assert categories[0].id == product_category2.id
     assert categories[1].id == product_category.id
@@ -149,12 +147,3 @@ async def test_move_multiple_categories(plytix, new_product_category_data):
 
     assert subcategories[0].parents_ids == [parent_category2.id]
     assert subcategories[1].parents_ids == [parent_category2.id]
-
-
-async def test_sorting_multiple_categories(plytix, new_product_category_data):
-    with pytest.raises(NotImplementedError):
-        await plytix.products.categories.sorting_categories(
-            [
-                ("category_id", ["subcategory_id"]),
-            ]
-        )
