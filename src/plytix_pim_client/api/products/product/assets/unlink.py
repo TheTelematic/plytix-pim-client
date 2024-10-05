@@ -9,15 +9,15 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductCategoryUnlinkAttributeAPI:
+class ProductAssetUnlinkAttributeAPI:
     @staticmethod
     def get_request(
         product_id: str,
-        product_category_id: str,
+        product_asset_id: str,
     ) -> PlytixRequest:
         return PlytixRequest(
             method=HTTPMethod.DELETE,
-            endpoint=f"api/v1/products/{product_id}/categories/{product_category_id}",
+            endpoint=f"api/v1/products/{product_id}/assets/{product_asset_id}",
         )
 
     @staticmethod
@@ -30,18 +30,18 @@ class ProductCategoryUnlinkAttributeAPI:
         return True
 
 
-class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
-    def unlink_product_to_category(
+class ProductAssetUnlinkAPISyncMixin(BaseAPISyncMixin):
+    def unlink_asset_from_product(
         self,
         product_id: str,
-        product_category_id: str,
+        product_asset_id: str,
     ) -> bool:
         """
-        Unlink product to a category.
+        Unlink asset from product.
 
         :return: If unlinked successfully.
         """
-        request = ProductCategoryUnlinkAttributeAPI.get_request(product_id, product_category_id)
+        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -50,34 +50,34 @@ class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryUnlinkAttributeAPI.process_response(response)
+        return ProductAssetUnlinkAttributeAPI.process_response(response)
 
-    def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
+    def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple products to categories. This uses threading to make the requests concurrently.
+        Unlink multiple assets from products. This uses threading to make the requests concurrently.
 
         :return: If unlinked successfully each.
         """
         with ThreadPoolExecutor() as executor:
             futures = [
-                executor.submit(self.unlink_product_to_category, product_id, product_category_id)
-                for product_id, product_category_id in product_ids_and_category_ids
+                executor.submit(self.unlink_asset_from_product, product_id, product_asset_id)
+                for product_id, product_asset_id in product_ids_and_asset_ids
             ]
             return [future.result() for future in futures]
 
 
-class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def unlink_product_to_category(
+class ProductAssetUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def unlink_asset_from_product(
         self,
         product_id: str,
-        product_category_id: str,
+        product_asset_id: str,
     ) -> bool:
         """
-        Unlink product to a category.
+        Unlink asset from product.
 
         :return: If unlinked successfully.
         """
-        request = ProductCategoryUnlinkAttributeAPI.get_request(product_id, product_category_id)
+        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -86,19 +86,19 @@ class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryUnlinkAttributeAPI.process_response(response)
+        return ProductAssetUnlinkAttributeAPI.process_response(response)
 
-    async def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
+    async def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple products to categories. This uses asyncio to make the requests concurrently.
+        Unlink multiple assets from products. This uses asyncio to make the requests concurrently.
 
         :return: If unlinked successfully each.
         """
         return list(
             await asyncio.gather(
                 *[
-                    self.unlink_product_to_category(product_id, product_category_id)
-                    for product_id, product_category_id in product_ids_and_category_ids
+                    self.unlink_asset_from_product(product_id, product_asset_id)
+                    for product_id, product_asset_id in product_ids_and_asset_ids
                 ]
             )
         )

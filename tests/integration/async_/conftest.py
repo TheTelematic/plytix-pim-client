@@ -4,6 +4,8 @@ import pytest
 
 from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixAsync
+from plytix_pim_client.dtos.assets.asset import Asset
+from plytix_pim_client.dtos.products.attribute import ProductAttribute
 from plytix_pim_client.dtos.products.category import ProductCategory
 
 
@@ -18,6 +20,7 @@ async def plytix() -> AsyncGenerator[PlytixAsync, None]:
 async def setup(plytix: PlytixAsync) -> AsyncGenerator[None, None]:
     yield
 
+    plytix._client._response_cooldown_seconds = 0.0
     await _clean_up(plytix)
     await plytix.close()
 
@@ -53,5 +56,15 @@ async def product(plytix, new_product_data) -> Product:
 
 
 @pytest.fixture
+async def product_attribute(plytix, new_product_attribute_data) -> ProductAttribute:
+    return await plytix.products.attributes.create_attribute(**new_product_attribute_data)
+
+
+@pytest.fixture
 async def product_category(plytix, new_product_category_data) -> ProductCategory:
     return await plytix.products.categories.create_product_category(**new_product_category_data)
+
+
+@pytest.fixture
+async def asset(plytix, new_asset_data_from_url_factory) -> Asset:
+    return await plytix.assets.create_asset_by_url(**new_asset_data_from_url_factory())

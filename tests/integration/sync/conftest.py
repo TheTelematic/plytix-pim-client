@@ -18,6 +18,7 @@ def plytix() -> Generator[PlytixSync, None, None]:
 def setup(plytix: PlytixSync) -> Generator[None, None, None]:
     yield
 
+    plytix._client._response_cooldown_seconds = 0.0
     _clean_up(plytix)
     plytix.close()
 

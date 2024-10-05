@@ -93,17 +93,29 @@ from plytix_pim_client.api.products.families.search import (
     ProductFamiliesSearchAPIAsyncMixin,
     ProductFamiliesSearchAPISyncMixin,
 )
+from plytix_pim_client.api.products.product.assets.get import (
+    ProductAssetsGetAPISyncMixin,
+    ProductAssetsGetAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.assets.link import (
+    ProductAssetLinkAPISyncMixin,
+    ProductAssetLinkAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.assets.unlink import (
+    ProductAssetUnlinkAPISyncMixin,
+    ProductAssetUnlinkAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.categories.get import (
     ProductCategoriesGetAPISyncMixin,
     ProductCategoriesGetAPIAsyncMixin,
 )
 from plytix_pim_client.api.products.product.categories.link import (
-    ProductCategoryLinkAttributeAPISyncMixin,
-    ProductCategoryLinkAttributeAPIAsyncMixin,
+    ProductCategoryLinkAPISyncMixin,
+    ProductCategoryLinkAPIAsyncMixin,
 )
 from plytix_pim_client.api.products.product.categories.unlink import (
-    ProductCategoryUnlinkAttributeAPISyncMixin,
-    ProductCategoryUnlinkAttributeAPIAsyncMixin,
+    ProductCategoryUnlinkAPISyncMixin,
+    ProductCategoryUnlinkAPIAsyncMixin,
 )
 from plytix_pim_client.api.products.product.create import ProductCreateAPIAsyncMixin, ProductCreateAPISyncMixin
 from plytix_pim_client.api.products.product.delete import ProductDeleteAPIAsyncMixin, ProductDeleteAPISyncMixin
@@ -171,6 +183,20 @@ class _FiltersAPIAsync(
 
 
 # Products API
+class _ProductAssetsAPISync(
+    ProductAssetsGetAPISyncMixin,
+    ProductAssetLinkAPISyncMixin,
+    ProductAssetUnlinkAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _ProductAssetsAPIAsync(
+    ProductAssetsGetAPIAsyncMixin,
+    ProductAssetLinkAPIAsyncMixin,
+    ProductAssetUnlinkAPIAsyncMixin,
+): ...  # noqa: E701
+
+
 class _ProductAttributesAPISync(
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeDeleteAPISyncMixin,
@@ -194,8 +220,8 @@ class _ProductCategoriesAPISync(
     ProductCategoryDeleteAPISyncMixin,
     ProductCategoryUpdateAPISyncMixin,
     ProductCategoriesSearchAPISyncMixin,
-    ProductCategoryLinkAttributeAPISyncMixin,
-    ProductCategoryUnlinkAttributeAPISyncMixin,
+    ProductCategoryLinkAPISyncMixin,
+    ProductCategoryUnlinkAPISyncMixin,
     ProductCategoriesGetAPISyncMixin,
 ): ...  # noqa: E701
 
@@ -205,8 +231,8 @@ class _ProductCategoriesAPIAsync(
     ProductCategoryDeleteAPIAsyncMixin,
     ProductCategoryUpdateAPIAsyncMixin,
     ProductCategoriesSearchAPIAsyncMixin,
-    ProductCategoryLinkAttributeAPIAsyncMixin,
-    ProductCategoryUnlinkAttributeAPIAsyncMixin,
+    ProductCategoryLinkAPIAsyncMixin,
+    ProductCategoryUnlinkAPIAsyncMixin,
     ProductCategoriesGetAPIAsyncMixin,
 ): ...  # noqa: E701
 
@@ -260,6 +286,10 @@ class _ProductsAPISync(
     ProductFamilyAssignAPISyncMixin,
 ):
     @property
+    def assets(self) -> _ProductAssetsAPISync:
+        return _ProductAssetsAPISync(self._client)
+
+    @property
     def attributes(self) -> _ProductAttributesAPISync:
         return _ProductAttributesAPISync(self._client)
 
@@ -280,6 +310,10 @@ class _ProductsAPIAsync(
     ProductDeleteAPIAsyncMixin,
     ProductFamilyAssignAPIAsyncMixin,
 ):
+    @property
+    def assets(self) -> _ProductAssetsAPIAsync:
+        return _ProductAssetsAPIAsync(self._client)
+
     @property
     def attributes(self) -> _ProductAttributesAPIAsync:
         return _ProductAttributesAPIAsync(self._client)
