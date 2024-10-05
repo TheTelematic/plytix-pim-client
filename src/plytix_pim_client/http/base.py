@@ -55,7 +55,10 @@ class ClientBase:
             elif exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
                 raise RateLimitExceededError("Rate limit exceeded")
             elif exc.response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-                message = f"Error with {exc.request.method} {exc.request.url} - {exc.response.json()}"
+                message = (
+                    f"Error with {exc.request.method} {exc.request.url} - "
+                    f"Request Payload: {exc.request.content!r} Response: {exc.response.json()}"
+                )
                 logger.error(message)
                 raise UnprocessableEntityError(message)
             elif exc.response.status_code == HTTPStatus.BAD_REQUEST:

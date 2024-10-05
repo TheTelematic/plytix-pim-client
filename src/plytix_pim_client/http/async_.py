@@ -41,7 +41,7 @@ class AsyncClient(ClientBase):
         except TokenExpiredError:
             logger.debug("Token expired, refreshing token...")
             await self._refresh_token()
-            return await self.make_request(method, path, **kwargs)
+            return await self.make_request(method, path, accepted_error_codes=accepted_error_codes, **kwargs)
         except RateLimitExceededError:
             logger.warning(f"Rate limit exceeded, waiting {waiting_time} seconds before retrying...")
             await asyncio.sleep(waiting_time)
