@@ -41,7 +41,7 @@ class SyncClient(ClientBase):
         except TokenExpiredError:
             logger.debug("Token expired, refreshing token...")
             self._refresh_token()
-            return self.make_request(method, path, **kwargs)
+            return self.make_request(method, path, accepted_error_codes=accepted_error_codes, **kwargs)
         except RateLimitExceededError:
             logger.warning(f"Rate limit exceeded, waiting {waiting_time} seconds before retrying...")
             time.sleep(waiting_time)
