@@ -4,20 +4,24 @@ import pytest
 
 from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixAsync
+from plytix_pim_client.dtos.assets.asset import Asset
+from plytix_pim_client.dtos.assets.category import AssetCategory
+from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 async def plytix() -> AsyncGenerator[PlytixAsync, None]:
-    _plytix = PlytixAsync()
+    _plytix = PlytixAsync(response_cooldown_seconds=2.0)
     yield _plytix
     await _plytix.close()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(autouse=True)
 async def setup(plytix: PlytixAsync) -> AsyncGenerator[None, None]:
     yield
 
+    plytix._client._response_cooldown_seconds = 0.0
     await _clean_up(plytix)
     await plytix.close()
 
@@ -53,5 +57,42 @@ async def product(plytix, new_product_data) -> Product:
 
 
 @pytest.fixture
+async def product_attribute(plytix, new_product_attribute_data) -> ProductAttribute:
+    return await plytix.products.attributes.create_attribute(**new_product_attribute_data)
+
+
+@pytest.fixture
+async def product_attribute_media(plytix, new_product_attribute_data) -> ProductAttribute:
+    new_product_attribute_data["type_class"] = ProductAttributeTypeClass.MEDIA
+    return await plytix.products.attributes.create_attribute(**new_product_attribute_data)
+
+
+@pytest.fixture
 async def product_category(plytix, new_product_category_data) -> ProductCategory:
     return await plytix.products.categories.create_product_category(**new_product_category_data)
+
+
+@pytest.fixture
+async def asset_category(plytix, new_product_category_data) -> AssetCategory:
+    return await plytix.assets.categories.create_asset_category(**new_product_category_data)
+
+
+@pytest.fixture
+async def product_subcategory(plytix, new_product_category_data, product_category) -> ProductCategory:
+    new_product_category_data["name"] = f"{new_product_category_data['name']}-sub"
+    return await plytix.products.categories.create_product_category(
+        parent_category_id=product_category.id, **new_product_category_data
+    )
+
+
+@pytest.fixture
+async def asset_subcategory(plytix, new_asset_category_data, asset_category) -> AssetCategory:
+    new_asset_category_data["name"] = f"{new_asset_category_data['name']}-sub"
+    return await plytix.assets.categories.create_asset_category(
+        parent_category_id=asset_category.id, **new_asset_category_data
+    )
+
+
+@pytest.fixture
+async def asset(plytix, new_asset_data_from_url_factory) -> Asset:
+    return await plytix.assets.create_asset_by_url(**new_asset_data_from_url_factory())

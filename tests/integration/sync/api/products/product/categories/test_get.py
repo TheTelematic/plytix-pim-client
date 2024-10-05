@@ -74,12 +74,12 @@ def test_get_all_categories_for_one_product(plytix, product, product_category, n
     categories = plytix.products.categories.get_product_categories(product.id)
 
     assert len(categories) == 2
-    assert categories[0].id == product_category.id or product_category2.id
-    assert categories[0].name == product_category.name or product_category2.name
-    assert categories[0].path == product_category.path or product_category2.path
-    assert categories[1].id == product_category.id or product_category2.id
-    assert categories[1].name == product_category.name or product_category2.name
-    assert categories[1].path == product_category.path or product_category2.path
+    assert categories[0].id == product_category.id
+    assert categories[0].name == product_category.name
+    assert categories[0].path == product_category.path
+    assert categories[1].id == product_category2.id
+    assert categories[1].name == product_category2.name
+    assert categories[1].path == product_category2.path
 
 
 def test_get_all_categories_for_multiple_products(
@@ -110,15 +110,15 @@ def test_get_all_categories_for_multiple_products(
     assert len(categories_groups) == 2
     assert len(categories_groups[0]) == 2
     assert len(categories_groups[1]) == 2
-    assert categories_groups[0][0].id == product_category.id or product_category2.id
-    assert categories_groups[0][0].name == product_category.name or product_category2.name
-    assert categories_groups[0][0].path == product_category.path or product_category2.path
-    assert categories_groups[0][1].id == product_category2.id or product_category.id
-    assert categories_groups[0][1].name == product_category2.name or product_category.name
-    assert categories_groups[0][1].path == product_category2.path or product_category.path
-    assert categories_groups[1][0].id == product_category.id or product_category2.id
-    assert categories_groups[1][0].name == product_category.name or product_category2.name
-    assert categories_groups[1][0].path == product_category.path or product_category2.path
-    assert categories_groups[1][1].id == product_category2.id or product_category.id
-    assert categories_groups[1][1].name == product_category2.name or product_category.name
-    assert categories_groups[1][1].path == product_category2.path or product_category.path
+    assert categories_groups[0][0].id == product_category.id
+    assert categories_groups[0][0].name == product_category.name
+    assert categories_groups[0][0].path == product_category.path
+    assert categories_groups[0][1].id == product_category.id
+    assert categories_groups[0][1].name == product_category.name
+    assert categories_groups[0][1].path == product_category.path
+    assert categories_groups[1][0].id == product_category.id
+    assert categories_groups[1][0].name == product_category.name
+    assert categories_groups[1][0].path == product_category.path
+    assert categories_groups[1][1].id == product_category.id
+    assert categories_groups[1][1].name == product_category.name
+    assert categories_groups[1][1].path == product_category.path

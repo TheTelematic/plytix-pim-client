@@ -29,7 +29,7 @@ class ProductCategoryLinkAttributeAPI:
         return True
 
 
-class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
+class ProductCategoryLinkAPISyncMixin(BaseAPISyncMixin):
     def link_product_to_category(
         self,
         product_id: str,
@@ -64,7 +64,7 @@ class ProductCategoryLinkAttributeAPISyncMixin(BaseAPISyncMixin):
         ]
 
 
-class ProductCategoryLinkAttributeAPIAsyncMixin(BaseAPIAsyncMixin):
+class ProductCategoryLinkAPIAsyncMixin(BaseAPIAsyncMixin):
     async def link_product_to_category(
         self,
         product_id: str,

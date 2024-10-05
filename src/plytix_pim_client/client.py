@@ -11,8 +11,8 @@ from plytix_pim_client.mixins import (
 
 
 class PlytixSync:
-    def __init__(self, api_key: str | None = None, api_password: str | None = None):
-        self._client = SyncClient(api_key, api_password)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None, **kwargs):
+        self._client = SyncClient(api_key, api_password, **kwargs)
 
     def close(self):
         self._client.close()
@@ -31,8 +31,8 @@ class PlytixSync:
 
 
 class PlytixAsync:
-    def __init__(self, api_key: str | None = None, api_password: str | None = None):
-        self._client = AsyncClient(api_key, api_password)
+    def __init__(self, api_key: str | None = None, api_password: str | None = None, **kwargs):
+        self._client = AsyncClient(api_key, api_password, **kwargs)
 
     async def close(self):
         await self._client.close()

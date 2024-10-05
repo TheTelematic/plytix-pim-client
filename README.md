@@ -26,6 +26,7 @@ PyPI: https://pypi.org/project/plytix-pim-client/
 - Automatic error handling
 - Automatic request retries
 - API docs fully covered*
+- Configurable Response Cooldown
 
 ## Usage
 
