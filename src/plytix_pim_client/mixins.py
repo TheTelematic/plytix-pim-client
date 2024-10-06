@@ -125,6 +125,22 @@ from plytix_pim_client.api.products.product.family import (
 )
 from plytix_pim_client.api.products.product.get import ProductGetAPIAsyncMixin, ProductGetAPISyncMixin
 from plytix_pim_client.api.products.product.update import ProductUpdateAPIAsyncMixin, ProductUpdateAPISyncMixin
+from plytix_pim_client.api.products.product.variants.add import (
+    ProductVariantAddAPISyncMixin,
+    ProductVariantAddAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.variants.get import (
+    ProductVariantsGetAPISyncMixin,
+    ProductVariantsGetAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.variants.link import (
+    ProductVariantLinkAPISyncMixin,
+    ProductVariantLinkAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.variants.unlink import (
+    ProductVariantUnlinkAPISyncMixin,
+    ProductVariantUnlinkAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.search import ProductsSearchAPIAsyncMixin, ProductsSearchAPISyncMixin
 
 
@@ -277,6 +293,22 @@ class _ProductFamiliesAPIAsync(
         return _ProductFamiliesAttributesAPIAsync(self._client)
 
 
+class _ProductVariantsAPISync(
+    ProductVariantLinkAPISyncMixin,
+    ProductVariantsGetAPISyncMixin,
+    ProductVariantUnlinkAPISyncMixin,
+    ProductVariantAddAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _ProductVariantsAPIAsync(
+    ProductVariantLinkAPIAsyncMixin,
+    ProductVariantsGetAPIAsyncMixin,
+    ProductVariantUnlinkAPIAsyncMixin,
+    ProductVariantAddAPIAsyncMixin,
+): ...  # noqa: E701
+
+
 class _ProductsAPISync(
     ProductCreateAPISyncMixin,
     ProductsSearchAPISyncMixin,
@@ -300,6 +332,10 @@ class _ProductsAPISync(
     @property
     def families(self) -> _ProductFamiliesAPISync:
         return _ProductFamiliesAPISync(self._client)
+
+    @property
+    def variants(self) -> _ProductVariantsAPISync:
+        return _ProductVariantsAPISync(self._client)
 
 
 class _ProductsAPIAsync(
@@ -325,3 +361,7 @@ class _ProductsAPIAsync(
     @property
     def families(self) -> _ProductFamiliesAPIAsync:
         return _ProductFamiliesAPIAsync(self._client)
+
+    @property
+    def variants(self) -> _ProductVariantsAPIAsync:
+        return _ProductVariantsAPIAsync(self._client)

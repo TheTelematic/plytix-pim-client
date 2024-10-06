@@ -9,7 +9,7 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductCategoryUnlinkAttributeAPI:
+class ProductCategoryUnlinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
@@ -41,7 +41,7 @@ class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
 
         :return: If unlinked successfully.
         """
-        request = ProductCategoryUnlinkAttributeAPI.get_request(product_id, product_category_id)
+        request = ProductCategoryUnlinkAPI.get_request(product_id, product_category_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -50,7 +50,7 @@ class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryUnlinkAttributeAPI.process_response(response)
+        return ProductCategoryUnlinkAPI.process_response(response)
 
     def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
@@ -77,7 +77,7 @@ class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: If unlinked successfully.
         """
-        request = ProductCategoryUnlinkAttributeAPI.get_request(product_id, product_category_id)
+        request = ProductCategoryUnlinkAPI.get_request(product_id, product_category_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -86,7 +86,7 @@ class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryUnlinkAttributeAPI.process_response(response)
+        return ProductCategoryUnlinkAPI.process_response(response)
 
     async def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """

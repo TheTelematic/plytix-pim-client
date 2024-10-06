@@ -7,16 +7,15 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductCategoryLinkAPI:
+class ProductVariantLinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
-        product_category_id: str,
+        product_variant_id: str,
     ) -> PlytixRequest:
         return PlytixRequest(
             method=HTTPMethod.POST,
-            endpoint=f"api/v1/products/{product_id}/categories",
-            kwargs={"json": {"id": product_category_id}},
+            endpoint=f"api/v1/products/{product_id}/variant/{product_variant_id}",
         )
 
     @staticmethod
@@ -29,18 +28,18 @@ class ProductCategoryLinkAPI:
         return True
 
 
-class ProductCategoryLinkAPISyncMixin(BaseAPISyncMixin):
-    def link_product_to_category(
+class ProductVariantLinkAPISyncMixin(BaseAPISyncMixin):
+    def link_variant_to_product(
         self,
         product_id: str,
-        product_category_id: str,
+        product_variant_id: str,
     ) -> bool:
         """
-        Link product to a category.
+        Link variant to a product.
 
         :return: If linked successfully.
         """
-        request = ProductCategoryLinkAPI.get_request(product_id, product_category_id)
+        request = ProductVariantLinkAPI.get_request(product_id, product_variant_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -49,33 +48,33 @@ class ProductCategoryLinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryLinkAPI.process_response(response)
+        return ProductVariantLinkAPI.process_response(response)
 
-    def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
+    def link_variant_to_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories.
+        Link multiple variants to products.
         This NOT uses threading to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
         return [
-            self.link_product_to_category(product_id, product_category_id)
-            for product_id, product_category_id in product_ids_and_category_ids
+            self.link_variant_to_product(product_id, product_variant_id)
+            for product_id, product_variant_id in product_ids_variant_ids
         ]
 
 
-class ProductCategoryLinkAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def link_product_to_category(
+class ProductVariantLinkAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def link_variant_to_product(
         self,
         product_id: str,
-        product_category_id: str,
+        product_variant_id: str,
     ) -> bool:
         """
-        Link product to a category.
+        Link variant to a product.
 
         :return: If linked successfully.
         """
-        request = ProductCategoryLinkAPI.get_request(product_id, product_category_id)
+        request = ProductVariantLinkAPI.get_request(product_id, product_variant_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -84,16 +83,16 @@ class ProductCategoryLinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductCategoryLinkAPI.process_response(response)
+        return ProductVariantLinkAPI.process_response(response)
 
-    async def link_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
+    async def link_variant_to_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Link multiple products to categories.
+        Link multiple variants to products.
         This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
         return [
-            await self.link_product_to_category(product_id, product_category_id)
-            for product_id, product_category_id in product_ids_and_category_ids
+            await self.link_variant_to_product(product_id, product_variant_id)
+            for product_id, product_variant_id in product_ids_variant_ids
         ]

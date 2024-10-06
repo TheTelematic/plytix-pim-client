@@ -16,3 +16,7 @@ class UnprocessableEntityError(PlytixPimClientException):
 
 class BadRequestError(PlytixPimClientException):
     """Raised when the request is bad"""
+
+
+class ConflictError(PlytixPimClientException):
+    """Raised when the request is conflicted"""

@@ -2,12 +2,13 @@ from typing import AsyncGenerator
 
 import pytest
 
-from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixAsync
 from plytix_pim_client.dtos.assets.asset import Asset
 from plytix_pim_client.dtos.assets.category import AssetCategory
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
+from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.variant import ProductVariant
 
 
 @pytest.fixture()
@@ -28,7 +29,13 @@ async def setup(plytix: PlytixAsync) -> AsyncGenerator[None, None]:
 
 async def _clean_up(plytix: PlytixAsync) -> None:
     async for products in plytix.products.search_all_products([], ["id"], [], "id"):
-        await plytix.products.delete_products([product.id for product in products if product.id])
+        for product in products:
+            if product.id:
+                variants = await plytix.products.variants.get_product_variants(product.id)
+                if variants:
+                    await plytix.products.delete_products([variant.id for variant in variants if variant.id])
+
+                await plytix.products.delete_product(product.id)
 
     async for attributes in plytix.products.attributes.search_all_product_attributes([], ["id"], [], "id"):
         await plytix.products.attributes.delete_attributes([attribute.id for attribute in attributes if attribute.id])
@@ -54,6 +61,14 @@ async def _clean_up(plytix: PlytixAsync) -> None:
 @pytest.fixture
 async def product(plytix, new_product_data) -> Product:
     return await plytix.products.create_product(**new_product_data)
+
+
+@pytest.fixture
+async def product_variant(plytix, product, new_product_data) -> ProductVariant:
+    new_product_data["sku"] = f"{new_product_data['sku']}-variant"
+    variant = await plytix.products.create_product(**new_product_data)
+    await plytix.products.variants.link_variant_to_product(product.id, variant.id)
+    return ProductVariant.from_dict(variant.to_dict())
 
 
 @pytest.fixture

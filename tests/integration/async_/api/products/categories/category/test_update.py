@@ -1,4 +1,4 @@
-from plytix_pim_client import SearchFilter, OperatorEnum
+from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
 
 
 async def test_convert_to_first_level_category(plytix, new_product_category_data):
