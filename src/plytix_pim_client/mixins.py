@@ -133,6 +133,10 @@ from plytix_pim_client.api.products.product.variants.link import (
     ProductVariantLinkAPISyncMixin,
     ProductVariantLinkAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.product.variants.unlink import (
+    ProductVariantUnlinkAPISyncMixin,
+    ProductVariantUnlinkAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.search import ProductsSearchAPIAsyncMixin, ProductsSearchAPISyncMixin
 
 
@@ -288,12 +292,14 @@ class _ProductFamiliesAPIAsync(
 class _ProductVariantsAPISync(
     ProductVariantLinkAPISyncMixin,
     ProductVariantsGetAPISyncMixin,
+    ProductVariantUnlinkAPISyncMixin,
 ): ...  # noqa: E701
 
 
 class _ProductVariantsAPIAsync(
     ProductVariantLinkAPIAsyncMixin,
     ProductVariantsGetAPIAsyncMixin,
+    ProductVariantUnlinkAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

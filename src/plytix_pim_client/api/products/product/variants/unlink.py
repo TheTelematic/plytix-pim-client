@@ -1,5 +1,3 @@
-import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
 from http import HTTPMethod, HTTPStatus
 from typing import Tuple
 
@@ -9,15 +7,15 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductAssetUnlinkAttributeAPI:
+class ProductVariantUnlinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
-        product_asset_id: str,
+        product_variant_id: str,
     ) -> PlytixRequest:
         return PlytixRequest(
             method=HTTPMethod.DELETE,
-            endpoint=f"api/v1/products/{product_id}/assets/{product_asset_id}",
+            endpoint=f"api/v1/products/{product_id}/variant/{product_variant_id}",
         )
 
     @staticmethod
@@ -30,18 +28,18 @@ class ProductAssetUnlinkAttributeAPI:
         return True
 
 
-class ProductAssetUnlinkAPISyncMixin(BaseAPISyncMixin):
-    def unlink_asset_from_product(
+class ProductVariantUnlinkAPISyncMixin(BaseAPISyncMixin):
+    def unlink_variant_from_product(
         self,
         product_id: str,
-        product_asset_id: str,
+        product_variant_id: str,
     ) -> bool:
         """
-        Unlink asset from product.
+        Unlink variant to a product.
 
         :return: If unlinked successfully.
         """
-        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
+        request = ProductVariantUnlinkAPI.get_request(product_id, product_variant_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -50,34 +48,33 @@ class ProductAssetUnlinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetUnlinkAttributeAPI.process_response(response)
+        return ProductVariantUnlinkAPI.process_response(response)
 
-    def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
+    def unlink_variant_from_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple assets from products. This uses threading to make the requests concurrently.
+        Unlink multiple variants to products.
+        This NOT uses threading to make the requests concurrently, due to race condition on server side.
 
         :return: If unlinked successfully each.
         """
-        with ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(self.unlink_asset_from_product, product_id, product_asset_id)
-                for product_id, product_asset_id in product_ids_and_asset_ids
-            ]
-            return [future.result() for future in futures]
+        return [
+            self.unlink_variant_from_product(product_id, product_variant_id)
+            for product_id, product_variant_id in product_ids_variant_ids
+        ]
 
 
-class ProductAssetUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def unlink_asset_from_product(
+class ProductVariantUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def unlink_variant_from_product(
         self,
         product_id: str,
-        product_asset_id: str,
+        product_variant_id: str,
     ) -> bool:
         """
-        Unlink asset from product.
+        Unlink variant to a product.
 
         :return: If unlinked successfully.
         """
-        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
+        request = ProductVariantUnlinkAPI.get_request(product_id, product_variant_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -86,19 +83,16 @@ class ProductAssetUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetUnlinkAttributeAPI.process_response(response)
+        return ProductVariantUnlinkAPI.process_response(response)
 
-    async def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
+    async def unlink_variant_from_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple assets from products. This uses asyncio to make the requests concurrently.
+        Unlink multiple variants to products.
+        This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
 
         :return: If unlinked successfully each.
         """
-        return list(
-            await asyncio.gather(
-                *[
-                    self.unlink_asset_from_product(product_id, product_asset_id)
-                    for product_id, product_asset_id in product_ids_and_asset_ids
-                ]
-            )
-        )
+        return [
+            await self.unlink_variant_from_product(product_id, product_variant_id)
+            for product_id, product_variant_id in product_ids_variant_ids
+        ]
