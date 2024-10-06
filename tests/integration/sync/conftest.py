@@ -2,12 +2,12 @@ from typing import Generator
 
 import pytest
 
-from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixSync
 from plytix_pim_client.dtos.assets.asset import Asset
 from plytix_pim_client.dtos.assets.category import AssetCategory
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
+from plytix_pim_client.dtos.products.product import Product
 
 
 @pytest.fixture()

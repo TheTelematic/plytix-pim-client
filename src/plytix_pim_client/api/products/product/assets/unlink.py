@@ -9,7 +9,7 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductAssetUnlinkAttributeAPI:
+class ProductAssetUnlinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
@@ -41,7 +41,7 @@ class ProductAssetUnlinkAPISyncMixin(BaseAPISyncMixin):
 
         :return: If unlinked successfully.
         """
-        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
+        request = ProductAssetUnlinkAPI.get_request(product_id, product_asset_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -50,7 +50,7 @@ class ProductAssetUnlinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetUnlinkAttributeAPI.process_response(response)
+        return ProductAssetUnlinkAPI.process_response(response)
 
     def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
         """
@@ -77,7 +77,7 @@ class ProductAssetUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: If unlinked successfully.
         """
-        request = ProductAssetUnlinkAttributeAPI.get_request(product_id, product_asset_id)
+        request = ProductAssetUnlinkAPI.get_request(product_id, product_asset_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -86,7 +86,7 @@ class ProductAssetUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetUnlinkAttributeAPI.process_response(response)
+        return ProductAssetUnlinkAPI.process_response(response)
 
     async def unlink_asset_from_products(self, product_ids_and_asset_ids: list[Tuple[str, str]]) -> list[bool]:
         """

@@ -7,7 +7,7 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductAssetLinkAttributeAPI:
+class ProductAssetLinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
@@ -42,7 +42,7 @@ class ProductAssetLinkAPISyncMixin(BaseAPISyncMixin):
 
         :return: If linked successfully.
         """
-        request = ProductAssetLinkAttributeAPI.get_request(product_id, product_asset_id, product_attribute_label)
+        request = ProductAssetLinkAPI.get_request(product_id, product_asset_id, product_attribute_label)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -51,7 +51,7 @@ class ProductAssetLinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetLinkAttributeAPI.process_response(response)
+        return ProductAssetLinkAPI.process_response(response)
 
     def link_asset_to_products(
         self, product_ids_asset_ids_and_attribute_labels: list[Tuple[str, str, str]]
@@ -80,7 +80,7 @@ class ProductAssetLinkAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: If linked successfully.
         """
-        request = ProductAssetLinkAttributeAPI.get_request(product_id, product_asset_id, product_attribute_label)
+        request = ProductAssetLinkAPI.get_request(product_id, product_asset_id, product_attribute_label)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -89,7 +89,7 @@ class ProductAssetLinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductAssetLinkAttributeAPI.process_response(response)
+        return ProductAssetLinkAPI.process_response(response)
 
     async def link_asset_to_products(
         self, product_ids_asset_ids_and_attribute_labels: list[Tuple[str, str, str]]

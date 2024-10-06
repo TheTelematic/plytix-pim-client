@@ -9,6 +9,7 @@ from plytix_pim_client.exceptions import (
     TokenExpiredError,
     UnprocessableEntityError,
     BadRequestError,
+    ConflictError,
 )
 from plytix_pim_client.logger import logger
 
@@ -65,6 +66,10 @@ class ClientBase:
                 message = f"Error with {exc.request.method} {exc.request.url} - {exc.response.json()}"
                 logger.error(message)
                 raise BadRequestError(message)
+            elif exc.response.status_code == HTTPStatus.CONFLICT:
+                message = f"Error with {exc.request.method} {exc.request.url} - {exc.response.json()}"
+                logger.error(message)
+                raise ConflictError(message)
             else:
                 raise exc
 
