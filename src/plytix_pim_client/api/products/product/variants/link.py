@@ -7,7 +7,7 @@ from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.dtos.request import PlytixRequest
 
 
-class ProductVariantLinkAttributeAPI:
+class ProductVariantLinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
@@ -39,7 +39,7 @@ class ProductVariantLinkAPISyncMixin(BaseAPISyncMixin):
 
         :return: If linked successfully.
         """
-        request = ProductVariantLinkAttributeAPI.get_request(product_id, product_variant_id)
+        request = ProductVariantLinkAPI.get_request(product_id, product_variant_id)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -48,7 +48,7 @@ class ProductVariantLinkAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductVariantLinkAttributeAPI.process_response(response)
+        return ProductVariantLinkAPI.process_response(response)
 
     def link_variant_to_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """
@@ -74,7 +74,7 @@ class ProductVariantLinkAPIAsyncMixin(BaseAPIAsyncMixin):
 
         :return: If linked successfully.
         """
-        request = ProductVariantLinkAttributeAPI.get_request(product_id, product_variant_id)
+        request = ProductVariantLinkAPI.get_request(product_id, product_variant_id)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -83,7 +83,7 @@ class ProductVariantLinkAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductVariantLinkAttributeAPI.process_response(response)
+        return ProductVariantLinkAPI.process_response(response)
 
     async def link_variant_to_products(self, product_ids_variant_ids: list[Tuple[str, str]]) -> list[bool]:
         """

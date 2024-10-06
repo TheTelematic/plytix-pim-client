@@ -125,6 +125,10 @@ from plytix_pim_client.api.products.product.family import (
 )
 from plytix_pim_client.api.products.product.get import ProductGetAPIAsyncMixin, ProductGetAPISyncMixin
 from plytix_pim_client.api.products.product.update import ProductUpdateAPIAsyncMixin, ProductUpdateAPISyncMixin
+from plytix_pim_client.api.products.product.variants.add import (
+    ProductVariantAddAPISyncMixin,
+    ProductVariantAddAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.variants.get import (
     ProductVariantsGetAPISyncMixin,
     ProductVariantsGetAPIAsyncMixin,
@@ -293,6 +297,7 @@ class _ProductVariantsAPISync(
     ProductVariantLinkAPISyncMixin,
     ProductVariantsGetAPISyncMixin,
     ProductVariantUnlinkAPISyncMixin,
+    ProductVariantAddAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -300,6 +305,7 @@ class _ProductVariantsAPIAsync(
     ProductVariantLinkAPIAsyncMixin,
     ProductVariantsGetAPIAsyncMixin,
     ProductVariantUnlinkAPIAsyncMixin,
+    ProductVariantAddAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
