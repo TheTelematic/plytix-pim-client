@@ -113,12 +113,12 @@ def test_get_all_categories_for_multiple_products(
     assert categories_groups[0][0].id == product_category.id
     assert categories_groups[0][0].name == product_category.name
     assert categories_groups[0][0].path == product_category.path
-    assert categories_groups[0][1].id == product_category.id
-    assert categories_groups[0][1].name == product_category.name
-    assert categories_groups[0][1].path == product_category.path
+    assert categories_groups[0][1].id == product_category2.id
+    assert categories_groups[0][1].name == product_category2.name
+    assert categories_groups[0][1].path == product_category2.path
     assert categories_groups[1][0].id == product_category.id
     assert categories_groups[1][0].name == product_category.name
     assert categories_groups[1][0].path == product_category.path
-    assert categories_groups[1][1].id == product_category.id
-    assert categories_groups[1][1].name == product_category.name
-    assert categories_groups[1][1].path == product_category.path
+    assert categories_groups[1][1].id == product_category2.id
+    assert categories_groups[1][1].name == product_category2.name
+    assert categories_groups[1][1].path == product_category2.path

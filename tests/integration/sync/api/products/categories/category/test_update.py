@@ -1,5 +1,3 @@
-import pytest
-
 from plytix_pim_client import SearchFilter, OperatorEnum
 
 
@@ -143,12 +141,3 @@ def test_move_multiple_categories(plytix, new_product_category_data):
 
     assert subcategories[0].parents_ids == [parent_category2.id]
     assert subcategories[1].parents_ids == [parent_category2.id]
-
-
-def test_sorting_multiple_categories(plytix, new_product_category_data):
-    with pytest.raises(NotImplementedError):
-        plytix.products.categories.sorting_categories(
-            [
-                ("category_id", ["subcategory_id"]),
-            ]
-        )

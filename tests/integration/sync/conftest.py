@@ -6,7 +6,7 @@ from plytix_pim_client import Product
 from plytix_pim_client.client import PlytixSync
 from plytix_pim_client.dtos.assets.asset import Asset
 from plytix_pim_client.dtos.assets.category import AssetCategory
-from plytix_pim_client.dtos.products.attribute import ProductAttribute
+from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
 
 
@@ -56,6 +56,12 @@ def product(plytix, new_product_data) -> Product:
 
 @pytest.fixture
 def product_attribute(plytix, new_product_attribute_data) -> ProductAttribute:
+    return plytix.products.attributes.create_attribute(**new_product_attribute_data)
+
+
+@pytest.fixture
+def product_attribute_media(plytix, new_product_attribute_data) -> ProductAttribute:
+    new_product_attribute_data["type_class"] = ProductAttributeTypeClass.MEDIA
     return plytix.products.attributes.create_attribute(**new_product_attribute_data)
 
 
