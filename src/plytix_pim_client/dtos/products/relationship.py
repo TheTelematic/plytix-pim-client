@@ -7,3 +7,6 @@ from plytix_pim_client.dtos.base import BaseDTO
 class ProductRelationship(BaseDTO):
     id: str | None = None
     name: str | None = None
+    label: str | None = None
+    created_at: str | None = None
+    modified_at: str | None = None
