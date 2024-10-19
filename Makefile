@@ -7,6 +7,7 @@ endif
 requirements-tests:
 	python3 -m pip install -r requirements.txt
 	python3 -m pip install -r requirements-test.txt
+	python3 -m mypy --install-types --non-interactive
 
 lint: requirements-tests
 	python3 -m flake8 src tests --max-line-length=120
