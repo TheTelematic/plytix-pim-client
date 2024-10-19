@@ -91,6 +91,17 @@ async def product_relationship(plytix, new_product_relationship_data) -> Product
 
 
 @pytest.fixture
+async def product_related(plytix, product, product_relationship, new_product_data) -> Product:
+    new_product_data["sku"] = f"{new_product_data['sku']}-related"
+    related_product = await plytix.products.create_product(**new_product_data)
+    assert related_product.id is not None
+    await plytix.products.relationships.link_product_to_relationship(
+        product.id, product_relationship.id, [{"product_id": related_product.id, "quantity": 1}]
+    )
+    return Product.from_dict(related_product.to_dict())
+
+
+@pytest.fixture
 async def product_variant(plytix, product, new_product_data) -> ProductVariant:
     new_product_data["sku"] = f"{new_product_data['sku']}-variant"
     variant = await plytix.products.create_product(**new_product_data)
