@@ -19,7 +19,7 @@ class ProductRelationshipsDict(TypedDict):
     product_relationships: list[ProductRelationshipDict]
 
 
-class ProductRelationshipAddAPI:
+class ProductRelationshipLinkAPI:
     @staticmethod
     def get_request(
         product_id: str,
@@ -47,19 +47,19 @@ class ProductRelationshipAddAPI:
         )
 
 
-class ProductRelationshipAddAPISyncMixin(BaseAPISyncMixin):
-    def add_product_to_relationship(
+class ProductRelationshipLinkAPISyncMixin(BaseAPISyncMixin):
+    def link_product_to_relationship(
         self,
         product_id: str,
         product_relationship_id: str,
         product_relationships: list[ProductRelationshipDict],
     ) -> ProductRelationship | None:
         """
-        Add product to a relationship.
+        Link product to a relationship.
 
         :return: If linked successfully.
         """
-        request = ProductRelationshipAddAPI.get_request(product_id, product_relationship_id, product_relationships)
+        request = ProductRelationshipLinkAPI.get_request(product_id, product_relationship_id, product_relationships)
         response = self._client.make_request(
             request.method,
             request.endpoint,
@@ -68,33 +68,33 @@ class ProductRelationshipAddAPISyncMixin(BaseAPISyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductRelationshipAddAPI.process_response(response)
+        return ProductRelationshipLinkAPI.process_response(response)
 
-    def add_product_to_relationships(
+    def link_product_to_relationships(
         self, relationships: list[ProductRelationshipsDict]
     ) -> list[ProductRelationship | None]:
         """
-        Add products to relationships.
+        Link products to relationships.
         This NOT uses threading to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
-        return [self.add_product_to_relationship(**relationship) for relationship in relationships]
+        return [self.link_product_to_relationship(**relationship) for relationship in relationships]
 
 
-class ProductRelationshipAddAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def add_product_to_relationship(
+class ProductRelationshipLinkAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def link_product_to_relationship(
         self,
         product_id: str,
         product_relationship_id: str,
         product_relationships: list[ProductRelationshipDict],
     ) -> ProductRelationship | None:
         """
-        Add product to a relationship.
+        Link product to a relationship.
 
         :return: If linked successfully.
         """
-        request = ProductRelationshipAddAPI.get_request(product_id, product_relationship_id, product_relationships)
+        request = ProductRelationshipLinkAPI.get_request(product_id, product_relationship_id, product_relationships)
         response = await self._client.make_request(
             request.method,
             request.endpoint,
@@ -103,15 +103,15 @@ class ProductRelationshipAddAPIAsyncMixin(BaseAPIAsyncMixin):
             ],
             **request.kwargs,
         )
-        return ProductRelationshipAddAPI.process_response(response)
+        return ProductRelationshipLinkAPI.process_response(response)
 
-    async def add_product_to_relationships(
+    async def link_product_to_relationships(
         self, relationships: list[ProductRelationshipsDict]
     ) -> list[ProductRelationship | None]:
         """
-        Add products to relationships.
+        Link products to relationships.
         This NOT uses asyncio to make the requests concurrently, due to race condition on server side.
 
         :return: If linked successfully each.
         """
-        return [await self.add_product_to_relationship(**relationship) for relationship in relationships]
+        return [await self.link_product_to_relationship(**relationship) for relationship in relationships]

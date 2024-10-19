@@ -1,10 +1,10 @@
-async def test_add_product_to_relationship(plytix, product, product_relationship, new_product_data):
+async def test_link_product_to_relationship(plytix, product, product_relationship, new_product_data):
     product2 = new_product_data.copy()
     product2["sku"] = f"{product2['sku']}-2"
     product2 = await plytix.products.create_product(**product2)
     assert product2.id is not None
 
-    relationship = await plytix.products.relationships.add_product_to_relationship(
+    relationship = await plytix.products.relationships.link_product_to_relationship(
         product.id,
         product_relationship.id,
         [{"product_id": product2.id, "quantity": 1}],
@@ -19,8 +19,8 @@ async def test_add_product_to_relationship(plytix, product, product_relationship
     assert relationship.related_products[0].last_modified is not None
 
 
-async def test_add_product_to_relationships_not_found(plytix):
-    relationship = await plytix.products.relationships.add_product_to_relationship(
+async def test_link_product_to_relationships_not_found(plytix):
+    relationship = await plytix.products.relationships.link_product_to_relationship(
         "not-found",
         "not-found",
         [{"product_id": "not-found", "quantity": 1}],
@@ -29,7 +29,7 @@ async def test_add_product_to_relationships_not_found(plytix):
     assert relationship is None
 
 
-async def test_add_products_to_relationships(plytix, product, product_relationship, new_product_data):
+async def test_link_products_to_relationships(plytix, product, product_relationship, new_product_data):
     assert product.id is not None
     assert product_relationship.id is not None
     product2 = new_product_data.copy()
@@ -41,7 +41,7 @@ async def test_add_products_to_relationships(plytix, product, product_relationsh
     product3 = await plytix.products.create_product(**product3)
     assert product3.id is not None
 
-    relationships = await plytix.products.relationships.add_product_to_relationships(
+    relationships = await plytix.products.relationships.link_product_to_relationships(
         [
             {
                 "product_id": product.id,

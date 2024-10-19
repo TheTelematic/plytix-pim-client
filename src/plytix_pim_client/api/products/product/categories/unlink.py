@@ -37,7 +37,7 @@ class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
         product_category_id: str,
     ) -> bool:
         """
-        Unlink product to a category.
+        Unlink product from a category.
 
         :return: If unlinked successfully.
         """
@@ -54,7 +54,7 @@ class ProductCategoryUnlinkAPISyncMixin(BaseAPISyncMixin):
 
     def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple products to categories. This uses threading to make the requests concurrently.
+        Unlink multiple products from categories. This uses threading to make the requests concurrently.
 
         :return: If unlinked successfully each.
         """
@@ -73,7 +73,7 @@ class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
         product_category_id: str,
     ) -> bool:
         """
-        Unlink product to a category.
+        Unlink product from a category.
 
         :return: If unlinked successfully.
         """
@@ -90,7 +90,7 @@ class ProductCategoryUnlinkAPIAsyncMixin(BaseAPIAsyncMixin):
 
     async def unlink_product_to_categories(self, product_ids_and_category_ids: list[Tuple[str, str]]) -> list[bool]:
         """
-        Unlink multiple products to categories. This uses asyncio to make the requests concurrently.
+        Unlink multiple products from categories. This uses asyncio to make the requests concurrently.
 
         :return: If unlinked successfully each.
         """
