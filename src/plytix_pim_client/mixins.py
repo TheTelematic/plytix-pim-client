@@ -124,6 +124,10 @@ from plytix_pim_client.api.products.product.family import (
     ProductFamilyAssignAPISyncMixin,
 )
 from plytix_pim_client.api.products.product.get import ProductGetAPIAsyncMixin, ProductGetAPISyncMixin
+from plytix_pim_client.api.products.product.relationships.add import (
+    ProductRelationshipAddAPISyncMixin,
+    ProductRelationshipAddAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.update import ProductUpdateAPIAsyncMixin, ProductUpdateAPISyncMixin
 from plytix_pim_client.api.products.product.variants.add import (
     ProductVariantAddAPISyncMixin,
@@ -314,6 +318,7 @@ class _ProductFamiliesAPIAsync(
 
 
 class _ProductRelationshipsAPISync(
+    ProductRelationshipAddAPISyncMixin,
     ProductRelationshipCreateAPISyncMixin,
     ProductRelationshipsDeleteAPISyncMixin,
     ProductRelationshipGetAPISyncMixin,
@@ -323,6 +328,7 @@ class _ProductRelationshipsAPISync(
 
 
 class _ProductRelationshipsAPIAsync(
+    ProductRelationshipAddAPIAsyncMixin,
     ProductRelationshipCreateAPIAsyncMixin,
     ProductRelationshipsDeleteAPIAsyncMixin,
     ProductRelationshipGetAPIAsyncMixin,

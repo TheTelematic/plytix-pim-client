@@ -8,6 +8,7 @@ from plytix_pim_client.dtos.assets.category import AssetCategory
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
 from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.relationship import ProductRelationship
 from plytix_pim_client.dtos.products.variant import ProductVariant
 
 
@@ -69,14 +70,6 @@ async def product(plytix, new_product_data) -> Product:
 
 
 @pytest.fixture
-async def product_variant(plytix, product, new_product_data) -> ProductVariant:
-    new_product_data["sku"] = f"{new_product_data['sku']}-variant"
-    variant = await plytix.products.create_product(**new_product_data)
-    await plytix.products.variants.link_variant_to_product(product.id, variant.id)
-    return ProductVariant.from_dict(variant.to_dict())
-
-
-@pytest.fixture
 async def product_attribute(plytix, new_product_attribute_data) -> ProductAttribute:
     return await plytix.products.attributes.create_attribute(**new_product_attribute_data)
 
@@ -90,6 +83,19 @@ async def product_attribute_media(plytix, new_product_attribute_data) -> Product
 @pytest.fixture
 async def product_category(plytix, new_product_category_data) -> ProductCategory:
     return await plytix.products.categories.create_product_category(**new_product_category_data)
+
+
+@pytest.fixture
+async def product_relationship(plytix, new_product_relationship_data) -> ProductRelationship:
+    return await plytix.products.relationships.create_product_relationship(**new_product_relationship_data)
+
+
+@pytest.fixture
+async def product_variant(plytix, product, new_product_data) -> ProductVariant:
+    new_product_data["sku"] = f"{new_product_data['sku']}-variant"
+    variant = await plytix.products.create_product(**new_product_data)
+    await plytix.products.variants.link_variant_to_product(product.id, variant.id)
+    return ProductVariant.from_dict(variant.to_dict())
 
 
 @pytest.fixture
