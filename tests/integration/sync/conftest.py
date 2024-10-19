@@ -8,6 +8,7 @@ from plytix_pim_client.dtos.assets.category import AssetCategory
 from plytix_pim_client.dtos.products.attribute import ProductAttribute, ProductAttributeTypeClass
 from plytix_pim_client.dtos.products.category import ProductCategory
 from plytix_pim_client.dtos.products.product import Product
+from plytix_pim_client.dtos.products.relationship import ProductRelationship
 from plytix_pim_client.dtos.products.variant import ProductVariant
 
 
@@ -67,14 +68,6 @@ def product(plytix, new_product_data) -> Product:
 
 
 @pytest.fixture
-def product_variant(plytix, product, new_product_data) -> ProductVariant:
-    new_product_data["sku"] = f"{new_product_data['sku']}-variant"
-    variant = plytix.products.create_product(**new_product_data)
-    plytix.products.variants.link_variant_to_product(product.id, variant.id)
-    return ProductVariant.from_dict(variant.to_dict())
-
-
-@pytest.fixture
 def product_attribute(plytix, new_product_attribute_data) -> ProductAttribute:
     return plytix.products.attributes.create_attribute(**new_product_attribute_data)
 
@@ -88,6 +81,30 @@ def product_attribute_media(plytix, new_product_attribute_data) -> ProductAttrib
 @pytest.fixture
 def product_category(plytix, new_product_category_data) -> ProductCategory:
     return plytix.products.categories.create_product_category(**new_product_category_data)
+
+
+@pytest.fixture
+def product_relationship(plytix, new_product_relationship_data) -> ProductRelationship:
+    return plytix.products.relationships.create_product_relationship(**new_product_relationship_data)
+
+
+@pytest.fixture
+def product_related(plytix, product, product_relationship, new_product_data) -> Product:
+    new_product_data["sku"] = f"{new_product_data['sku']}-related"
+    related_product = plytix.products.create_product(**new_product_data)
+    assert related_product.id is not None
+    plytix.products.relationships.link_product_to_relationship(
+        product.id, product_relationship.id, [{"product_id": related_product.id, "quantity": 1}]
+    )
+    return Product.from_dict(related_product.to_dict())
+
+
+@pytest.fixture
+def product_variant(plytix, product, new_product_data) -> ProductVariant:
+    new_product_data["sku"] = f"{new_product_data['sku']}-variant"
+    variant = plytix.products.create_product(**new_product_data)
+    plytix.products.variants.link_variant_to_product(product.id, variant.id)
+    return ProductVariant.from_dict(variant.to_dict())
 
 
 @pytest.fixture

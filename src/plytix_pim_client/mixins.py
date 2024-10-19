@@ -124,6 +124,18 @@ from plytix_pim_client.api.products.product.family import (
     ProductFamilyAssignAPISyncMixin,
 )
 from plytix_pim_client.api.products.product.get import ProductGetAPIAsyncMixin, ProductGetAPISyncMixin
+from plytix_pim_client.api.products.product.relationships.link import (
+    ProductRelationshipLinkAPISyncMixin,
+    ProductRelationshipLinkAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.relationships.unlink import (
+    ProductRelationshipsUnlinkAPISyncMixin,
+    ProductRelationshipsUnlinkAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.product.relationships.update_quantity import (
+    ProductRelationshipsUpdateQuantityAPISyncMixin,
+    ProductRelationshipsUpdateQuantityAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.product.update import ProductUpdateAPIAsyncMixin, ProductUpdateAPISyncMixin
 from plytix_pim_client.api.products.product.variants.add import (
     ProductVariantAddAPISyncMixin,
@@ -317,8 +329,11 @@ class _ProductRelationshipsAPISync(
     ProductRelationshipCreateAPISyncMixin,
     ProductRelationshipsDeleteAPISyncMixin,
     ProductRelationshipGetAPISyncMixin,
+    ProductRelationshipLinkAPISyncMixin,
     ProductRelationshipsSearchAPISyncMixin,
+    ProductRelationshipsUnlinkAPISyncMixin,
     ProductRelationshipUpdateAPISyncMixin,
+    ProductRelationshipsUpdateQuantityAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -326,8 +341,11 @@ class _ProductRelationshipsAPIAsync(
     ProductRelationshipCreateAPIAsyncMixin,
     ProductRelationshipsDeleteAPIAsyncMixin,
     ProductRelationshipGetAPIAsyncMixin,
+    ProductRelationshipLinkAPIAsyncMixin,
     ProductRelationshipsSearchAPIAsyncMixin,
+    ProductRelationshipsUnlinkAPIAsyncMixin,
     ProductRelationshipUpdateAPIAsyncMixin,
+    ProductRelationshipsUpdateQuantityAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

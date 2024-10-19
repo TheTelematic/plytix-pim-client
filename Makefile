@@ -10,7 +10,7 @@ requirements-tests:
 
 lint: requirements-tests
 	python3 -m flake8 src tests --max-line-length=120
-	python3 -m mypy src/ tests/
+	python3 -m mypy --install-types --non-interactive src/ tests/
 
 unit-tests: requirements-tests
 	@args=$1
