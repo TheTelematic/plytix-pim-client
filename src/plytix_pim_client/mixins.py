@@ -149,6 +149,10 @@ from plytix_pim_client.api.products.relationships.relationship.delete import (
     ProductRelationshipsDeleteAPISyncMixin,
     ProductRelationshipsDeleteAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.relationships.search import (
+    ProductRelationshipsSearchAPISyncMixin,
+    ProductRelationshipsSearchAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.search import ProductsSearchAPIAsyncMixin, ProductsSearchAPISyncMixin
 
 
@@ -304,12 +308,14 @@ class _ProductFamiliesAPIAsync(
 class _ProductRelationshipsAPISync(
     ProductRelationshipCreateAPISyncMixin,
     ProductRelationshipsDeleteAPISyncMixin,
+    ProductRelationshipsSearchAPISyncMixin,
 ): ...  # noqa: E701
 
 
 class _ProductRelationshipsAPIAsync(
     ProductRelationshipCreateAPIAsyncMixin,
     ProductRelationshipsDeleteAPIAsyncMixin,
+    ProductRelationshipsSearchAPIAsyncMixin,
 ): ...  # noqa: E701
 
 
