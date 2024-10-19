@@ -141,6 +141,10 @@ from plytix_pim_client.api.products.product.variants.unlink import (
     ProductVariantUnlinkAPISyncMixin,
     ProductVariantUnlinkAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.relationships.relationship.create import (
+    ProductRelationshipCreateAPISyncMixin,
+    ProductRelationshipCreateAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.search import ProductsSearchAPIAsyncMixin, ProductsSearchAPISyncMixin
 
 
@@ -293,6 +297,16 @@ class _ProductFamiliesAPIAsync(
         return _ProductFamiliesAttributesAPIAsync(self._client)
 
 
+class _ProductRelationshipsAPISync(
+    ProductRelationshipCreateAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _ProductRelationshipsAPIAsync(
+    ProductRelationshipCreateAPIAsyncMixin,
+): ...  # noqa: E701
+
+
 class _ProductVariantsAPISync(
     ProductVariantLinkAPISyncMixin,
     ProductVariantsGetAPISyncMixin,
@@ -334,6 +348,10 @@ class _ProductsAPISync(
         return _ProductFamiliesAPISync(self._client)
 
     @property
+    def relationships(self) -> _ProductRelationshipsAPISync:
+        return _ProductRelationshipsAPISync(self._client)
+
+    @property
     def variants(self) -> _ProductVariantsAPISync:
         return _ProductVariantsAPISync(self._client)
 
@@ -361,6 +379,10 @@ class _ProductsAPIAsync(
     @property
     def families(self) -> _ProductFamiliesAPIAsync:
         return _ProductFamiliesAPIAsync(self._client)
+
+    @property
+    def relationships(self) -> _ProductRelationshipsAPIAsync:
+        return _ProductRelationshipsAPIAsync(self._client)
 
     @property
     def variants(self) -> _ProductVariantsAPIAsync:
