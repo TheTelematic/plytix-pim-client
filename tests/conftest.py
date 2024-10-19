@@ -80,3 +80,9 @@ def new_asset_category_data() -> dict:
 def new_product_category_data() -> dict:
     now = datetime.now()
     return dict(name=f"test-category-{now.isoformat()}")
+
+
+@pytest.fixture
+def new_product_relationship_data() -> dict:
+    now = datetime.now()
+    return dict(name=f"test-relationship-{now.isoformat()}")

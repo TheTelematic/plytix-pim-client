@@ -40,8 +40,18 @@ async def _clean_up(plytix: PlytixAsync) -> None:
     async for attributes in plytix.products.attributes.search_all_product_attributes([], ["id"], [], "id"):
         await plytix.products.attributes.delete_attributes([attribute.id for attribute in attributes if attribute.id])
 
+    async for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
+        await plytix.products.categories.delete_product_categories(
+            [category.id for category in product_categories if category.id]
+        )
+
     async for families in plytix.products.families.search_all_families([], ["id", "name"], [], "id"):
         await plytix.products.families.delete_families([family.id for family in families if family.id])
+
+    async for relationships in plytix.products.relationships.search_all_product_relationships([], ["id"], [], "id"):
+        await plytix.products.relationships.delete_product_relationships(
+            [relationship.id for relationship in relationships if relationship.id]
+        )
 
     async for assets in plytix.assets.search_all_assets([], ["id"], [], "id"):
         await plytix.assets.delete_assets([asset.id for asset in assets if asset.id])
@@ -49,11 +59,6 @@ async def _clean_up(plytix: PlytixAsync) -> None:
     async for asset_categories in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
         await plytix.assets.categories.delete_asset_categories(
             [category.id for category in asset_categories if category.id]
-        )
-
-    async for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
-        await plytix.products.categories.delete_product_categories(
-            [category.id for category in product_categories if category.id]
         )
 
 

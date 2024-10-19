@@ -40,19 +40,24 @@ def _clean_up(plytix: PlytixSync) -> None:
     for attributes in plytix.products.attributes.search_all_product_attributes([], ["id"], [], "id"):
         plytix.products.attributes.delete_attributes([attribute.id for attribute in attributes if attribute.id])
 
+    for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
+        plytix.products.categories.delete_product_categories(
+            [category.id for category in product_categories if category.id]
+        )
+
     for families in plytix.products.families.search_all_families([], ["id", "name"], [], "id"):
         plytix.products.families.delete_families([family.id for family in families if family.id])
+
+    for relationships in plytix.products.relationships.search_all_product_relationships([], ["id"], [], "id"):
+        plytix.products.relationships.delete_product_relationships(
+            [relationship.id for relationship in relationships if relationship.id]
+        )
 
     for assets in plytix.assets.search_all_assets([], ["id"], [], "id"):
         plytix.assets.delete_assets([asset.id for asset in assets if asset.id])
 
     for asset_categories in plytix.assets.categories.search_all_asset_categories([], ["id"], [], "id"):
         plytix.assets.categories.delete_asset_categories([category.id for category in asset_categories if category.id])
-
-    for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
-        plytix.products.categories.delete_product_categories(
-            [category.id for category in product_categories if category.id]
-        )
 
 
 # Fixtures
