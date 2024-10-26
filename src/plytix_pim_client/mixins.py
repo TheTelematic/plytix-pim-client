@@ -37,6 +37,18 @@ from plytix_pim_client.api.products.attributes.attribute.update import (
     ProductAttributeUpdateAPIAsyncMixin,
     ProductAttributeUpdateAPISyncMixin,
 )
+from plytix_pim_client.api.products.attributes.groups.group.create import (
+    ProductAttributesGroupCreateAPISyncMixin,
+    ProductAttributesGroupCreateAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.attributes.groups.group.delete import (
+    ProductAttributesGroupDeleteAPISyncMixin,
+    ProductAttributesGroupDeleteAPIAsyncMixin,
+)
+from plytix_pim_client.api.products.attributes.groups.search import (
+    ProductAttributesGroupsSearchAPISyncMixin,
+    ProductAttributesGroupsSearchAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.attributes.search import (
     ProductAttributesSearchAPIAsyncMixin,
     ProductAttributesSearchAPISyncMixin,
@@ -245,13 +257,30 @@ class _ProductAssetsAPIAsync(
 ): ...  # noqa: E701
 
 
+class _ProductAttributesGroupsAPISync(
+    ProductAttributesGroupCreateAPISyncMixin,
+    ProductAttributesGroupDeleteAPISyncMixin,
+    ProductAttributesGroupsSearchAPISyncMixin,
+): ...  # noqa: E701
+
+
+class _ProductAttributesGroupsAPIAsync(
+    ProductAttributesGroupCreateAPIAsyncMixin,
+    ProductAttributesGroupDeleteAPIAsyncMixin,
+    ProductAttributesGroupsSearchAPIAsyncMixin,
+): ...  # noqa: E701
+
+
 class _ProductAttributesAPISync(
     ProductAttributeCreateAPISyncMixin,
     ProductAttributeDeleteAPISyncMixin,
     ProductAttributeGetAPISyncMixin,
     ProductAttributeUpdateAPISyncMixin,
     ProductAttributesSearchAPISyncMixin,
-): ...  # noqa: E701
+):
+    @property
+    def groups(self) -> _ProductAttributesGroupsAPISync:
+        return _ProductAttributesGroupsAPISync(self._client)
 
 
 class _ProductAttributesAPIAsync(
@@ -260,7 +289,10 @@ class _ProductAttributesAPIAsync(
     ProductAttributeGetAPIAsyncMixin,
     ProductAttributeUpdateAPIAsyncMixin,
     ProductAttributesSearchAPIAsyncMixin,
-): ...  # noqa: E701
+):
+    @property
+    def groups(self) -> _ProductAttributesGroupsAPIAsync:
+        return _ProductAttributesGroupsAPIAsync(self._client)
 
 
 class _ProductCategoriesAPISync(

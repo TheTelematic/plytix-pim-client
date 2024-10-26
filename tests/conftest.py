@@ -47,6 +47,16 @@ def new_product_attribute_data() -> dict:
 
 
 @pytest.fixture
+def new_product_attributes_group_data() -> dict:
+    now = datetime.now()
+    return dict(
+        name=f"test-attribute-group-{now.isoformat()}",
+        attribute_labels=[],
+        order=0,
+    )
+
+
+@pytest.fixture
 def new_asset_data_from_url_factory() -> Callable[[], dict]:
     def factory() -> dict:
         with httpx.Client() as client:
