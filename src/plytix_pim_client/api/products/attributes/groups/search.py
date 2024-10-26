@@ -5,32 +5,32 @@ from plytix_pim_client.api.common.search import SearchResourceAPI
 from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
-from plytix_pim_client.dtos.products.attribute import ProductAttribute
+from plytix_pim_client.dtos.products.attribute import ProductAttributesGroup
 
 
-class ProductAttributesSearchAPI(SearchResourceAPI):
-    endpoint = "/api/v1/attributes/product/search"
-    resource_dto_class = ProductAttribute
+class ProductAttributesGroupsSearchAPI(SearchResourceAPI):
+    endpoint = "/api/v1/attribute-groups/product/search"
+    resource_dto_class = ProductAttributesGroup
 
 
-class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
-    def search_product_attributes(
+class ProductAttributesGroupsSearchAPISyncMixin(BaseAPISyncMixin):
+    def search_product_attributes_groups(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[ProductAttribute]:
+    ) -> List[ProductAttributesGroup]:
         """
-        Search for products attributes matching the filters.
+        Search for products attributes groups matching the filters.
 
-        :return: The products attributes found.
+        :return: The products attributes groups found.
         """
-        request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductAttributesGroupsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductAttributesSearchAPI.process_response(response)
+        return ProductAttributesGroupsSearchAPI.process_response(response)
 
-    def search_all_product_attributes(
+    def search_all_product_attributes_groups(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
@@ -38,11 +38,11 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> Generator[List[ProductAttribute], None, None]:
+    ) -> Generator[List[ProductAttributesGroup], None, None]:
         """
-        Iterate over all products attributes matching the filters.
+        Iterate over all products attributes groups matching the filters.
 
-        :return: The products attributes found.
+        :return: The products attributes groups found.
         """
         current_page = 1
         while True:
@@ -52,31 +52,33 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products_attributes = self.search_product_attributes(filters, attributes, relationship_filters, pagination)
-            if not products_attributes:
+            products_attributes_groups = self.search_product_attributes_groups(
+                filters, attributes, relationship_filters, pagination
+            )
+            if not products_attributes_groups:
                 break
-            yield products_attributes
+            yield products_attributes_groups
             current_page += 1
 
 
-class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
-    async def search_product_attributes(
+class ProductAttributesGroupsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
+    async def search_product_attributes_groups(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[ProductAttribute]:
+    ) -> List[ProductAttributesGroup]:
         """
-        Search for products attributes matching the filters.
+        Search for products attributes groups matching the filters.
 
-        :return: The products attributes found.
+        :return: The products attributes groups found.
         """
-        request = ProductAttributesSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
+        request = ProductAttributesGroupsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductAttributesSearchAPI.process_response(response)
+        return ProductAttributesGroupsSearchAPI.process_response(response)
 
-    async def search_all_product_attributes(
+    async def search_all_product_attributes_groups(
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
@@ -84,11 +86,11 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> AsyncGenerator[List[ProductAttribute], None]:
+    ) -> AsyncGenerator[List[ProductAttributesGroup], None]:
         """
-        Iterate over all products attributes matching the filters.
+        Iterate over all products attributes groups matching the filters.
 
-        :return: The products attributes found.
+        :return: The products attributes groups found.
         """
         current_page = 1
         while True:
@@ -98,10 +100,10 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products_attributes = await self.search_product_attributes(
+            products_attributes_groups = await self.search_product_attributes_groups(
                 filters, attributes, relationship_filters, pagination
             )
-            if not products_attributes:
+            if not products_attributes_groups:
                 break
-            yield products_attributes
+            yield products_attributes_groups
             current_page += 1
