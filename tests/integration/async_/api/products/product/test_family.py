@@ -11,7 +11,7 @@ async def test_assign_product_to_family(plytix, new_product_data, new_product_fa
 async def test_assign_product_to_family_not_found(plytix, new_product_data):
     product = await plytix.products.create_product(**new_product_data)
 
-    result = await plytix.products.assign_family(product.id, "non-existing-id")
+    result = await plytix.products.assign_family(product.id, "671cb42ee5a7f1405888ef86")
 
     assert result is None
 

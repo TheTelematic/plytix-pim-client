@@ -11,7 +11,7 @@ def test_assign_product_to_family(plytix, new_product_data, new_product_family_d
 def test_assign_product_to_family_not_found(plytix, new_product_data):
     product = plytix.products.create_product(**new_product_data)
 
-    result = plytix.products.assign_family(product.id, "non-existing-id")
+    result = plytix.products.assign_family(product.id, "671cb42ee5a7f1405888ef86")
 
     assert result is None
 

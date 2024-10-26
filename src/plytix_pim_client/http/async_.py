@@ -43,7 +43,7 @@ class AsyncClient(ClientBase):
             await self._refresh_token()
             return await self.make_request(method, path, accepted_error_codes=accepted_error_codes, **kwargs)
         except RateLimitExceededError:
-            retry_after = int(response.headers.get("Retry-After", -1))
+            retry_after = float(response.headers.get("Retry-After", -1))
             if retry_after > 0:
                 waiting_time = retry_after
             else:
