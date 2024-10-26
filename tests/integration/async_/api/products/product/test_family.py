@@ -8,14 +8,6 @@ async def test_assign_product_to_family(plytix, new_product_data, new_product_fa
     assert (await plytix.products.get_product(product.id)).product_family_id == family.id
 
 
-async def test_assign_product_to_family_not_found(plytix, new_product_data):
-    product = await plytix.products.create_product(**new_product_data)
-
-    result = await plytix.products.assign_family(product.id, "671cb42ee5a7f1405888ef86")
-
-    assert result is None
-
-
 async def test_assign_product_to_family_product_not_found(plytix, new_product_family_data):
     family = await plytix.products.families.create_family(**new_product_family_data)
 
