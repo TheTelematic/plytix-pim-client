@@ -54,12 +54,16 @@ For the sake of simplicity, only the synchronous client is shown in the examples
 ### Available resources
 Any of the following resources can be accessed through the client:
 - `products`
+  - `assets`
+  - `attributes`
+    - `groups`
+  - `categories`
   - `families`
     - `attributes`
-  - `attributes`
+  - `relationships`
+  - `variants`
 - `assets`
-- `categories`
-- `relationships`
+  - `categories`
 
 Each resource has specific methods to interact with the API. 
 If you use an IDE with code completion, you can see all available methods.
