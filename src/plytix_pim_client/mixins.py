@@ -45,6 +45,10 @@ from plytix_pim_client.api.products.attributes.groups.group.delete import (
     ProductAttributesGroupDeleteAPISyncMixin,
     ProductAttributesGroupDeleteAPIAsyncMixin,
 )
+from plytix_pim_client.api.products.attributes.groups.group.update import (
+    ProductAttributesGroupUpdateAPISyncMixin,
+    ProductAttributesGroupUpdateAPIAsyncMixin,
+)
 from plytix_pim_client.api.products.attributes.groups.search import (
     ProductAttributesGroupsSearchAPISyncMixin,
     ProductAttributesGroupsSearchAPIAsyncMixin,
@@ -261,6 +265,7 @@ class _ProductAttributesGroupsAPISync(
     ProductAttributesGroupCreateAPISyncMixin,
     ProductAttributesGroupDeleteAPISyncMixin,
     ProductAttributesGroupsSearchAPISyncMixin,
+    ProductAttributesGroupUpdateAPISyncMixin,
 ): ...  # noqa: E701
 
 
@@ -268,6 +273,7 @@ class _ProductAttributesGroupsAPIAsync(
     ProductAttributesGroupCreateAPIAsyncMixin,
     ProductAttributesGroupDeleteAPIAsyncMixin,
     ProductAttributesGroupsSearchAPIAsyncMixin,
+    ProductAttributesGroupUpdateAPIAsyncMixin,
 ): ...  # noqa: E701
 
 

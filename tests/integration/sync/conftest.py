@@ -41,6 +41,9 @@ def _clean_up(plytix: PlytixSync) -> None:
     for attributes in plytix.products.attributes.search_all_product_attributes([], ["id"], [], "id"):
         plytix.products.attributes.delete_attributes([attribute.id for attribute in attributes if attribute.id])
 
+    for groups in plytix.products.attributes.groups.search_all_product_attributes_groups([], ["id"], [], "id"):
+        plytix.products.attributes.groups.delete_attributes_groups([group.id for group in groups if group.id])
+
     for product_categories in plytix.products.categories.search_all_product_categories([], ["id"], [], "id"):
         plytix.products.categories.delete_product_categories(
             [category.id for category in product_categories if category.id]
