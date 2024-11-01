@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Callable
+
 import pytest
 
 from plytix_pim_client import config
@@ -12,10 +15,22 @@ from plytix_pim_client.dtos.products.variant import ProductVariant
 
 @pytest.fixture(scope="session", autouse=True)
 def check_env_vars():
-    config.PLYTIX_API_KEY = None
-    config.PLYTIX_API_PASSWORD = None
+    config.PLYTIX_API_KEY = "foo"
+    config.PLYTIX_API_PASSWORD = "bar"
+    config.PLYTIX_PIM_BASE_URL = "http://pim.plytix.test"
+    config.PLYTIX_AUTH_BASE_URL = "http://auth.plytix.test"
     config.USER_AGENT = f"[Unit Tests] {config.USER_AGENT}"
 
+
+@pytest.fixture
+def new_asset_data_from_url_factory() -> Callable[[], dict]:
+    def factory() -> dict:
+        return dict(
+            url="http://example.test/image.jpg",
+            filename=f"test-{str(datetime.now().timestamp()).replace('.', '')}.jpg",
+        )
+
+    return factory
 
 # Fixtures
 @pytest.fixture

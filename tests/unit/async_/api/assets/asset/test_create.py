@@ -1,11 +1,28 @@
+from http import HTTPMethod, HTTPStatus
+
 import pytest
 
 
-async def test_create_asset_from_url(plytix_factory, new_asset_data_from_url_factory):
+async def test_create_asset_from_url(
+    plytix_factory, response_factory, assert_requests_factory, new_asset_data_from_url_factory
+):
+    plytix = plytix_factory([response_factory(HTTPStatus.OK, {"id": 1, "url": "http://example.test/image.jpg"})])
+    data = new_asset_data_from_url_factory()
 
-    asset = await plytix_factory.assets.create_asset_by_url(**new_asset_data_from_url_factory())
+    await plytix.assets.create_asset_by_url(**data)
 
-    assert asset.id is not None
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/assets",
+                json={
+                    "url": data["url"],
+                    "filename": data["filename"],
+                },
+            )
+        ]
+    )
 
 
 async def test_create_assets_from_urls(plytix_factory, new_asset_data_from_url_factory):

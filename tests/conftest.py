@@ -4,7 +4,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable
 
-import httpx
 import pytest
 
 from plytix_pim_client.dtos.products.attribute import ProductAttributeTypeClass
@@ -54,19 +53,6 @@ def new_product_attributes_group_data() -> dict:
         attribute_labels=[],
         order=0,
     )
-
-
-@pytest.fixture
-def new_asset_data_from_url_factory() -> Callable[[], dict]:
-    def factory() -> dict:
-        with httpx.Client() as client:
-            response = client.get("https://picsum.photos/200/300")
-            return dict(
-                url=response.headers["Location"],
-                filename=f"test-{str(datetime.now().timestamp()).replace('.', '')}.jpg",
-            )
-
-    return factory
 
 
 @pytest.fixture
