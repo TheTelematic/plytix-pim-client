@@ -1,24 +1,79 @@
-async def test_delete_asset(plytix_factory, new_asset_data_from_url_factory):
-    asset = await plytix_factory.assets.create_asset_by_url(**new_asset_data_from_url_factory())
+from http import HTTPStatus, HTTPMethod
 
-    result = await plytix_factory.assets.delete_asset(asset.id)
+from plytix_pim_client.dtos.assets.asset import Asset
 
+
+async def test_delete_asset(plytix_factory, response_factory, assert_requests_factory, asset):
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.NO_CONTENT,
+            ),
+        ]
+    )
+
+    result = await plytix.assets.delete_asset(asset.id)
+
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.DELETE,
+                path=f"/api/v1/assets/{asset.id}",
+            )
+        ]
+    )
     assert result is True
 
 
-async def test_delete_asset_not_found(plytix_factory):
-    result = await plytix_factory.assets.delete_asset("non-existing-id")
+async def test_delete_asset_not_found(plytix_factory, response_factory, assert_requests_factory):
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.NOT_FOUND,
+            ),
+        ]
+    )
+    asset_id = "non-existing-id"
 
+    result = await plytix.assets.delete_asset(asset_id)
+
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.DELETE,
+                path=f"/api/v1/assets/{asset_id}",
+            )
+        ]
+    )
     assert result is False
 
 
-async def test_delete_multiple_assets(plytix_factory, new_asset_data_from_url_factory):
-    assets = await plytix_factory.assets.create_assets_by_urls(
-        [new_asset_data_from_url_factory(), new_asset_data_from_url_factory()]
+async def test_delete_multiple_assets(plytix_factory, response_factory, assert_requests_factory):
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.NO_CONTENT,
+            ),
+            response_factory(
+                HTTPStatus.NO_CONTENT,
+            ),
+        ]
     )
-    asset_ids = [result.id for result in assets]
+    asset1 = Asset(id="1", url="http://example.com/1", filename="1.jpg")
+    asset2 = Asset(id="2", url="http://example.com/2", filename="2.jpg")
 
-    results = await plytix_factory.assets.delete_assets(asset_ids)
+    result = await plytix.assets.delete_assets([asset1.id, asset2.id])
 
-    assert results[0] is True
-    assert results[1] is True
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.DELETE,
+                path=f"/api/v1/assets/{asset1.id}",
+            ),
+            dict(
+                method=HTTPMethod.DELETE,
+                path=f"/api/v1/assets/{asset2.id}",
+            ),
+        ]
+    )
+    assert result == [True, True]

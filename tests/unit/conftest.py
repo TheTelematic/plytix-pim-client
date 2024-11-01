@@ -1,6 +1,6 @@
 from datetime import datetime
 from http import HTTPStatus, HTTPMethod
-from typing import Callable, Optional, TypedDict, NotRequired
+from typing import Callable, TypedDict, NotRequired, Protocol
 from unittest.mock import Mock, call
 
 import httpx
@@ -14,6 +14,10 @@ from plytix_pim_client.dtos.products.category import ProductCategory
 from plytix_pim_client.dtos.products.product import Product
 from plytix_pim_client.dtos.products.relationship import ProductRelationship
 from plytix_pim_client.dtos.products.variant import ProductVariant
+
+
+class ResponseFactory(Protocol):
+    def __call__(self, status_code: HTTPStatus, json: dict | list[dict] | None = None) -> httpx.Response: ...
 
 
 class ExpectedRequest(TypedDict):
@@ -38,7 +42,7 @@ def api_token() -> str:
 
 
 @pytest.fixture
-def response_factory() -> Callable[[HTTPStatus, Optional[dict]], httpx.Response]:
+def response_factory() -> ResponseFactory:
     def factory(status_code: HTTPStatus, json: dict | list[dict] | None = None) -> httpx.Response:
         if json:
             json = {"data": [json]} if isinstance(json, dict) else {"data": json}
@@ -59,7 +63,7 @@ def assert_requests_factory(mock_requests, api_token) -> Callable[[list[Expected
                 headers={
                     "Authorization": f"Bearer {api_token}",
                     "User-Agent": config.USER_AGENT,
-                }
+                },
             )
             for request in expected_requests
         ]
