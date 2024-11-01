@@ -15,7 +15,7 @@ lint: requirements-tests
 unit-tests: requirements-tests
 	@args=$1
 
-	python3 -m pytest tests/unit ${args}
+	python3 -m pytest -n auto tests/unit ${args}
 
 integration-tests: requirements-tests
 	@args=$1

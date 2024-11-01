@@ -1,5 +1,5 @@
 from typing import Callable
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import httpx
 import pytest
@@ -27,3 +27,18 @@ def plytix_factory(mock_requests, api_token) -> Callable[[list[httpx.Response]],
         return _plytix
 
     return plytix
+
+
+@pytest.fixture(scope="session", autouse=True)
+async def hook_asyncio_gather():
+    """Run sequentially all tasks scheduled with asyncio.gather."""
+
+    async def _sequential_gather(*tasks) -> list:
+        results = []
+        for task in tasks:
+            results.append(await task)
+
+        return results
+
+    with patch("asyncio.gather", new=_sequential_gather):
+        yield
