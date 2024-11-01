@@ -59,8 +59,8 @@ async def test_delete_multiple_assets(plytix_factory, response_factory, assert_r
             ),
         ]
     )
-    asset1 = Asset(id="1", url="http://example.com/1", filename="1.jpg")
-    asset2 = Asset(id="2", url="http://example.com/2", filename="2.jpg")
+    asset1 = Asset(id="1", url="http://example.test/1", filename="1.jpg")
+    asset2 = Asset(id="2", url="http://example.test/2", filename="2.jpg")
 
     result = await plytix.assets.delete_assets([asset1.id, asset2.id])
 
