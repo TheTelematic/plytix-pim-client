@@ -1,20 +1,31 @@
+from http import HTTPStatus, HTTPMethod
+
+from plytix_pim_client.dtos.assets.category import AssetCategory
 from plytix_pim_client.dtos.filters import OperatorEnum, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
 
-async def test_search_asset_categories(plytix_factory, new_asset_category_data):
-    new_asset_data_1 = new_asset_category_data.copy()
-    new_asset_data_2 = new_asset_category_data.copy()
-    new_asset_data_3 = new_asset_category_data.copy()
-    new_asset_data_1["name"] = f"{new_asset_data_1['name']}-1"
-    new_asset_data_2["name"] = f"{new_asset_data_2['name']}-2"
-    new_asset_data_3["name"] = f"{new_asset_data_3['name']}-3"
-    categories = await plytix_factory.assets.categories.create_asset_categories(
-        [new_asset_data_1, new_asset_data_2, new_asset_data_3]
+async def test_search_asset_categories(plytix_factory, response_factory, assert_requests_factory):
+    category1 = AssetCategory(id="1", name="category1")
+    category2 = AssetCategory(id="2", name="category2")
+    category3 = AssetCategory(id="3", name="category3")
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"id": category1.id, "name": category1.name},
+                    {"id": category2.id, "name": category2.name},
+                    {"id": category3.id, "name": category3.name},
+                ],
+            ),
+        ]
     )
 
-    search_results = await plytix_factory.assets.categories.search_asset_categories(
-        filters=[[SearchFilter(field="id", operator=OperatorEnum.IN, value=[category.id for category in categories])]],
+    search_results = await plytix.assets.categories.search_asset_categories(
+        filters=[
+            [SearchFilter(field="id", operator=OperatorEnum.IN, value=[category1.id, category2.id, category3.id])]
+        ],
         attributes=[
             "modified",
         ],
@@ -22,27 +33,71 @@ async def test_search_asset_categories(plytix_factory, new_asset_category_data):
         pagination=Pagination(page=1, page_size=10, sort_by_attribute="modified", sort_ascending=True),
     )
 
-    categories_ids = list([category.id for category in sorted(categories, key=lambda category: category.modified)])
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/categories/file/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "id",
+                                "operator": OperatorEnum.IN,
+                                "value": [category1.id, category2.id, category3.id],
+                            }
+                        ]
+                    ],
+                    "attributes": ["modified"],
+                    "relationship_filters": [],
+                    "pagination": {
+                        "page": 1,
+                        "page_size": 10,
+                        "order": "modified",
+                    },
+                },
+            ),
+        ]
+    )
     assert len(search_results) == 3
-    assert search_results[0].id in categories_ids[0]
-    assert search_results[1].id in categories_ids[1]
-    assert search_results[2].id in categories_ids[2]
+    assert search_results == [
+        category1,
+        category2,
+        category3,
+    ]
 
 
-async def test_search_all_asset_categories(plytix_factory, new_asset_category_data):
-    new_asset_data_1 = new_asset_category_data.copy()
-    new_asset_data_2 = new_asset_category_data.copy()
-    new_asset_data_3 = new_asset_category_data.copy()
-    new_asset_data_1["name"] = f"{new_asset_data_1['name']}-1"
-    new_asset_data_2["name"] = f"{new_asset_data_2['name']}-2"
-    new_asset_data_3["name"] = f"{new_asset_data_3['name']}-3"
-    categories = await plytix_factory.assets.categories.create_asset_categories(
-        [new_asset_data_1, new_asset_data_2, new_asset_data_3]
+async def test_search_all_asset_categories(plytix_factory, response_factory, assert_requests_factory):
+    category1 = AssetCategory(id="1", name="category1")
+    category2 = AssetCategory(id="2", name="category2")
+    category3 = AssetCategory(id="3", name="category3")
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"id": category1.id, "name": category1.name},
+                    {"id": category2.id, "name": category2.name},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"id": category3.id, "name": category3.name},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [],
+            ),
+        ]
     )
 
     search_results = []
-    async for results in plytix_factory.assets.categories.search_all_asset_categories(
-        filters=[[SearchFilter(field="id", operator=OperatorEnum.IN, value=[category.id for category in categories])]],
+    async for results in plytix.assets.categories.search_all_asset_categories(
+        filters=[
+            [SearchFilter(field="id", operator=OperatorEnum.IN, value=[category1.id, category2.id, category3.id])]
+        ],
         attributes=[
             "modified",
         ],
@@ -53,8 +108,79 @@ async def test_search_all_asset_categories(plytix_factory, new_asset_category_da
     ):
         search_results.extend(results)
 
-    categories_ids = list([category.id for category in sorted(categories, key=lambda category: category.modified)])
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/categories/file/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "id",
+                                "operator": OperatorEnum.IN,
+                                "value": [category1.id, category2.id, category3.id],
+                            }
+                        ]
+                    ],
+                    "attributes": ["modified"],
+                    "relationship_filters": [],
+                    "pagination": {
+                        "page": 1,
+                        "page_size": 2,
+                        "order": "modified",
+                    },
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/categories/file/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "id",
+                                "operator": OperatorEnum.IN,
+                                "value": [category1.id, category2.id, category3.id],
+                            }
+                        ]
+                    ],
+                    "attributes": ["modified"],
+                    "relationship_filters": [],
+                    "pagination": {
+                        "page": 2,
+                        "page_size": 2,
+                        "order": "modified",
+                    },
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/categories/file/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "id",
+                                "operator": OperatorEnum.IN,
+                                "value": [category1.id, category2.id, category3.id],
+                            }
+                        ]
+                    ],
+                    "attributes": ["modified"],
+                    "relationship_filters": [],
+                    "pagination": {
+                        "page": 3,
+                        "page_size": 2,
+                        "order": "modified",
+                    },
+                },
+            ),
+        ]
+    )
     assert len(search_results) == 3
-    assert search_results[0].id in categories_ids[0]
-    assert search_results[1].id in categories_ids[1]
-    assert search_results[2].id in categories_ids[2]
+    assert search_results == [
+        category1,
+        category2,
+        category3,
+    ]

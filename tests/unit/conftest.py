@@ -45,7 +45,7 @@ def api_token() -> str:
 @pytest.fixture
 def response_factory() -> ResponseFactory:
     def factory(status_code: HTTPStatus, json: dict | list[dict] | None = None) -> httpx.Response:
-        if json:
+        if json is not None:
             json = {"data": [json]} if isinstance(json, dict) else {"data": json}
 
         return httpx.Response(request=Mock(), status_code=status_code, json=json)

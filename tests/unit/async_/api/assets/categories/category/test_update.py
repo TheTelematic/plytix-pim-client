@@ -14,6 +14,13 @@ async def test_convert_to_first_level_category(
 
     subcategory = await plytix.assets.categories.convert_to_first_level_category(asset_subcategory.id)
 
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.PATCH, path=f"/api/v1/categories/file/{asset_subcategory.id}", json={"parent_id": ""}
+            ),
+        ]
+    )
     assert subcategory.parents_ids == []
 
 
@@ -34,6 +41,15 @@ async def test_move_category(
 
     subcategory = await plytix.assets.categories.move_category(asset_subcategory.id, new_parent_category.id)
 
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.PATCH,
+                path=f"/api/v1/categories/file/{asset_subcategory.id}",
+                json={"parent_id": new_parent_category.id},
+            ),
+        ]
+    )
     assert subcategory.parents_ids == [new_parent_category.id]
 
 
