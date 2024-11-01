@@ -9,11 +9,12 @@ import pytest
 from plytix_pim_client.dtos.products.attribute import ProductAttributeTypeClass
 
 
-@pytest.fixture(scope="session", autouse=True)
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture(scope="function", autouse=True)
+async def _close_event_loop():
+    event_loop = asyncio.get_running_loop()
+    yield
+    await event_loop.shutdown_asyncgens()
+    await event_loop.shutdown_default_executor()
 
 
 @pytest.fixture

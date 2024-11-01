@@ -29,7 +29,7 @@ def plytix_factory(mock_requests, api_token) -> Callable[[list[httpx.Response]],
     return plytix
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 async def hook_asyncio_gather():
     """Run sequentially all tasks scheduled with asyncio.gather."""
 
