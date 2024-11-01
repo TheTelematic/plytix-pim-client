@@ -2,6 +2,7 @@ from datetime import datetime
 from http import HTTPStatus, HTTPMethod
 from typing import Callable, TypedDict, NotRequired, Protocol
 from unittest.mock import Mock, call
+from uuid import uuid4
 
 import httpx
 import pytest
@@ -87,29 +88,30 @@ def new_asset_data_from_url_factory() -> Callable[[], dict]:
 # Fixtures
 @pytest.fixture
 def product(new_product_data) -> Product:
-    return Product(**new_product_data)
+    return Product(id=str(uuid4()), **new_product_data)
 
 
 @pytest.fixture
 def product_attribute(new_product_attribute_data) -> ProductAttribute:
-    return ProductAttribute(**new_product_attribute_data)
+    return ProductAttribute(id=str(uuid4()), **new_product_attribute_data)
 
 
 @pytest.fixture
 def product_attribute_media(new_product_attribute_data) -> ProductAttribute:
     new_product_attribute_data["type_class"] = ProductAttributeTypeClass.MEDIA
-    return ProductAttribute(**new_product_attribute_data)
+    return ProductAttribute(id=str(uuid4()), **new_product_attribute_data)
 
 
 @pytest.fixture
 def product_relationship(new_product_relationship_data) -> ProductRelationship:
-    return ProductRelationship(**new_product_relationship_data)
+    return ProductRelationship(id=str(uuid4()), **new_product_relationship_data)
 
 
 @pytest.fixture
 def product_related(product, product_relationship, new_product_data) -> Product:
     new_product_data["sku"] = f"{new_product_data['sku']}-related"
     return Product(
+        id=str(uuid4()),
         **new_product_data,
         relationships=[
             {
@@ -124,31 +126,31 @@ def product_related(product, product_relationship, new_product_data) -> Product:
 @pytest.fixture
 def product_variant(product, new_product_data) -> ProductVariant:
     new_product_data["sku"] = f"{new_product_data['sku']}-variant"
-    return ProductVariant(**new_product_data, product_type="VARIANT")
+    return ProductVariant(id=str(uuid4()), **new_product_data, product_type="VARIANT")
 
 
 @pytest.fixture
 def asset_category(new_product_category_data) -> AssetCategory:
-    return AssetCategory(**new_product_category_data)
+    return AssetCategory(id=str(uuid4()), **new_product_category_data)
 
 
 @pytest.fixture
 def product_category(new_product_category_data) -> ProductCategory:
-    return ProductCategory(**new_product_category_data)
+    return ProductCategory(id=str(uuid4()), **new_product_category_data)
 
 
 @pytest.fixture
 def product_subcategory(new_product_category_data, product_category) -> ProductCategory:
     new_product_category_data["name"] = f"{new_product_category_data['name']}-sub"
-    return ProductCategory(parents_ids=[product_category.id], **new_product_category_data)
+    return ProductCategory(id=str(uuid4()), parents_ids=[product_category.id], **new_product_category_data)
 
 
 @pytest.fixture
 def asset_subcategory(new_asset_category_data, asset_category) -> AssetCategory:
     new_asset_category_data["name"] = f"{new_asset_category_data['name']}-sub"
-    return AssetCategory(parents_ids=[asset_category.id], **new_asset_category_data)
+    return AssetCategory(id=str(uuid4()), parents_ids=[asset_category.id], **new_asset_category_data)
 
 
 @pytest.fixture
 def asset(new_asset_data_from_url_factory) -> Asset:
-    return Asset(**new_asset_data_from_url_factory())
+    return Asset(id=str(uuid4()), **new_asset_data_from_url_factory())
