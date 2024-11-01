@@ -1,145 +1,155 @@
-from plytix_pim_client.dtos.filters import SearchFilter, OperatorEnum
+from http import HTTPStatus, HTTPMethod
+
+from plytix_pim_client.dtos.assets.category import AssetCategory
 
 
-async def test_convert_to_first_level_category(plytix_factory, new_asset_category_data):
-    parent_category = new_asset_category_data.copy()
-    subcategory = new_asset_category_data.copy()
-    parent_category["name"] = f"{parent_category['name']}-parent"
-    subcategory["name"] = f"{subcategory['name']}-sub"
-    parent_category = await plytix_factory.assets.categories.create_asset_category(**parent_category)
-    subcategory = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory
+async def test_convert_to_first_level_category(
+    plytix_factory, response_factory, assert_requests_factory, asset_category, asset_subcategory
+):
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, {"id": asset_subcategory.id, "parents_ids": []}),
+        ]
     )
 
-    subcategory = await plytix_factory.assets.categories.convert_to_first_level_category(subcategory.id)
+    subcategory = await plytix.assets.categories.convert_to_first_level_category(asset_subcategory.id)
 
     assert subcategory.parents_ids == []
 
 
-async def test_move_category(plytix_factory, new_asset_category_data):
-    parent_category = new_asset_category_data.copy()
-    subcategory = new_asset_category_data.copy()
-    parent_category["name"] = f"{parent_category['name']}-parent"
-    subcategory["name"] = f"{subcategory['name']}-sub"
-    parent_category = await plytix_factory.assets.categories.create_asset_category(**parent_category)
-    subcategory = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory
+async def test_move_category(
+    plytix_factory,
+    response_factory,
+    assert_requests_factory,
+    asset_category,
+    asset_subcategory,
+    new_asset_category_data,
+):
+    new_parent_category = AssetCategory(id="3", **new_asset_category_data)
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, {"id": asset_subcategory.id, "parents_ids": [new_parent_category.id]}),
+        ]
     )
-    new_parent_category = await plytix_factory.assets.categories.create_asset_category(**new_asset_category_data)
 
-    subcategory = await plytix_factory.assets.categories.move_category(subcategory.id, new_parent_category.id)
+    subcategory = await plytix.assets.categories.move_category(asset_subcategory.id, new_parent_category.id)
 
     assert subcategory.parents_ids == [new_parent_category.id]
 
 
-async def test_sorting_category(plytix_factory, asset_category, asset_subcategory, new_asset_category_data):
+async def test_sorting_category(
+    plytix_factory,
+    response_factory,
+    assert_requests_factory,
+    asset_category,
+    asset_subcategory,
+    new_asset_category_data,
+):
     asset_subcategory2 = new_asset_category_data.copy()
     asset_subcategory2["name"] = f"{asset_subcategory2['name']}-sub2"
-    asset_subcategory2 = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=asset_category.id, **asset_subcategory2
+    asset_subcategory2 = AssetCategory(id="3", **asset_subcategory2)
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, json={"id": asset_category.id, "n_children": "2"}),
+        ]
     )
 
-    await plytix_factory.assets.categories.sorting_category(asset_category.id, [asset_subcategory2.id, asset_subcategory.id])
+    await plytix.assets.categories.sorting_category(asset_category.id, [asset_subcategory2.id, asset_subcategory.id])
 
-    categories = [
-        _
-        async for _ in plytix_factory.assets.categories.search_all_asset_categories(
-            [
-                [
-                    SearchFilter(
-                        field="id",
-                        operator=OperatorEnum.IN,
-                        value=[asset_category.id, asset_subcategory.id, asset_subcategory2.id],
-                    )
-                ]
-            ],
-            ["id", "order", "n_children"],
-            [],
-            "id",
-        )
-    ][0]
-    assert len(categories) == 3
-    assert categories[0].id == asset_subcategory2.id
-    assert categories[1].id == asset_subcategory.id
-    assert categories[2].id == asset_category.id
-    assert categories[2].n_children == 2
-    assert categories[1].order == "2"
-    assert categories[2].order == "1"
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.PATCH,
+                path=f"/api/v1/categories/file/{asset_category.id}",
+                json={"sort_children": [asset_subcategory2.id, asset_subcategory.id]},
+            )
+        ]
+    )
 
 
-async def test_sorting_root_category(plytix_factory, asset_category, new_asset_category_data):
+async def test_sorting_root_category(
+    plytix_factory, response_factory, assert_requests_factory, asset_category, new_asset_category_data
+):
     asset_category2 = new_asset_category_data.copy()
     asset_category2["name"] = f"{asset_category2['name']}-sub2"
-    asset_category2 = await plytix_factory.assets.categories.create_asset_category(**asset_category2)
-
-    await plytix_factory.assets.categories.sorting_root_category([asset_category2.id, asset_category.id])
-
-    categories = [
-        _
-        async for _ in plytix_factory.assets.categories.search_all_asset_categories(
-            [
-                [
-                    SearchFilter(
-                        field="id",
-                        operator=OperatorEnum.IN,
-                        value=[asset_category.id, asset_category2.id],
-                    )
-                ]
-            ],
-            ["id", "order"],
-            [],
-            "id",
-        )
-    ][0]
-    assert len(categories) == 2
-    assert categories[0].id == asset_category2.id
-    assert categories[1].id == asset_category.id
-    assert categories[0].order == "1"
-    assert categories[1].order == "2"
-
-
-async def test_convert_to_first_level_multiple_categories(plytix_factory, new_asset_category_data):
-    parent_category = new_asset_category_data.copy()
-    subcategory1 = new_asset_category_data.copy()
-    subcategory2 = new_asset_category_data.copy()
-    parent_category["name"] = f"{parent_category['name']}-parent"
-    subcategory1["name"] = f"{subcategory1['name']}-sub1"
-    subcategory2["name"] = f"{subcategory2['name']}-sub2"
-    parent_category = await plytix_factory.assets.categories.create_asset_category(**parent_category)
-    subcategory1 = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory1
-    )
-    subcategory2 = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category.id, **subcategory2
+    asset_category2 = AssetCategory(id="2", **asset_category2)
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, json={"id": asset_category.id, "n_children": "2"}),
+        ]
     )
 
-    subcategories = await plytix_factory.assets.categories.convert_to_first_level_categories([subcategory1.id, subcategory2.id])
+    await plytix.assets.categories.sorting_root_category([asset_category2.id, asset_category.id])
 
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.PATCH,
+                path="/api/v1/categories/file/root",
+                json={"sort_children": [asset_category2.id, asset_category.id]},
+            )
+        ]
+    )
+
+
+async def test_convert_to_first_level_multiple_categories(
+    plytix_factory, response_factory, assert_requests_factory, asset_category, new_asset_category_data
+):
+    subcategory1 = AssetCategory(id="2", **new_asset_category_data)
+    subcategory2 = AssetCategory(id="3", **new_asset_category_data)
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, {"id": subcategory1.id, "parents_ids": []}),
+            response_factory(HTTPStatus.OK, {"id": subcategory2.id, "parents_ids": []}),
+        ]
+    )
+
+    subcategories = await plytix.assets.categories.convert_to_first_level_categories([subcategory1.id, subcategory2.id])
+
+    assert assert_requests_factory(
+        [
+            dict(method=HTTPMethod.PATCH, path=f"/api/v1/categories/file/{subcategory1.id}", json={"parent_id": ""}),
+            dict(method=HTTPMethod.PATCH, path=f"/api/v1/categories/file/{subcategory2.id}", json={"parent_id": ""}),
+        ]
+    )
     assert subcategories[0].parents_ids == []
     assert subcategories[1].parents_ids == []
 
 
-async def test_move_multiple_categories(plytix_factory, new_asset_category_data):
-    parent_category1 = new_asset_category_data.copy()
-    parent_category2 = new_asset_category_data.copy()
-    subcategory1 = new_asset_category_data.copy()
-    subcategory2 = new_asset_category_data.copy()
-    parent_category1["name"] = f"{parent_category1['name']}-parent1"
-    parent_category2["name"] = f"{parent_category2['name']}-parent2"
-    subcategory1["name"] = f"{subcategory1['name']}-sub1"
-    subcategory2["name"] = f"{subcategory2['name']}-sub2"
-    parent_category1 = await plytix_factory.assets.categories.create_asset_category(**parent_category1)
-    parent_category2 = await plytix_factory.assets.categories.create_asset_category(**parent_category2)
-    subcategory1 = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category1.id, **subcategory1
-    )
-    subcategory2 = await plytix_factory.assets.categories.create_asset_category(
-        parent_category_id=parent_category1.id, **subcategory2
-    )
-
-    subcategories = await plytix_factory.assets.categories.move_categories(
-        [(subcategory1.id, parent_category2.id), (subcategory2.id, parent_category2.id)],
+async def test_move_multiple_categories(
+    plytix_factory,
+    response_factory,
+    assert_requests_factory,
+    asset_category,
+    asset_subcategory,
+    new_asset_category_data,
+):
+    subcategory1 = AssetCategory(id="3", **new_asset_category_data)
+    subcategory2 = AssetCategory(id="4", **new_asset_category_data)
+    plytix = plytix_factory(
+        [
+            response_factory(HTTPStatus.OK, {"id": asset_subcategory.id, "parents_ids": [asset_category.id]}),
+            response_factory(HTTPStatus.OK, {"id": asset_subcategory.id, "parents_ids": [asset_category.id]}),
+        ]
     )
 
-    assert subcategories[0].parents_ids == [parent_category2.id]
-    assert subcategories[1].parents_ids == [parent_category2.id]
+    subcategories = await plytix.assets.categories.move_categories(
+        [(subcategory1.id, asset_category.id), (subcategory2.id, asset_category.id)],
+    )
+
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.PATCH,
+                path=f"/api/v1/categories/file/{subcategory1.id}",
+                json={"parent_id": asset_category.id},
+            ),
+            dict(
+                method=HTTPMethod.PATCH,
+                path=f"/api/v1/categories/file/{subcategory2.id}",
+                json={"parent_id": asset_category.id},
+            ),
+        ]
+    )
+    assert subcategories[0].parents_ids == [asset_category.id]
+    assert subcategories[1].parents_ids == [asset_category.id]
