@@ -13,7 +13,9 @@ async def test_add_new_variant_to_product(
     assert result.sku == new_product_data["sku"]
 
     try:
+        # The only asserts about this field, to not spread the undocumented stuff
         assert "_parent_id" in result._undocumented_data
+        assert result._undocumented_data["_parent_id"] == product.id
     except AssertionError:
         warnings.warn("The _parent_id is no longer available in the _undocumented_data, remove this assert.")
 
