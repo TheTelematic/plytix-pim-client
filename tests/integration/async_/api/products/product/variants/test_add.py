@@ -1,3 +1,6 @@
+import warnings
+
+
 async def test_add_new_variant_to_product(
     plytix,
     product,
@@ -8,6 +11,11 @@ async def test_add_new_variant_to_product(
     result = await plytix.products.variants.add_variant_to_product(product.id, new_product_data["sku"])
 
     assert result.sku == new_product_data["sku"]
+
+    try:
+        assert "_parent_id" in result._undocumented_data
+    except AssertionError:
+        warnings.warn("The _parent_id is no longer available in the _undocumented_data, remove this assert.")
 
 
 async def test_add_new_variant_to_product_with_label(
