@@ -74,8 +74,10 @@ class SyncClient(ClientBase):
                             exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
                         )
                         logger.error(
-                            f"Auth get token is returning too many requests, retrying after {retry_after} seconds..."
+                            f"Auth get token is returning TooManyRequests error, "
+                            f"retrying after {retry_after} seconds..."
                         )
+                        time.sleep(retry_after)
                         response = self.client.post(
                             f"{self.base_url_auth}/auth/api/get-token",
                             json={"api_key": self.api_key, "api_password": self.api_password},
