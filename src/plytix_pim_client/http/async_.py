@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 from http import HTTPMethod, HTTPStatus
 from typing import List
 
@@ -20,6 +21,7 @@ class AsyncClient(ClientBase):
             timeout=config.HTTP_TIMEOUT,
         )
         self._lock = asyncio.Lock()
+        self._token_refreshed_at = None
 
     async def close(self):
         await self.client.aclose()
@@ -59,8 +61,13 @@ class AsyncClient(ClientBase):
             )
 
     async def _refresh_token(self):
+        current_token_refreshed_at = self._token_refreshed_at
         if await self._lock.acquire():
             try:
+                if current_token_refreshed_at != self._token_refreshed_at:
+                    logger.info("The token was already refreshed")
+                    return
+
                 response = await self.client.post(
                     f"{self.base_url_auth}/auth/api/get-token",
                     json={"api_key": self.api_key, "api_password": self.api_password},
@@ -84,6 +91,7 @@ class AsyncClient(ClientBase):
                         response.raise_for_status()
 
                 self.auth_token = response.json()["data"][0]["access_token"]
+                self._token_refreshed_at = datetime.now().timestamp()
             finally:
                 self._lock.release()
         else:

@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPStatus, HTTPMethod
 from unittest.mock import Mock
 
@@ -53,6 +54,22 @@ async def test_token_expired_and_auth_too_many_requests(mock_requests, mock_http
         httpx.Response(status_code=HTTPStatus.TOO_MANY_REQUESTS, request=Mock(), headers={"Retry-After": "1"}),
         httpx.Response(status_code=HTTPStatus.OK, request=Mock(), json={"data": [{"access_token": "foo"}]}),
     ]
+
+    response = await mock_http_client.make_request(HTTPMethod.GET, "/foo")
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.content == b""
+
+
+async def test_token_expired_previously_refreshed(mock_requests, mock_http_client, mock_response):
+    mock_requests.request.side_effect = [
+        httpx.Response(status_code=HTTPStatus.UNAUTHORIZED, request=Mock()),
+        mock_response,
+    ]
+    mock_requests.post.side_effect = [
+        httpx.Response(status_code=HTTPStatus.OK, request=Mock(), json={"data": [{"access_token": "foo"}]}),
+    ]
+    mock_http_client._token_refreshed_at = datetime.now().timestamp()
 
     response = await mock_http_client.make_request(HTTPMethod.GET, "/foo")
 
