@@ -12,6 +12,7 @@ async def test_search_products(plytix_factory, new_product_data, response_factor
     new_product_data_1["sku"] = f"{new_product_data['sku']}-1"
     new_product_data_2["sku"] = f"{new_product_data['sku']}-2"
     new_product_data_3["sku"] = f"{new_product_data['sku']}-3"
+
     plytix = plytix_factory(
         [
             response_factory(
@@ -66,7 +67,7 @@ async def test_search_products(plytix_factory, new_product_data, response_factor
     assert search_results[2].label == new_product_data_3["label"]
 
 
-async def test_search_all_products(plytix_factory, new_product_data):
+async def test_search_all_products(plytix_factory, new_product_data, response_factory, assert_requests_factory):
     new_product_data_1 = new_product_data.copy()
     new_product_data_2 = new_product_data.copy()
     new_product_data_3 = new_product_data.copy()
@@ -75,15 +76,30 @@ async def test_search_all_products(plytix_factory, new_product_data):
     new_product_data_2["sku"] = f"{new_product_data['sku']}-2"
     new_product_data_3["sku"] = f"{new_product_data['sku']}-3"
 
-    products = [
-        new_product_data_1,
-        new_product_data_2,
-        new_product_data_3,
-    ]
-    await plytix_factory.products.create_products(products)
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"sku": new_product_data_1["sku"], "label": new_product_data_1["label"]},
+                    {"sku": new_product_data_2["sku"], "label": new_product_data_2["label"]},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"sku": new_product_data_3["sku"], "label": new_product_data_3["label"]},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [],
+            ),
+        ]
+    )
 
     search_results = []
-    async for products in plytix_factory.products.search_all_products(
+    async for products in plytix.products.search_all_products(
         filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data["sku"])]],
         attributes=["sku", "label"],
         relationship_filters=[],
@@ -93,6 +109,64 @@ async def test_search_all_products(plytix_factory, new_product_data):
     ):
         search_results.extend(products)
 
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/products/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "sku",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_data["sku"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["sku", "label"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "sku", "page": 1, "page_size": 2},
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/products/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "sku",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_data["sku"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["sku", "label"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "sku", "page": 2, "page_size": 2},
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/products/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "sku",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_data["sku"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["sku", "label"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "sku", "page": 3, "page_size": 2},
+                },
+            ),
+        ]
+    )
     assert len(search_results) == 3
 
     assert search_results[0].sku == new_product_data_1["sku"]
