@@ -29,6 +29,7 @@ class ProductAttribute(BaseDTO):
     groups: list = field(default_factory=list)
     options: list[str] = field(default_factory=list)
     attributes: list[dict] = field(default_factory=list)
+    description: str | None = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

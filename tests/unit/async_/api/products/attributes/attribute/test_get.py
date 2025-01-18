@@ -1,8 +1,30 @@
-async def test_get_attribute(plytix_factory, new_product_attribute_data):
-    product_attribute = await plytix_factory.products.attributes.create_attribute(**new_product_attribute_data)
+from http import HTTPStatus, HTTPMethod
 
-    retrieved_product_attribute = await plytix_factory.products.attributes.get_attribute(product_attribute.id)
 
+async def test_get_attribute(plytix_factory, response_factory, assert_requests_factory, product_attribute):
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.OK,
+                {
+                    "id": product_attribute.id,
+                    "name": product_attribute.name,
+                    "type_class": product_attribute.type_class,
+                },
+            ),
+        ]
+    )
+
+    retrieved_product_attribute = await plytix.products.attributes.get_attribute(product_attribute.id)
+
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.GET,
+                path=f"/api/v1/attributes/product/{product_attribute.id}",
+            ),
+        ]
+    )
     assert product_attribute.id == retrieved_product_attribute.id
     assert product_attribute.name == retrieved_product_attribute.name
     assert product_attribute.type_class == retrieved_product_attribute.type_class
