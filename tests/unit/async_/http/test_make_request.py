@@ -75,3 +75,16 @@ async def test_token_expired_previously_refreshed(mock_requests, mock_http_clien
 
     assert response.status_code == HTTPStatus.OK
     assert response.content == b""
+
+
+@pytest.mark.parametrize("headers", [None, {"Retry-After": "1"}])
+async def test_rate_limit_exceeded(mock_requests, mock_http_client, mock_response, headers):
+    mock_requests.request.side_effect = [
+        httpx.Response(status_code=HTTPStatus.TOO_MANY_REQUESTS, request=Mock(), headers=headers),
+        mock_response,
+    ]
+
+    response = await mock_http_client.make_request(HTTPMethod.GET, "/foo")
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.content == b""
