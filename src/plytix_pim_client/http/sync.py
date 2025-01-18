@@ -1,3 +1,4 @@
+import threading
 import time
 from http import HTTPMethod, HTTPStatus
 from typing import List
@@ -5,6 +6,7 @@ from typing import List
 import httpx
 
 from plytix_pim_client import config
+from plytix_pim_client.constants import DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS
 from plytix_pim_client.exceptions import RateLimitExceededError, TokenExpiredError
 from plytix_pim_client.http.base import ClientBase
 from plytix_pim_client.logger import logger
@@ -18,6 +20,7 @@ class SyncClient(ClientBase):
             transport=httpx.HTTPTransport(retries=config.HTTP_RETRIES),
             timeout=config.HTTP_TIMEOUT,
         )
+        self._lock = threading.Lock()
 
     def close(self):
         self.client.close()
@@ -57,9 +60,34 @@ class SyncClient(ClientBase):
             )
 
     def _refresh_token(self):
-        response = self.client.post(
-            f"{self.base_url_auth}/auth/api/get-token",
-            json={"api_key": self.api_key, "api_password": self.api_password},
-        )
-        response.raise_for_status()
-        self.auth_token = response.json()["data"][0]["access_token"]
+        if self._lock.acquire():
+            try:
+                response = self.client.post(
+                    f"{self.base_url_auth}/auth/api/get-token",
+                    json={"api_key": self.api_key, "api_password": self.api_password},
+                )
+                try:
+                    response.raise_for_status()
+                except httpx.HTTPStatusError as exc:
+                    if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                        retry_after = float(
+                            exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
+                        )
+                        logger.error(
+                            f"Auth get token is returning TooManyRequests error, "
+                            f"retrying after {retry_after} seconds..."
+                        )
+                        time.sleep(retry_after)
+                        response = self.client.post(
+                            f"{self.base_url_auth}/auth/api/get-token",
+                            json={"api_key": self.api_key, "api_password": self.api_password},
+                        )
+                        response.raise_for_status()
+
+                self.auth_token = response.json()["data"][0]["access_token"]
+            finally:
+                self._lock.release()
+        else:
+            while self._lock.locked():
+                logger.warning("Another task is refreshing the token, waiting...")
+                time.sleep(1)
