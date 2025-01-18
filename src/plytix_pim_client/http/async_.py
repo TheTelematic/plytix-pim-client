@@ -64,7 +64,7 @@ class AsyncClient(ClientBase):
         current_token_refreshed_at = self._token_refreshed_at
         async with self._lock:
             if current_token_refreshed_at != self._token_refreshed_at:
-                logger.info("The token was already refreshed")
+                logger.debug("The token was already refreshed")
                 return
 
             response = await self.client.post(
