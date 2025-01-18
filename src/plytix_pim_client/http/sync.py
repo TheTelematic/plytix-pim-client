@@ -60,7 +60,7 @@ class SyncClient(ClientBase):
             )
 
     def _refresh_token(self):
-        if self._lock.acquire():
+        if self._lock.acquire(blocking=False):
             try:
                 response = self.client.post(
                     f"{self.base_url_auth}/auth/api/get-token",
@@ -89,5 +89,5 @@ class SyncClient(ClientBase):
                 self._lock.release()
         else:
             while self._lock.locked():
-                logger.warning("Another task is refreshing the token, waiting...")
+                logger.warning("Another thread is refreshing the token, waiting...")
                 time.sleep(1)

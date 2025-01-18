@@ -62,39 +62,32 @@ class AsyncClient(ClientBase):
 
     async def _refresh_token(self):
         current_token_refreshed_at = self._token_refreshed_at
-        if await self._lock.acquire():
+        async with self._lock:
+            if current_token_refreshed_at != self._token_refreshed_at:
+                logger.info("The token was already refreshed")
+                return
+
+            response = await self.client.post(
+                f"{self.base_url_auth}/auth/api/get-token",
+                json={"api_key": self.api_key, "api_password": self.api_password},
+            )
             try:
-                if current_token_refreshed_at != self._token_refreshed_at:
-                    logger.info("The token was already refreshed")
-                    return
-
-                response = await self.client.post(
-                    f"{self.base_url_auth}/auth/api/get-token",
-                    json={"api_key": self.api_key, "api_password": self.api_password},
-                )
-                try:
+                response.raise_for_status()
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                    retry_after = float(
+                        exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
+                    )
+                    logger.error(
+                        f"Auth get token is returning TooManyRequests error, "
+                        f"retrying after {retry_after} seconds..."
+                    )
+                    await asyncio.sleep(retry_after)
+                    response = await self.client.post(
+                        f"{self.base_url_auth}/auth/api/get-token",
+                        json={"api_key": self.api_key, "api_password": self.api_password},
+                    )
                     response.raise_for_status()
-                except httpx.HTTPStatusError as exc:
-                    if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
-                        retry_after = float(
-                            exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
-                        )
-                        logger.error(
-                            f"Auth get token is returning TooManyRequests error, "
-                            f"retrying after {retry_after} seconds..."
-                        )
-                        await asyncio.sleep(retry_after)
-                        response = await self.client.post(
-                            f"{self.base_url_auth}/auth/api/get-token",
-                            json={"api_key": self.api_key, "api_password": self.api_password},
-                        )
-                        response.raise_for_status()
 
-                self.auth_token = response.json()["data"][0]["access_token"]
-                self._token_refreshed_at = datetime.now().timestamp()
-            finally:
-                self._lock.release()
-        else:
-            while self._lock.locked():
-                logger.warning("Another task is refreshing the token, waiting...")
-                await asyncio.sleep(1)
+            self.auth_token = response.json()["data"][0]["access_token"]
+            self._token_refreshed_at = datetime.now().timestamp()
