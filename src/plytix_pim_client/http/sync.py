@@ -62,27 +62,30 @@ class SyncClient(ClientBase):
     def _refresh_token(self):
         if self._lock.acquire(blocking=False):
             try:
-                response = self.client.post(
-                    f"{self.base_url_auth}/auth/api/get-token",
-                    json={"api_key": self.api_key, "api_password": self.api_password},
-                )
-                try:
-                    response.raise_for_status()
-                except httpx.HTTPStatusError as exc:
-                    if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
-                        retry_after = float(
-                            exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
-                        )
-                        logger.error(
-                            f"Auth get token is returning TooManyRequests error, "
-                            f"retrying after {retry_after} seconds..."
-                        )
-                        time.sleep(retry_after)
-                        response = self.client.post(
-                            f"{self.base_url_auth}/auth/api/get-token",
-                            json={"api_key": self.api_key, "api_password": self.api_password},
-                        )
+                retry = True
+                while retry:
+                    response = self.client.post(
+                        f"{self.base_url_auth}/auth/api/get-token",
+                        json={"api_key": self.api_key, "api_password": self.api_password},
+                    )
+                    try:
                         response.raise_for_status()
+                        retry = False
+                    except httpx.HTTPStatusError as exc:
+                        if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                            retry_after = float(
+                                exc.response.headers.get(
+                                    "Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS
+                                )
+                            )
+                            logger.error(
+                                f"Auth get token is returning TooManyRequests error, "
+                                f"retrying after {retry_after} seconds..."
+                            )
+                            time.sleep(retry_after)
+                        else:
+                            logger.error(f"Something went wrong getting the auth token. {exc.response=}")
+                            retry = False
 
                 self.auth_token = response.json()["data"][0]["access_token"]
             finally:

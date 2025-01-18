@@ -67,27 +67,28 @@ class AsyncClient(ClientBase):
                 logger.debug("The token was already refreshed")
                 return
 
-            response = await self.client.post(
-                f"{self.base_url_auth}/auth/api/get-token",
-                json={"api_key": self.api_key, "api_password": self.api_password},
-            )
-            try:
-                response.raise_for_status()
-            except httpx.HTTPStatusError as exc:
-                if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
-                    retry_after = float(
-                        exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
-                    )
-                    logger.error(
-                        f"Auth get token is returning TooManyRequests error, "
-                        f"retrying after {retry_after} seconds..."
-                    )
-                    await asyncio.sleep(retry_after)
-                    response = await self.client.post(
-                        f"{self.base_url_auth}/auth/api/get-token",
-                        json={"api_key": self.api_key, "api_password": self.api_password},
-                    )
+            retry = True
+            while retry:
+                response = await self.client.post(
+                    f"{self.base_url_auth}/auth/api/get-token",
+                    json={"api_key": self.api_key, "api_password": self.api_password},
+                )
+                try:
                     response.raise_for_status()
+                    retry = False
+                except httpx.HTTPStatusError as exc:
+                    if exc.response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                        retry_after = float(
+                            exc.response.headers.get("Retry-After", DEFAULT_WAIT_SECONDS_AFTER_AUTH_TOO_MANY_REQUESTS)
+                        )
+                        logger.error(
+                            f"Auth get token is returning TooManyRequests error, "
+                            f"retrying after {retry_after} seconds..."
+                        )
+                        await asyncio.sleep(retry_after)
+                    else:
+                        logger.error(f"Something went wrong getting the auth token. {exc.response=}")
+                        retry = False
 
             self.auth_token = response.json()["data"][0]["access_token"]
             self._token_refreshed_at = datetime.now().timestamp()
