@@ -20,8 +20,6 @@ class BaseDTO:
         return cls(_undocumented_data=_undocumented_data, **filtered_data)
 
     def to_dict(self) -> dict:
-        return asdict(self)
-
-    def clean_dict(self) -> dict:
-        data = self.to_dict()
-        return {k: v for k, v in data.items() if v is not None}
+        d = asdict(self)
+        d.pop("_undocumented_data")
+        return d
