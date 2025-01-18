@@ -34,7 +34,24 @@ async def test_search_products(plytix_factory, new_product_data, response_factor
 
     assert assert_requests_factory(
         [
-            dict(method=HTTPMethod.POST, path="/api/v1/products/search", json={}),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/products/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "sku",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_data["sku"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["sku", "label"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "sku", "page": 1, "page_size": 10},
+                },
+            ),
         ]
     )
     assert len(search_results) == 3
