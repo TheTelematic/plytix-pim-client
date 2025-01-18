@@ -31,10 +31,26 @@ async def test_response_cooldown_seconds_is_set(mock_requests, mock_http_client,
 
 async def test_token_expired(mock_requests, mock_http_client, mock_response):
     mock_requests.request.side_effect = [
+        httpx.Response(status_code=HTTPStatus.UNAUTHORIZED, request=Mock()),
         mock_response,
     ]
     mock_requests.post.side_effect = [
+        httpx.Response(status_code=HTTPStatus.OK, request=Mock(), json={"data": [{"access_token": "foo"}]}),
+    ]
+
+    response = await mock_http_client.make_request(HTTPMethod.GET, "/foo")
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.content == b""
+
+
+async def test_token_expired_and_auth_too_many_requests(mock_requests, mock_http_client, mock_response):
+    mock_requests.request.side_effect = [
         httpx.Response(status_code=HTTPStatus.UNAUTHORIZED, request=Mock()),
+        mock_response,
+    ]
+    mock_requests.post.side_effect = [
+        httpx.Response(status_code=HTTPStatus.TOO_MANY_REQUESTS, request=Mock(), headers={"Retry-After": "1"}),
         httpx.Response(status_code=HTTPStatus.OK, request=Mock(), json={"data": [{"access_token": "foo"}]}),
     ]
 
