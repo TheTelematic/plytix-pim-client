@@ -13,17 +13,21 @@ def mock_requests() -> AsyncMock:
     return AsyncMock(spec=httpx.AsyncClient)
 
 
+@pytest.fixture
+def mock_http_client(mock_requests, api_token) -> AsyncClient:
+    mock_client = AsyncClient()
+    mock_client.client = mock_requests
+    mock_client.auth_token = api_token
+    return mock_client
+
+
 @pytest.fixture()
-def plytix_factory(mock_requests, api_token) -> Callable[[list[httpx.Response]], PlytixAsync]:
+def plytix_factory(mock_requests, mock_http_client) -> Callable[[list[httpx.Response]], PlytixAsync]:
     def plytix(expected_responses: list[httpx.Response]) -> PlytixAsync:
         mock_requests.request.side_effect = expected_responses
 
-        mock_client = AsyncClient()
-        mock_client.client = mock_requests
-        mock_client.auth_token = api_token
-
         _plytix = PlytixAsync()
-        _plytix._client = mock_client
+        _plytix._client = mock_http_client
         return _plytix
 
     return plytix
