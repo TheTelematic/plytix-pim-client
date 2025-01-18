@@ -84,8 +84,7 @@ class SyncClient(ClientBase):
                             )
                             time.sleep(retry_after)
                         else:
-                            logger.error(f"Something went wrong getting the auth token. {exc.response=}")
-                            retry = False
+                            raise
 
                 self.auth_token = response.json()["data"][0]["access_token"]
             finally:
