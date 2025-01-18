@@ -24,8 +24,26 @@ async def test_delete_attribute(plytix_factory, response_factory, assert_request
     assert deleted
 
 
-async def test_delete_attribute_that_does_not_exist(plytix_factory):
-    deleted = await plytix_factory.products.attributes.delete_attribute("non_existent_id")
+async def test_delete_attribute_that_does_not_exist(plytix_factory, response_factory, assert_requests_factory):
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.NOT_FOUND,
+            ),
+        ]
+    )
+    product_attribute_id = "1234"
+
+    deleted = await plytix.products.attributes.delete_attribute(product_attribute_id)
+
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.DELETE,
+                path=f"/api/v1/attributes/product/{product_attribute_id}",
+            ),
+        ]
+    )
     assert not deleted
 
 
