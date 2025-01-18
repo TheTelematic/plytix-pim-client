@@ -43,7 +43,7 @@ async def test_search_product_attributes(
         [
             dict(
                 method=HTTPMethod.POST,
-                path="/api/v1/products/search",
+                path="/api/v1/attributes/product/search",
                 json={
                     "filters": [
                         [
@@ -54,9 +54,9 @@ async def test_search_product_attributes(
                             }
                         ]
                     ],
-                    "attributes": ["sku", "label"],
+                    "attributes": ["name"],
                     "relationship_filters": [],
-                    "pagination": {"order": "sku", "page": 1, "page_size": 10},
+                    "pagination": {"order": "name", "page": 1, "page_size": 10},
                 },
             ),
         ]
@@ -68,7 +68,9 @@ async def test_search_product_attributes(
     assert search_results[2].name == new_product_attribute_data_3["name"]
 
 
-async def test_search_all_product_attributes(plytix_factory, new_product_attribute_data):
+async def test_search_all_product_attributes(
+    plytix_factory, new_product_attribute_data, response_factory, assert_requests_factory
+):
     new_product_attribute_data_1 = new_product_attribute_data.copy()
     new_product_attribute_data_2 = new_product_attribute_data.copy()
     new_product_attribute_data_3 = new_product_attribute_data.copy()
@@ -77,15 +79,30 @@ async def test_search_all_product_attributes(plytix_factory, new_product_attribu
     new_product_attribute_data_2["name"] = f"{new_product_attribute_data['name']}-2"
     new_product_attribute_data_3["name"] = f"{new_product_attribute_data['name']}-3"
 
-    product_attributes = [
-        new_product_attribute_data_1,
-        new_product_attribute_data_2,
-        new_product_attribute_data_3,
-    ]
-    await plytix_factory.products.attributes.create_attributes(product_attributes)
+    plytix = plytix_factory(
+        [
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"name": new_product_attribute_data_1["name"]},
+                    {"name": new_product_attribute_data_2["name"]},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [
+                    {"name": new_product_attribute_data_3["name"]},
+                ],
+            ),
+            response_factory(
+                HTTPStatus.OK,
+                [],
+            ),
+        ]
+    )
 
     search_results = []
-    async for product_attributes in plytix_factory.products.attributes.search_all_product_attributes(
+    async for product_attributes in plytix.products.attributes.search_all_product_attributes(
         filters=[
             [SearchFilter(field="name", operator=OperatorEnum.CONTAINS, value=new_product_attribute_data["name"])]
         ],
@@ -99,6 +116,64 @@ async def test_search_all_product_attributes(plytix_factory, new_product_attribu
     ):
         search_results.extend(product_attributes)
 
+    assert assert_requests_factory(
+        [
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/attributes/product/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "name",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_attribute_data["name"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["name"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "name", "page": 1, "page_size": 2},
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/attributes/product/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "name",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_attribute_data["name"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["name"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "name", "page": 2, "page_size": 2},
+                },
+            ),
+            dict(
+                method=HTTPMethod.POST,
+                path="/api/v1/attributes/product/search",
+                json={
+                    "filters": [
+                        [
+                            {
+                                "field": "name",
+                                "operator": OperatorEnum.CONTAINS,
+                                "value": new_product_attribute_data["name"],
+                            }
+                        ]
+                    ],
+                    "attributes": ["name"],
+                    "relationship_filters": [],
+                    "pagination": {"order": "name", "page": 3, "page_size": 2},
+                },
+            ),
+        ]
+    )
     assert len(search_results) == 3
 
     assert search_results[0].name == new_product_attribute_data_1["name"]
