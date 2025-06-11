@@ -18,7 +18,7 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
     ) -> List[ProductAttribute]:
         """
@@ -34,7 +34,7 @@ class ProductAttributesSearchAPISyncMixin(BaseAPISyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
@@ -64,7 +64,7 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
     ) -> List[ProductAttribute]:
         """
@@ -80,7 +80,7 @@ class ProductAttributesSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,

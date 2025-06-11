@@ -18,7 +18,7 @@ class AssetsSearchAPISyncMixin(BaseAPISyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
     ) -> List[Asset]:
         """
@@ -34,7 +34,7 @@ class AssetsSearchAPISyncMixin(BaseAPISyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
@@ -64,7 +64,7 @@ class AssetsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
     ) -> List[Asset]:
         """
@@ -80,7 +80,7 @@ class AssetsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         self,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         sort_by_attribute: str,
         sort_ascending: bool = True,
         page_size: int = DEFAULT_PAGE_SIZE,
