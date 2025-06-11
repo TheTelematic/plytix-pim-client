@@ -80,7 +80,7 @@ async def test_search_products_by_relationships(plytix, new_product_data, new_pr
     # Create product 1 (It won't be linked through the relationship)
     new_product_data_1 = new_product_data.copy()
     new_product_data_1["sku"] = f"{new_product_data['sku']}-1"
-    new_product_1 = plytix.products.create_product(**new_product_data_1)
+    plytix.products.create_product(**new_product_data_1)
 
     # Create product 2 (it will be linked to product 3 through the relationship)
     new_product_data_2 = new_product_data.copy()
