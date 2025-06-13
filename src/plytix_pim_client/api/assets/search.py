@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Generator, List
+from typing import AsyncGenerator, Generator, List, cast
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
@@ -6,6 +6,7 @@ from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.assets.asset import Asset
 from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
+from plytix_pim_client.dtos.response import SearchResponse
 
 
 class AssetsSearchAPI(SearchResourceAPI):
@@ -20,7 +21,9 @@ class AssetsSearchAPISyncMixin(BaseAPISyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Asset]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[Asset]:
         """
         Search for assets matching the filters.
 
@@ -28,7 +31,10 @@ class AssetsSearchAPISyncMixin(BaseAPISyncMixin):
         """
         request = AssetsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return AssetsSearchAPI.process_response(response)
+        return AssetsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     def search_all_assets(
         self,
@@ -52,7 +58,7 @@ class AssetsSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            assets = self.search_assets(filters, attributes, relationship_filters, pagination)
+            assets = cast(List[Asset], self.search_assets(filters, attributes, relationship_filters, pagination))
             if not assets:
                 break
             yield assets
@@ -66,7 +72,9 @@ class AssetsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[Asset]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[Asset]:
         """
         Search for assets matching the filters.
 
@@ -74,7 +82,10 @@ class AssetsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         """
         request = AssetsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return AssetsSearchAPI.process_response(response)
+        return AssetsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     async def search_all_assets(
         self,
@@ -98,7 +109,10 @@ class AssetsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            assets = await self.search_assets(filters, attributes, relationship_filters, pagination)
+            assets = cast(
+                List[Asset],
+                await self.search_assets(filters, attributes, relationship_filters, pagination),
+            )
             if not assets:
                 break
             yield assets

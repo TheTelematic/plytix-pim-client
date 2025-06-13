@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Generator, List
+from typing import AsyncGenerator, Generator, List, cast
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
@@ -6,6 +6,7 @@ from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.products.attribute import ProductAttributesGroup
+from plytix_pim_client.dtos.response import SearchResponse
 
 
 class ProductAttributesGroupsSearchAPI(SearchResourceAPI):
@@ -20,7 +21,9 @@ class ProductAttributesGroupsSearchAPISyncMixin(BaseAPISyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[ProductAttributesGroup]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[ProductAttributesGroup]:
         """
         Search for products attributes groups matching the filters.
 
@@ -28,7 +31,10 @@ class ProductAttributesGroupsSearchAPISyncMixin(BaseAPISyncMixin):
         """
         request = ProductAttributesGroupsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductAttributesGroupsSearchAPI.process_response(response)
+        return ProductAttributesGroupsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     def search_all_product_attributes_groups(
         self,
@@ -52,8 +58,9 @@ class ProductAttributesGroupsSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products_attributes_groups = self.search_product_attributes_groups(
-                filters, attributes, relationship_filters, pagination
+            products_attributes_groups = cast(
+                List[ProductAttributesGroup],
+                self.search_product_attributes_groups(filters, attributes, relationship_filters, pagination),
             )
             if not products_attributes_groups:
                 break
@@ -68,7 +75,9 @@ class ProductAttributesGroupsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         attributes: List[str],
         relationship_filters: List[RelationshipSearchFilter],
         pagination: Pagination,
-    ) -> List[ProductAttributesGroup]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[ProductAttributesGroup]:
         """
         Search for products attributes groups matching the filters.
 
@@ -76,7 +85,10 @@ class ProductAttributesGroupsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         """
         request = ProductAttributesGroupsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductAttributesGroupsSearchAPI.process_response(response)
+        return ProductAttributesGroupsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     async def search_all_product_attributes_groups(
         self,
@@ -100,8 +112,9 @@ class ProductAttributesGroupsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            products_attributes_groups = await self.search_product_attributes_groups(
-                filters, attributes, relationship_filters, pagination
+            products_attributes_groups = cast(
+                List[ProductAttributesGroup],
+                await self.search_product_attributes_groups(filters, attributes, relationship_filters, pagination),
             )
             if not products_attributes_groups:
                 break

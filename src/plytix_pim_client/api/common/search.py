@@ -7,6 +7,8 @@ from plytix_pim_client.dtos.base import BaseDTO
 from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.request import PlytixRequest
+from plytix_pim_client.dtos.response import PaginationResponse, SearchResponse, SearchResponseWithPagination
+
 
 T = TypeVar("T", bound=BaseDTO)
 
@@ -45,5 +47,30 @@ class SearchResourceAPI(Generic[T]):
         )
 
     @classmethod
-    def process_response(cls, response: httpx.Response) -> List[T]:
-        return [cls.resource_dto_class.from_dict(product) for product in response.json()["data"]]
+    def _process_response_data(cls, data: List[dict], return_undocumented_data: bool) -> List[T]:
+        return [
+            cls.resource_dto_class.from_dict(item, include_undocumented=return_undocumented_data)
+            for item in data
+        ]
+
+    @classmethod
+    def process_response(cls, response: httpx.Response, return_undocumented_data: bool = True) -> List[T]:
+        return cls._process_response_data(response.json(), return_undocumented_data)
+
+    @classmethod
+    def process_search_response(
+        cls,
+        response: httpx.Response,
+        *,
+        return_pagination: bool = False,
+        return_undocumented_data: bool = True
+    ) -> SearchResponse:
+        json_response = response.json()
+        data = cls._process_response_data(json_response["data"], return_undocumented_data)
+
+        if return_pagination:
+            return SearchResponseWithPagination(
+                data=data,
+                pagination=PaginationResponse(**json_response["pagination"]),
+            )
+        return data
