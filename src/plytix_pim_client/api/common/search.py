@@ -22,7 +22,7 @@ class SearchResourceAPI(Generic[T]):
         cls,
         filters: List[List[SearchFilter]],
         attributes: List[str],
-        relationship_filters: List[RelationshipSearchFilter],
+        relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
     ) -> PlytixRequest:
         return PlytixRequest(
@@ -32,7 +32,10 @@ class SearchResourceAPI(Generic[T]):
                 "json": {
                     "filters": [[filter_.to_dict() for filter_ in filters_group] for filters_group in filters],
                     "attributes": attributes,
-                    "relationship_filters": [filter_.to_dict() for filter_ in relationship_filters],
+                    "relationship_filters": [
+                        [filter_.to_dict() for filter_ in relationship_filters_group]
+                        for relationship_filters_group in relationship_filters
+                    ],
                     "pagination": {
                         "order": (
                             pagination.sort_by_attribute
