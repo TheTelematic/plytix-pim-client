@@ -6,7 +6,7 @@ class BaseDTO:
     _undocumented_data: dict = field(default_factory=dict)  # Anything inside may change with no notice
 
     @classmethod
-    def from_dict(cls, data: dict, *, include_undocumented=False):
+    def from_dict(cls, data: dict, *, include_undocumented=True):
         _fields = fields(cls)
         __fields = [f.name for f in _fields if f.name != "_undocumented_data"]
         filtered_data = {}
