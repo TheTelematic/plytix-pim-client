@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Generator, List
+from typing import AsyncGenerator, Generator, List, cast
 
 from plytix_pim_client.api.base import BaseAPIAsyncMixin, BaseAPISyncMixin
 from plytix_pim_client.api.common.search import SearchResourceAPI
@@ -6,6 +6,7 @@ from plytix_pim_client.constants import DEFAULT_PAGE_SIZE
 from plytix_pim_client.dtos.filters import RelationshipSearchFilter, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 from plytix_pim_client.dtos.products.relationship import ProductRelationship
+from plytix_pim_client.dtos.response import SearchResponse
 
 
 class ProductRelationshipsSearchAPI(SearchResourceAPI):
@@ -20,7 +21,9 @@ class ProductRelationshipsSearchAPISyncMixin(BaseAPISyncMixin):
         attributes: List[str],
         relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
-    ) -> List[ProductRelationship]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[ProductRelationship]:
         """
         Search for product relationships matching the filters.
 
@@ -28,7 +31,10 @@ class ProductRelationshipsSearchAPISyncMixin(BaseAPISyncMixin):
         """
         request = ProductRelationshipsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductRelationshipsSearchAPI.process_response(response)
+        return ProductRelationshipsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     def search_all_product_relationships(
         self,
@@ -52,8 +58,9 @@ class ProductRelationshipsSearchAPISyncMixin(BaseAPISyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            product_relationships = self.search_product_relationships(
-                filters, attributes, relationship_filters, pagination
+            product_relationships = cast(
+                List[ProductRelationship],
+                self.search_product_relationships(filters, attributes, relationship_filters, pagination),
             )
             if not product_relationships:
                 break
@@ -68,7 +75,9 @@ class ProductRelationshipsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         attributes: List[str],
         relationship_filters: List[List[RelationshipSearchFilter]],
         pagination: Pagination,
-    ) -> List[ProductRelationship]:
+        *,
+        extra: dict = {},
+    ) -> SearchResponse[ProductRelationship]:
         """
         Search for product relationships matching the filters.
 
@@ -76,7 +85,10 @@ class ProductRelationshipsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
         """
         request = ProductRelationshipsSearchAPI.get_request(filters, attributes, relationship_filters, pagination)
         response = await self._client.make_request(request.method, request.endpoint, **request.kwargs)
-        return ProductRelationshipsSearchAPI.process_response(response)
+        return ProductRelationshipsSearchAPI.process_search_response(
+            response,
+            **{k: v for k in {"return_pagination", "return_undocumented_data"} if ((v := extra.get(k)) is not None)},
+        )
 
     async def search_all_product_relationships(
         self,
@@ -100,8 +112,9 @@ class ProductRelationshipsSearchAPIAsyncMixin(BaseAPIAsyncMixin):
                 page_size=page_size,
                 page=current_page,
             )
-            product_relationships = await self.search_product_relationships(
-                filters, attributes, relationship_filters, pagination
+            product_relationships = cast(
+                List[ProductRelationship],
+                await self.search_product_relationships(filters, attributes, relationship_filters, pagination),
             )
             if not product_relationships:
                 break

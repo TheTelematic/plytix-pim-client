@@ -36,6 +36,18 @@ def test_search_products(plytix, new_product_data):
     assert search_results[2].sku == new_product_data_3["sku"]
     assert search_results[2].label == new_product_data_3["label"]
 
+    search_results_2 = plytix.products.search_products(
+        filters=[[SearchFilter(field="sku", operator=OperatorEnum.CONTAINS, value=new_product_data_2["sku"])]],
+        attributes=["sku", "label"],
+        relationship_filters=[],
+        pagination=Pagination(page=1, page_size=10, sort_by_attribute="sku", sort_ascending=True),
+        extra={"return_pagination": True, "return_undocumented_data": False},
+    )
+
+    assert len(search_results_2.data) == 1
+    assert search_results_2.pagination.total_count == 3
+    assert not search_results_2.data[0]._undocumented_data
+
 
 def test_search_all_products(plytix, new_product_data):
     new_product_data_1 = new_product_data.copy()
