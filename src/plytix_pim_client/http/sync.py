@@ -34,7 +34,15 @@ class SyncClient(ClientBase):
         **kwargs,
     ) -> httpx.Response:
         kwargs["headers"] = self._get_headers()
-        response = self.client.request(method, path, **kwargs)
+        try:
+            response = self.client.request(method, path, **kwargs)
+        except httpx.TimeoutException:
+            if not kwargs.get("fail_if_timeout", False):
+                logger.warning(f"Timeout, retrying after {waiting_time} seconds...")
+                time.sleep(waiting_time)
+                return self.make_request(method, path, waiting_time, accepted_error_codes, fail_if_timeout=True)
+            else:
+                raise
         try:
             processed_response = self._process_response(response, accepted_error_codes=accepted_error_codes)
             if self._response_cooldown_seconds:
