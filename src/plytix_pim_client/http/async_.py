@@ -94,6 +94,12 @@ class AsyncClient(ClientBase):
                             f"retrying after {retry_after} seconds..."
                         )
                         await asyncio.sleep(retry_after)
+                    elif exc.response.status_code in [HTTPStatus.BAD_GATEWAY, HTTPStatus.SERVICE_UNAVAILABLE]:
+                        logger.error(
+                            f"Auth get token is returning {exc.response.status_code} error, "
+                            "retrying after 5 seconds..."
+                        )
+                        await asyncio.sleep(5)
                     else:
                         raise
 

@@ -1,5 +1,7 @@
 import time
 
+from flaky import flaky  # type: ignore
+
 from plytix_pim_client.dtos.filters import OperatorEnum, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
@@ -31,6 +33,7 @@ def test_search_product_categories(plytix, new_product_category_data):
     assert search_results[2].id in categories_ids[2]
 
 
+@flaky
 def test_search_all_product_categories(plytix, new_product_category_data):
     new_product_data_1 = new_product_category_data.copy()
     new_product_data_2 = new_product_category_data.copy()

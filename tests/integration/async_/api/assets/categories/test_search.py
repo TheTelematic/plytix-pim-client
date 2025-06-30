@@ -1,9 +1,12 @@
 import asyncio
 
+from flaky import flaky  # type: ignore
+
 from plytix_pim_client.dtos.filters import OperatorEnum, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
 
+@flaky
 async def test_search_asset_categories(plytix, new_asset_category_data):
     new_asset_data_1 = new_asset_category_data.copy()
     new_asset_data_2 = new_asset_category_data.copy()
