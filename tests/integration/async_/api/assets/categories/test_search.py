@@ -1,3 +1,5 @@
+import asyncio
+
 from plytix_pim_client.dtos.filters import OperatorEnum, SearchFilter
 from plytix_pim_client.dtos.pagination import Pagination
 
@@ -40,6 +42,7 @@ async def test_search_all_asset_categories(plytix, new_asset_category_data):
         [new_asset_data_1, new_asset_data_2, new_asset_data_3]
     )
 
+    await asyncio.sleep(3)
     search_results = []
     async for results in plytix.assets.categories.search_all_asset_categories(
         filters=[[SearchFilter(field="id", operator=OperatorEnum.IN, value=[category.id for category in categories])]],

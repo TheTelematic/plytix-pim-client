@@ -1,3 +1,6 @@
+import asyncio
+
+
 async def test_delete_asset(plytix, new_asset_data_from_url_factory):
     asset = await plytix.assets.create_asset_by_url(**new_asset_data_from_url_factory())
 
@@ -17,6 +20,7 @@ async def test_delete_multiple_assets(plytix, new_asset_data_from_url_factory):
         [new_asset_data_from_url_factory(), new_asset_data_from_url_factory()]
     )
     asset_ids = [result.id for result in assets]
+    await asyncio.sleep(3)
 
     results = await plytix.assets.delete_assets(asset_ids)
 

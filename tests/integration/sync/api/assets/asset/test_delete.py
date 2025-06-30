@@ -1,3 +1,6 @@
+import time
+
+
 def test_delete_asset(plytix, new_asset_data_from_url_factory):
     asset = plytix.assets.create_asset_by_url(**new_asset_data_from_url_factory())
 
@@ -15,6 +18,7 @@ def test_delete_asset_not_found(plytix):
 def test_delete_multiple_assets(plytix, new_asset_data_from_url_factory):
     assets = plytix.assets.create_assets_by_urls([new_asset_data_from_url_factory(), new_asset_data_from_url_factory()])
     asset_ids = [result.id for result in assets]
+    time.sleep(3)
 
     results = plytix.assets.delete_assets(asset_ids)
 
